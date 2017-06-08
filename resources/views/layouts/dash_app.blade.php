@@ -1,269 +1,159 @@
+
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>mSuite | {{strtoupper($title)}} </title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Bootstrap -->
-    <link href="{{asset('/css/bootstrap.min.css')}}" rel="stylesheet">
-    <!-- Font Awesome -->
+    <title>PASA | {{strtoupper($title)}}</title>
+
+    <!-- Scripts -->
+    <script>
+        window.Laravel = {!! json_encode([
+            'csrfToken' => csrf_token(),
+        ]) !!};
+    </script>
+
+    <!-- Global stylesheets -->
+    <link href="{{ asset('css/theme/bootstrap.css') }}" rel="stylesheet" type="text/css">
     <link href="{{asset('/css/font-awesome.css')}}" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="{{asset('/css/theme/nprogress.css')}}" rel="stylesheet">
+    <link href="{{asset('/css/theme/core.css')}}" rel="stylesheet">
+    <link href="{{asset('/css/theme/components.css')}}" rel="stylesheet">
+    <link href="{{asset('/css/theme/colors.css')}}" rel="stylesheet">
+    <!-- /global stylesheets -->
 
-    <!-- Custom Theme Style -->
-    <link href="{{asset('/css/theme/custom.min.css')}}" rel="stylesheet">
+    <!-- Core JS files -->
+    <!-- jQuery -->
+    <script src="{{asset('/js/jquery.min.js')}}"></script>
+    <!-- Bootstrap -->
+    <script src="{{asset('/js/bootstrap.min.js')}}"></script>
+    <!-- /core JS files -->
+    <script type="text/javascript" src="{{ asset('js/theme/app.js') }}"></script>
+
+    <!-- /theme JS files -->
 </head>
+<body>
 
-<style type="text/css">
-    .left_col *{
-        display: block;
-    }
-</style>
+<!-- Main navbar -->
+<div class="navbar navbar-default header-highlight">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="{{'/'}}"><img src="{{ asset('images/pasa-logo.png') }}" alt=""></a>
+        <ul class="nav navbar-nav visible-xs-block">
+            <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+            <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+        </ul>
+    </div>
 
-<body class="nav-md">
-<div class="container body">
-    <div class="main_container">
-        <div class="col-md-3 left_col">
-            <div class="left_col scroll-view">
+    <div class="navbar-collapse collapse" id="navbar-mobile">
 
-                <div class="navbar nav_title" style="border: 0; min-height: 80px; padding-top: 15px; background-color:white;">
-                    <a  href="/" class="site_title" >
-                        <img style="min-width:60%;margin-left:auto;margin-right:auto;" src="{{asset('images/pasa-logo.png')}}" height="50px" />
-                    </a>
-                </div>
-
-                <div class="clearfix"></div>
-
-                <!-- menu profile quick info -->
-                <div class="profile clearfix">
-                    <div class="profile_pic">
-                        <img src="images/img.jpg" alt="..." class="img-circle profile_img">
-                    </div>
-                    <div class="profile_info">
-                        <span>Welcome,</span>
-                        <h2>John Doe</h2>
-                    </div>
-                </div>
-                <!-- /menu profile quick info -->
-
-                <br />
-
-                <!-- sidebar menu -->
-                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-
-                    @if(Auth::user()->role==='superadmin')
-                        <div class="menu_section">
-                            <h3>Setup</h3>
-                            <ul class="nav side-menu">
-                                <li><a href="/employee" @if($title==='employee') class="active" @endif><i class="fa fa-home"></i> Employee </a></li>
-                                <li><a><i class="fa fa-home"></i> Manage Item <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Add Item Category</a></li>
-                                        <li><a href="index2.html">Edit Item Category</a></li>
-                                        <li><a href="index3.html">Manage Package</a></li>
-                                        <li><a href="index3.html">Billing Item</a></li>
-                                        <li><a href="index3.html">Billing Item Price</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-home"></i> System Config <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Settings</a></li>
-                                        <li><a href="index2.html">Role</a></li>
-                                        <li><a href="index3.html">Group</a></li>
-                                        <li><a href="index3.html">Resource</a></li>
-                                        <li><a href="index3.html">Menu</a></li>
-                                        <li><a href="index3.html">Create Backup</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-home"></i> App Config <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Lab Specialist</a></li>
-                                        <li><a href="index2.html">Test Advice group</a></li>
-                                        <li><a href="index3.html">Test ResultItem</a></li>
-                                        <li><a href="index3.html">Image Category</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    @elseif(Auth::user()->role==='admin')
-                        <div class="menu_section">
-                            <h3>Patient Workflow</h3>
-                            <ul class="nav side-menu">
-                                <li><a href="/patient" @if($title=="patient")class='active';}} @endif><i class="fa fa-home"></i> Search Patient </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Lab Investigation </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> New Patient </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Lab Collection </a></li>
-                            </ul>
-                        </div>
-                        <div class="menu_section">
-                            <h3>Reports</h3>
-                            <ul class="nav side-menu">
-                                <li><a href="index.html"><i class="fa fa-home"></i> Report </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Discount Report </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Item Category Report </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Referer Analysis </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Sales Summary </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Consultant Referral </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Advance Report </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Item Group Report </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Refund Report </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Search By Bill No. </a></li>
-                            </ul>
-                        </div>
-                        <div class="menu_section">
-                            <h3>Appointments</h3>
-                            <ul class="nav side-menu">
-                                <li><a href="index.html"><i class="fa fa-home"></i> Appointment List </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Consultant Summary </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> New Appointment </a></li>
-                                <li><a href="index.html"><i class="fa fa-home"></i> Datewise Appointment List </a></li>
-                            </ul>
-                        </div>
-                        <div class="menu_section">
-                            <h3>Setup</h3>
-                            <ul class="nav side-menu">
-                                <li><a href="index.html"><i class="fa fa-home"></i> Employee </a></li>
-                                <li><a><i class="fa fa-home"></i> Manage Item <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Add Item Category</a></li>
-                                        <li><a href="index2.html">Edit Item Category</a></li>
-                                        <li><a href="index3.html">Manage Package</a></li>
-                                        <li><a href="index3.html">Billing Item</a></li>
-                                        <li><a href="index3.html">Billing Item Price</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-home"></i> System Config <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index3.html">Create Backup</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-home"></i> App Config <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Lab Specialist</a></li>
-                                        <li><a href="index2.html">Test Advice group</a></li>
-                                        <li><a href="index3.html">Test ResultItem</a></li>
-                                        <li><a href="index3.html">Image Category</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    @else
-                        <div class="menu_section">
-                            <h3>General</h3>
-                            <ul class="nav side-menu">
-                                <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Dashboard</a></li>
-                                        <li><a href="index2.html">Dashboard2</a></li>
-                                        <li><a href="index3.html">Dashboard3</a></li>
-                                    </ul>
-                            </ul>
-                        </div>
-                    @endif
-                </div>
-                <!-- /sidebar menu -->
-
-                <!-- /menu footer buttons -->
-                <div class="sidebar-footer hidden-small">
-                    <a data-toggle="tooltip" data-placement="top" title="Settings">
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                    </a>
-                    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                    </a>
-                    <a data-toggle="tooltip" data-placement="top" title="Lock">
-                        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                    </a>
-
-                    <a href="{{ route('logout') }}" data-toggle="tooltip" data-placement="top" title="Logout"
-                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-
-                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-
-                </div>
-                <!-- /menu footer buttons -->
-            </div>
-        </div>
-
-        <!-- top navigation -->
-        <div class="top_nav">
-            <div class="nav_menu" style="min-height:80px;">
-                <nav>
-                    <div class="nav toggle">
-                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                    </div>
-
-
-                </nav>
-            </div>
-        </div>
-        <!-- /top navigation -->
-
-        <!-- page content -->
-        <div class="right_col" role="main">
-                &nbsp;
-                @section('content')
-                @show
-
-        </div>
-        <!-- /page content -->
-
-        <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
-        <!-- /footer content -->
     </div>
 </div>
-
-<!-- jQuery -->
-<script src="{{asset('/js/jquery.min.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{asset('/js/bootstrap.min.js')}}"></script>
-<!-- FastClick -->
-<script src="{{asset('/js/theme/fastclick.js')}}"></script>
-<!-- NProgress -->
-<script src="{{asset('/js/theme/nprogress.js')}}"></script>
-{{--<!-- Chart.js -->--}}
-{{--<script src="../vendors/Chart.js/dist/Chart.min.js"></script>--}}
-{{--<!-- jQuery Sparklines -->--}}
-{{--<script src="../vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>--}}
-
-<!-- Flot -->
-<!--
-<script src="../vendors/Flot/jquery.flot.js"></script>
-<script src="../vendors/Flot/jquery.flot.pie.js"></script>
-<script src="../vendors/Flot/jquery.flot.time.js"></script>
-<script src="../vendors/Flot/jquery.flot.stack.js"></script>
-<script src="../vendors/Flot/jquery.flot.resize.js"></script>
-<!-- Flot plugins
-<script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-<script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-<script src="../vendors/flot.curvedlines/curvedLines.js"></script>
-<!-- DateJS
-<script src="../vendors/DateJS/build/date.js"></script>
-<!-- bootstrap-daterangepicker
-<script src="../vendors/moment/min/moment.min.js"></script>
-<script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
--->
-<!-- Custom Theme Scripts -->
-<script src="{{asset('/js/theme/custom.min.js')}}"></script>
+<!-- /main navbar -->
 
 
+<!-- Page container -->
+<div class="page-container">
+
+    <!-- Page content -->
+    <div class="page-content">
+
+        <!-- Main sidebar -->
+        <div class="sidebar sidebar-main">
+            <div class="sidebar-content">
+
+                <!-- User menu -->
+                <div class="sidebar-user-material">
+                    <div class="category-content">
+                        <div class="sidebar-user-material-content">
+                            {{--<a href="#">--}}
+                            {{--<img src="assets/images/demo/users/face11.jpg" class="img-circle img-responsive" alt="">--}}
+                            {{--</a>--}}
+                            <h6>{{ Auth::user()->name }}</h6>
+                            <span class="text-size-small">{{ Auth::user()->email }}</span>
+                        </div>
+
+                        <div class="sidebar-user-material-menu">
+                            <a href="#user-nav" data-toggle="collapse"><span>My account</span> <i class="caret"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="navigation-wrapper collapse" id="user-nav">
+                        <ul class="navigation">
+                            <li><a href="#"><i class="icon-user-plus"></i> <span>My profile</span></a></li>
+                            <li><a href="#"><i class="icon-cog5"></i> <span>Account settings</span></a></li>
+                            <li>
+                                <a href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    <i class="icon-switch2"></i> <span>Logout</span>
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /user menu -->
+
+
+                <!-- Main navigation -->
+                <div class="sidebar-category sidebar-category-visible">
+                    <div class="category-content no-padding">
+                        <ul class="navigation navigation-main navigation-accordion">
+
+                            <!-- Main -->
+                            <li class="@if ($title === 'dashboard') active @endif">
+                                <a href="/" ><i class="fa fa-home"></i> Dashboard </a>
+                            </li>
+                            <h5>Operational Management</h5>
+                            <li class="@if ($title === 'visitor_log') active @endif">
+								<a href="/reception"><i class="fa fa-home"></i> Visitor Log </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /main navigation -->
+
+            </div>
+        </div>
+        <!-- /main sidebar -->
+
+
+        <!-- Main content -->
+        <div class="content-wrapper">
+
+            <!-- Content area -->
+            <div class="content">
+
+                <!-- Main charts -->
+            @section('content')
+            @show
+            <!-- /main charts -->
+
+
+
+
+
+                <!-- Footer -->
+                <div class="footer text-muted pull-right">
+                    &copy;Pasa IT Solution 2017 <a class="btn btn-link" href="http://itspasa.com.np" style="color:green">www.itspasa.com.np</a>
+                </div>
+                <!-- /footer -->
+
+            </div>
+            <!-- /content area -->
+
+        </div>
+        <!-- /main content -->
+    </div>
+    <!-- /page content -->
+</div>
+<!-- /page container -->
 </body>
 </html>

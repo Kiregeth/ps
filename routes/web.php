@@ -16,3 +16,4 @@ Route::get('/','SysController@index');
 Auth::routes();
 
 Route::get('/dashboard', 'SysController@dashboard')->name('dash');
+Route::get('/reception', 'SysController@visitor_log')->name('dash');
