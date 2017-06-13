@@ -16,4 +16,7 @@ Route::get('/','SysController@index');
 Auth::routes();
 
 Route::get('/dashboard', 'SysController@dashboard')->name('dash');
-Route::get('/reception', 'SysController@visitor_log')->name('dash');
+Route::get('/reception', 'SysController@visitor_log');
+Route::post('/add', 'SysController@add');
+
+Route::post('/quick_add','AjaxController@quick_add');
