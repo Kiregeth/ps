@@ -71,27 +71,15 @@ class AjaxController extends Controller
                 ($db_table=='databanks')?$db_table2='visaprocesses':$db_table2='databanks';
                 $cols=\Schema::getColumnListing($db_table2);
                 $refs=\DB::table($db_table2)->select('Ref_No')->get();
-                if(in_array($w_val,$refs) && in_array($col,$cols))
+                $ref_array=[];
+                foreach($refs as $key=>$value)
                 {
-                    echo "asdf";
-                    exit;
+                    $ref_array[]=$value->Ref_No;
                 }
 
-                $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME= '" . $db_table2 . "'";
-                $result = $conn->query($sql);
-
-                $col_name = array();
-                if (mysqli_num_rows($result) > 0) {
-                    // output data of each row
-                    $i = 0;
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $col_name[$i] = $row["COLUMN_NAME"];
-                        $i++;
-                    }
-                }
-                if (in_array($_POST['col'], $col_name)) {
-                    $sql = "UPDATE " . $db_table2 . " SET " . $_POST['col'] . "='" . $_POST['val'] . "'WHERE " . $_POST['w_col'] . "='" . $_POST['w_val'] . "'";
-                    $result = $conn->query($sql) or die('Unable to update row.');
+                if(in_array($w_val,$ref_array) && in_array($col,$cols))
+                {
+                    \DB::table($db_table2)->where($w_col, $w_val)->update([$col => $val]);
                 }
             }
         }
@@ -114,21 +102,28 @@ class AjaxController extends Controller
 
         $w_col=$request->w_col;
         $w_id=$request->w_id;
-        $array=[];
         $query=[];
+        $check=\DB::table($db_table2)->select()->where($w_col,$w_id)->first();
+        if(count($check)<1)
+        {
+            $array= \DB::table($db_table1)->select()->where($w_col,$w_id)->first();
 
-        $i = 0;
-
-        $array= \DB::table($db_table1)->select()->where($w_col,$w_id)->first();
-
-        foreach($array as $key=>$value) {
-            if(!in_array($key,$discard))
-            {
-                $query[$key]=$value;
+            foreach($array as $key=>$value) {
+                if(!in_array($key,$discard))
+                {
+                    $query[$key]=$value;
+                }
             }
+            $query['State_Vp']='vp';
+            \DB::table($db_table2)->insert($query);
+            \DB::table($db_table1)->where($w_col, $w_id)->update(['State' => 'vp']);
         }
-        $query['State_Vp']='vp';
-        \DB::table($db_table2)->insert($query);
-        \DB::table($db_table1)->where($w_col, $w_id)->update(['State' => 'vp']);
+        else
+        {
+            \DB::table($db_table1)->where($w_col, $w_id)->update(['State' => 'vp']);
+            \DB::table($db_table2)->where($w_col, $w_id)->update(['State_Vp' => 'vp']);
+        }
+        exit;
+
     }
 }

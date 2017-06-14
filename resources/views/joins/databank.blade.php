@@ -46,7 +46,7 @@
                     {{ csrf_field() }}
                     @php $required=['Ref_No','Date','Candidates_Name','Contact_No','DOB','PP_NO','Trade','Company']; @endphp
                     <div class="">
-                        <table class="table table-striped table-bordered editableTable" >
+                        <table class="table table-striped table-bordered editableTable" id="myTable" >
                             <thead>
                             <tr>
                                 <th><a title="Add New" class="btn btn-default" data-toggle="modal" data-target="#modal_add">Add New</a></th>
@@ -76,6 +76,8 @@
                                     style='background-color: lightgreen;'
                                 @elseif($data->State== 'vc')
                                     style='background-color: lightcoral;'
+                                @elseif($data->State== 'vf')
+                                    style='background-color: lightblue;'
                                 @endif
                                 >
 
@@ -84,7 +86,7 @@
 
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->Ref_No}}"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            @if($data->State!='vp')
+                                            @if($data->State!='vp' && $data->State!='vf')
                                             <a title="visa processing" class="visa btn btn-link" name="{{$data->Ref_No}}_visa"><i
                                                         class="fa fa-cc-visa"></i></a>
                                             @endif
@@ -307,18 +309,16 @@
                 $(this).addClass("cellEditing");
                 var myCol = $(this).index()-1;
                 var $tr = $(this).closest('tr');
-                var myRow = $tr.index();
+                var myRow = $tr.index()+1;
 
 
-                var colArray ="{!! json_encode($cols)!!}";
-                var rowArray ="{!! json_encode($datas->all()) !!}";
+                var colArray = {!! json_encode($cols) !!} ;
 
-                var id=rowArray[0][0];
+                var id=document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
 
-                alert(rowArray);
 
                 $(this).html(
-                    "<input placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='"+OriginalContent+"'/>"+
+                    "<input placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
                     "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
                 );
 
@@ -326,7 +326,7 @@
 
                 $(this).children().first().keypress(function (e) {
                     if (e.which == 13) {
-                        var res=autosubmit(colArray,rowArray,myCol,myRow);
+                        var res=autosubmit(colArray,myCol,myRow);
                         var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                         $(this).parent().text(val);
                         $(this).parent().removeClass("cellEditing");
