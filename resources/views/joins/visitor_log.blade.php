@@ -29,6 +29,9 @@
     text-decoration: none;
     cursor: pointer;
     }
+    .fa{
+        color:#000;
+    }
     </style>
     <div class="container">
         <div class="row">
@@ -53,7 +56,7 @@
 
                         <tr>
                             <th></th>
-                            <td align="center"><a class="btn btn-link" id="quick_add"><strong>+</strong></a></td>
+                            <td align="center"><a class="btn btn-link" id="quick_add"><strong><i class="fa fa-plus-square"></i></strong></a></td>
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             @foreach ($cols as $col)
                                 @if($col!='sn' && $col!='time' && $col!="created_at" && $col!="updated_at")

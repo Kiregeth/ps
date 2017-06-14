@@ -113,7 +113,10 @@
                             </li>
                             <h5>Operational Management</h5>
                             <li class="@if ($title === 'visitor_log') active @endif">
-								<a href="/reception"><i class="fa fa-home"></i> Visitor Log </a>
+                                <a href="/reception"><i class="fa fa-home"></i> Visitor Log </a>
+                            </li>
+                            <li class="@if ($title === 'databank') active @endif">
+                                <a href="/databank"><i class="fa fa-home"></i> Databank </a>
                             </li>
                         </ul>
                     </div>
