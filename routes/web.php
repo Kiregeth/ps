@@ -18,6 +18,8 @@ Auth::routes();
 Route::get('/dashboard', 'SysController@dashboard')->name('dash');
 Route::get('/reception', 'SysController@visitor_log');
 Route::get('/databank', 'SysController@databank');
+Route::get('/visa', 'SysController@visa');
+Route::get('/deployment', 'SysController@deployment');
 
 
 Route::post('/add', 'SysController@add');
@@ -27,3 +29,5 @@ Route::post('/delete', 'AjaxController@delete');
 Route::post('/quick_add','AjaxController@quick_add');
 Route::post('/quick_edit','AjaxController@quick_edit');
 Route::post('/visaprocess','AjaxController@visaprocess');
+Route::post('/deploy','AjaxController@deploy');
+Route::post('/cancel','AjaxController@cancel');

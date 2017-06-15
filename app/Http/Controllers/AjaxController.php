@@ -61,28 +61,32 @@ class AjaxController extends Controller
         $w_val=$request->w_val;
         $col=$request->col;
         $val=$request->val;
-        \DB::table($db_table)->where($w_col, $w_val)->update([$col => $val]);
-
-        if($db_table=='databanks' || $db_table=='visaprocesses')
+        $check=\DB::table('databanks')->select()->where($w_col,$w_val)->first();
+        if(count($check)>0)
         {
-            $state=\DB::table($db_table)->select('State')->where($w_col,$w_val)->first();
-
-            if($state->State=='vp') {
-                ($db_table=='databanks')?$db_table2='visaprocesses':$db_table2='databanks';
-                $cols=\Schema::getColumnListing($db_table2);
-                $refs=\DB::table($db_table2)->select('Ref_No')->get();
-                $ref_array=[];
-                foreach($refs as $key=>$value)
-                {
-                    $ref_array[]=$value->Ref_No;
-                }
-
-                if(in_array($w_val,$ref_array) && in_array($col,$cols))
-                {
-                    \DB::table($db_table2)->where($w_col, $w_val)->update([$col => $val]);
-                }
+            $cols=\Schema::getColumnListing('databanks');
+            if(in_array($col,$cols))
+            {
+                \DB::table('databanks')->where($w_col, $w_val)->update([$col => $val]);
             }
         }
+        $check=\DB::table('visaprocesses')->select()->where($w_col,$w_val)->first();
+        if(count($check)>0)
+        {
+            $cols=\Schema::getColumnListing('visaprocesses');
+            if(in_array($col,$cols)) {
+                \DB::table('visaprocesses')->where($w_col, $w_val)->update([$col => $val]);
+            }
+        }
+        $check=\DB::table('vrflowns')->select()->where($w_col,$w_val)->first();
+        if(count($check)>0)
+        {
+            $cols=\Schema::getColumnListing('vrflowns');
+            if(in_array($col,$cols)) {
+                \DB::table('vrflowns')->where($w_col, $w_val)->update([$col => $val]);
+            }
+        }
+
     }
 
     public function delete(Request $request)
@@ -123,7 +127,72 @@ class AjaxController extends Controller
             \DB::table($db_table1)->where($w_col, $w_id)->update(['State' => 'vp']);
             \DB::table($db_table2)->where($w_col, $w_id)->update(['State_Vp' => 'vp']);
         }
-        exit;
+    }
 
+    public function deploy(Request $request)
+    {
+        $db_table1=$request->db_table1;
+        $db_table2=$request->db_table2;
+        $db_table3=$request->db_table3;
+
+        $discard=['State_Vp','created_at','updated_at'];
+
+        $w_col=$request->w_col;
+        $w_id=$request->w_id;
+        $query=[];
+        $check=\DB::table($db_table2)->select()->where($w_col,$w_id)->first();
+        if(count($check)<1)
+        {
+            $array= \DB::table($db_table1)->select()->where($w_col,$w_id)->first();
+
+            foreach($array as $key=>$value) {
+                if(!in_array($key,$discard))
+                {
+                    if($key=='Process_Date')
+                        $query['VP_Date']=$value;
+                    else
+                        $query[$key]=$value;
+                }
+            }
+            \DB::table($db_table2)->insert($query);
+            \DB::table($db_table1)->where($w_col, $w_id)->update(['State_Vp' => 'vf']);
+            \DB::table($db_table3)->where($w_col, $w_id)->update(['State' => 'vf']);
+        }
+        else
+        {
+            \DB::table($db_table1)->where($w_col, $w_id)->update(['State_Vp' => 'vf']);
+            \DB::table($db_table3)->where($w_col, $w_id)->update(['State' => 'vf']);
+        }
+    }
+
+    public function cancel(Request $request)
+    {
+        $db_table1=$request->db_table1;
+        $db_table2=$request->db_table2;
+        $db_table3=$request->db_table3;
+        $w_col=$request->w_col;
+        $w_id=$request->w_id;
+
+        $temp_date="";
+        $temp_status="";
+
+        $check=\DB::table($db_table1)->select('State_Vp')->where($w_col,$w_id)->first();
+        if($check->State_Vp=='vf')
+        {
+            $query=\DB::table($db_table2)->select('VP_Date','Status')->where($w_col,$w_id)->first();
+            $temp_date=$query->VP_Date;
+            $temp_status=$query->Status;
+            \DB::table($db_table2)->where($w_col, $w_id)->delete();
+            \DB::table($db_table1)->where($w_col, $w_id)->delete();
+        }
+        else
+        {
+            $query=\DB::table($db_table1)->select('Process_Date','Status')->where($w_col,$w_id)->first();
+            $temp_date=$query->Process_Date;
+            $temp_status=$query->Status;
+            \DB::table($db_table1)->where($w_col, $w_id)->delete();
+        }
+
+        \DB::table($db_table3)->where($w_col, $w_id)->update(['State' => 'vc','Remarks'=>$temp_status,'Old_VP_Date'=>$temp_date]);
     }
 }

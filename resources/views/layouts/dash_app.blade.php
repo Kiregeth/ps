@@ -118,6 +118,12 @@
                             <li class="@if ($title === 'databank') active @endif">
                                 <a href="/databank"><i class="fa fa-home"></i> Databank </a>
                             </li>
+                            <li class="@if ($title === 'visa') active @endif">
+                                <a href="/visa"><i class="fa fa-home"></i> Visa Process </a>
+                            </li>
+                            <li class="@if ($title === 'deployment') active @endif">
+                                <a href="/deployment"><i class="fa fa-home"></i> Deployment </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

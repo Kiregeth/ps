@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\visitor_log;
 use App\databank;
+use App\visaprocess;
 
 class SysController extends Controller
 {
@@ -98,6 +99,113 @@ class SysController extends Controller
         {
             return redirect('/');
         }
+    }
+
+    public function visa()
+    {
+        if(\Auth::user())
+        {
+            $cols=\Schema::getColumnListing('visaprocesses');
+            $datas=visaprocess::orderBy('Ref_No','desc')
+                ->groupBy('Ref_No')
+                ->groupBy('Date')
+                ->groupBy('Candidates_Name')
+                ->groupBy('Contact_No')
+                ->groupBy('DOB')
+                ->groupBy('PP_NO')
+                ->groupBy('PP_Status')
+                ->groupBy('LA_Contact')
+                ->groupBy('LA')
+                ->groupBy('Trade')
+                ->groupBy('Company')
+                ->groupBy('Status')
+                ->groupBy('Offer_Letter_Received_Date')
+                ->groupBy('Process_Date')
+                ->groupBy('Status')
+                ->groupBy('PP_Returned_Date')
+                ->groupBy('PP_Resubmitted_Date')
+                ->groupBy('State_Vp')
+                ->groupBy('created_at')
+                ->groupBy('updated_at')
+                ->get([
+                    'Ref_No','Date','Candidates_Name','Contact_No','DOB','PP_NO','PP_Status','LA_Contact','LA',
+                    'Trade','Company','Status','Offer_Letter_Received_Date','Process_Date','Status','PP_Returned_Date',
+                    'PP_Resubmitted_Date','State_Vp'
+                ]);
+            $db_table="visaprocesses";
+
+            return view('joins.visa',compact('cols','datas','db_table'));
+        }else
+        {
+            return redirect('/');
+        }
+
+    }
+
+    public function deployment()
+    {
+        if(\Auth::user())
+        {
+            $cols=\Schema::getColumnListing('visaprocesses');
+            $datas=visaprocess::orderBy('Ref_No','desc')
+                ->groupBy('Ref_No')
+                ->groupBy('Date')
+                ->groupBy('Candidates_Name')
+                ->groupBy('Contact_No')
+                ->groupBy('DOB')
+                ->groupBy('PP_NO')
+                ->groupBy('PP_Status')
+                ->groupBy('LA_Contact')
+                ->groupBy('LA')
+                ->groupBy('Trade')
+                ->groupBy('Company')
+                ->groupBy('Status')
+                ->groupBy('Offer_Letter_Received_Date')
+                ->groupBy('Process_Date')
+                ->groupBy('Status')
+                ->groupBy('PP_Returned_Date')
+                ->groupBy('PP_Resubmitted_Date')
+                ->groupBy('State_Vp')
+                ->groupBy('created_at')
+                ->groupBy('updated_at')
+                ->get([
+                    'Ref_No','Date','Candidates_Name','Contact_No','DOB','PP_NO','PP_Status','LA_Contact','LA',
+                    'Trade','Company','Status','Offer_Letter_Received_Date','Process_Date','Status','PP_Returned_Date',
+                    'PP_Resubmitted_Date','State_Vp'
+                ]);
+            Full texts
+Ref_No  Descending 1
+Date
+Candidates_Name
+Contact_No
+DOB
+PP_No
+PP_Status
+LA_Contact
+LA
+Trade
+Company
+Status
+WP_Expiry
+Offer_Letter_Received_Date
+VP_Date
+VR_Date
+Visa_Issue_Date
+Visa_Exp
+SA
+Flown_date
+PP_Returned_Date
+PP_Resubmitted_Date
+Demand_No
+Visa_No
+
+            $db_table="visaprocesses";
+
+            return view('joins.deployment',compact('cols','datas','db_table'));
+        }else
+        {
+            return redirect('/');
+        }
 
     }
 
@@ -111,7 +219,7 @@ class SysController extends Controller
                 break;
             case 'databanks':
                 $pasa=new databank;
-                $discard=['_token','db_table','add','state','created_at','updated_at'];
+                $discard=['_token','db_table','add','State','created_at','updated_at'];
                 break;
             default:
                 $pasa=new visitor_log;
@@ -132,12 +240,5 @@ class SysController extends Controller
         return back();
     }
 
-    public function delete(Request $request)
-    {
-        $value=$request->db_table;
-        echo $value;
-        exit;
-        \DB::table($db_table)->where('Ref_No', $Ref_No)->delete();
-        return back();
-    }
+
 }
