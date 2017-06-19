@@ -32,11 +32,49 @@
     .fa{
         color:#000;
     }
+    th,td{
+        padding:0 !important;
+        padding-left:5px !important;
+        padding-right:5px !important;
+    }
+    .caret{
+        display:none;
+    }
+    .select
+    {
+        color:blue !important;
+    }
+
+    .btn-info
+    {
+        padding:5px;
+    }
     </style>
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
-                <h1>Visitor Log</h1>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6"><h1>Visitor Log</h1></div>
+                    <div class="col-xs-6 col-md-6 center-blocks">
+                        <form action="/reception" method="POST" name="search-form" id="search-form">
+                            {{csrf_field()}}
+                            <h5><label for="search">Search:</label></h5>
+                            <select class="selectpicker" name="sel" id="sel" data-style="btn-info">
+                                @foreach($cols as $col)
+                                    @if($col!='State' && $col!='created_at' && $col!='updated_at')
+                                        <option value="{{$col}}" @if($sel===$col){{'selected'}}@endif>{{$col}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+
+                            <input name="search" id="search" type="text" value="{{$search}}" placeholder="Search"/>
+
+                            <input type="submit" style="display:none" />
+
+                        </form>
+                    </div>
+                </div>
+                <br/>
                 <form id='ajax-form' method='post' action='/'>
                     {{ csrf_field() }}
                 <div class="">
@@ -85,7 +123,14 @@
                 </div>
                 </form>
             </div>
+            <br/>
         </div>
+        @if($sel!="" && $search!="")
+            <div class="center-block">{{$logs->appends(['sel' => $sel,'search'=>$search])->render()}}</div>
+        @else
+            <div class="center-block">{{$logs->render()}}</div>
+        @endif
+        <br/>
     </div>
 
     @foreach($logs as $log)

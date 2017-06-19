@@ -20,6 +20,7 @@
 
     <!-- Global stylesheets -->
     <link href="{{ asset('css/theme/bootstrap.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{asset('/css/font-awesome.css')}}" rel="stylesheet">
     <link href="{{asset('/css/theme/core.css')}}" rel="stylesheet">
     <link href="{{asset('/css/theme/components.css')}}" rel="stylesheet">
@@ -31,11 +32,19 @@
     <script src="{{asset('/js/jquery.min.js')}}"></script>
     <!-- Bootstrap -->
     <script src="{{asset('/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('/js/bootstrap-select.min.js')}}"></script>
     <!-- /core JS files -->
     <script type="text/javascript" src="{{ asset('js/theme/app.js') }}"></script>
 
     <!-- /theme JS files -->
 </head>
+
+<style rel="stylesheet" type="text/css">
+    .navigation .fa{
+        color: #fff !important;
+    }
+</style>
+
 <body>
 
 <!-- Main navbar -->
@@ -61,8 +70,15 @@
     <!-- Page content -->
     <div class="page-content">
 
+        <div class="pull-left">
+            <button title="Show Sidebar" id="ToggleNavScriptRight" class="btn btn-link"
+                    data-toggle="collapse" data-target=".navbar-collapse" >
+                <i style="color:black !important;" class="fa fa-caret-square-o-right fa-2x" aria-hidden="true"></i>
+            </button>
+        </div>
+
         <!-- Main sidebar -->
-        <div class="sidebar sidebar-main">
+        <div id="sidebar" class="sidebar sidebar-main">
             <div class="sidebar-content">
 
                 <!-- User menu -->
@@ -72,6 +88,12 @@
                             {{--<a href="#">--}}
                             {{--<img src="assets/images/demo/users/face11.jpg" class="img-circle img-responsive" alt="">--}}
                             {{--</a>--}}
+                            <div class="pull-right">
+                                <button title="Hide Sidebar" id="ToggleNavScriptLeft" class="btn btn-link"
+                                        data-toggle="collapse" data-target=".navbar-collapse" >
+                                    <i style="color:white !important;" class="fa fa-caret-square-o-left fa-2x" aria-hidden="true"></i>
+                                </button>
+                            </div>
                             <h6>{{ Auth::user()->name }}</h6>
                             <span class="text-size-small">{{ Auth::user()->email }}</span>
                         </div>
@@ -113,16 +135,16 @@
                             </li>
                             <h5>Operational Management</h5>
                             <li class="@if ($title === 'visitor_log') active @endif">
-                                <a href="/reception"><i class="fa fa-home"></i> Visitor Log </a>
+                                <a href="/reception"><i class="fa fa-university"></i> Visitor Log </a>
                             </li>
                             <li class="@if ($title === 'databank') active @endif">
-                                <a href="/databank"><i class="fa fa-home"></i> Databank </a>
+                                <a href="/databank"><i class="fa  fa-database"></i> Databank </a>
                             </li>
                             <li class="@if ($title === 'visa') active @endif">
-                                <a href="/visa"><i class="fa fa-home"></i> Visa Process </a>
+                                <a href="/visa"><i class="fa fa-cc-visa"></i> Visa Process </a>
                             </li>
                             <li class="@if ($title === 'deployment') active @endif">
-                                <a href="/deployment"><i class="fa fa-home"></i> Deployment </a>
+                                <a href="/deployment"><i class="fa fa-share-square-o"></i> Deployment </a>
                             </li>
                         </ul>
                     </div>
@@ -150,7 +172,7 @@
 
 
                 <!-- Footer -->
-                <div class="footer text-muted pull-right">
+                <div class="footer">
                     &copy;Pasa IT Solution 2017 <a class="btn btn-link" href="http://itspasa.com.np" style="color:green">www.itspasa.com.np</a>
                 </div>
                 <!-- /footer -->
@@ -164,5 +186,16 @@
     <!-- /page content -->
 </div>
 <!-- /page container -->
+
+<script type="text/javascript">
+    $("#ToggleNavScriptLeft").click(function() {
+        $('#sidebar').hide();
+    });
+    $("#ToggleNavScriptRight").click(function() {
+        $('#sidebar').show();
+    });
+</script>
+
+
 </body>
 </html>
