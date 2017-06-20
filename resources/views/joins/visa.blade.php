@@ -41,6 +41,9 @@
             padding-left:5px !important;
             padding-right:5px !important;
         }
+        thead th{
+            padding:10px !important;
+        }
         .caret{
             display:none;
         }
