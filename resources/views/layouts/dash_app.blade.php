@@ -146,6 +146,17 @@
                             <li class="@if ($title === 'deployment') active @endif">
                                 <a href="/deployment"><i class="fa fa-share-square-o"></i> Deployment </a>
                             </li>
+
+                            @if(Auth::user()->role=='admin' || Auth::user()->role=='admin')
+                            <h5>User Management</h5>
+                                <li class="@if ($title === 'add_user') active @endif">
+                                    <a href="/add_user"><i class="fa fa-user-plus"></i> Add User</a>
+                                </li>
+                            <li class="@if ($title === 'users') active @endif">
+                                <a href="/users"><i class="fa fa-users"></i> Users </a>
+                            </li>
+                            @endif
+
                         </ul>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ use App\visitor_log;
 use App\databank;
 use App\visaprocess;
 use App\vrflown;
+use App\User;
 
 class SysController extends Controller
 {
@@ -366,6 +367,106 @@ class SysController extends Controller
         }
         $pasa->save();
         return back();
+    }
+
+    public function users(Request $request)
+    {
+        if(\Auth::user() && (\Auth::user()->role=='admin' || \Auth::user()->role=='superadmin'))
+        {
+            $sel="";
+            $search="";
+
+            if (!empty($request->all()) && $request->sel!="" && $request->search!="")
+            {
+                $sel = $request->sel;
+                $search = $request->search;
+                $users=user::where($sel, 'LIKE', '%' . $search . '%')
+                    ->orderBy('uname','desc')
+                    ->groupBy('uname')
+                    ->groupBy('id')
+                    ->groupBy('name')
+                    ->groupBy('phn')
+                    ->groupBy('role')
+                    ->groupBy('email')
+                    ->groupBy('password')
+                    ->groupBy('remember_token')
+                    ->groupBy('created_at')
+                    ->groupBy('updated_at')
+                    ->paginate(20,['id','uname','name','phn','role','email','password']);
+            }
+            else
+            {
+                $users=user::orderBy('uname','desc')
+                    ->groupBy('uname')
+                    ->groupBy('id')
+                    ->groupBy('name')
+                    ->groupBy('phn')
+                    ->groupBy('role')
+                    ->groupBy('email')
+                    ->groupBy('password')
+                    ->groupBy('remember_token')
+                    ->groupBy('created_at')
+                    ->groupBy('updated_at')
+                    ->paginate(20,['id','uname','name','phn','role','email','password']);
+            }
+
+            $cols=\Schema::getColumnListing('users');
+            return view ('joins/users', compact('users','cols','sel','search'));
+        }
+        else
+        {
+            return redirect('/');
+        }
+    }
+
+    public function add_user(Request $request)
+    {
+        if(\Auth::user() && (\Auth::user()->role=='admin' || \Auth::user()->role=='superadmin'))
+        {
+            $sel="";
+            $search="";
+
+            if (!empty($request->all()) && $request->sel!="" && $request->search!="")
+            {
+                $sel = $request->sel;
+                $search = $request->search;
+                $users=user::where($sel, 'LIKE', '%' . $search . '%')
+                    ->orderBy('uname','desc')
+                    ->groupBy('uname')
+                    ->groupBy('id')
+                    ->groupBy('name')
+                    ->groupBy('phn')
+                    ->groupBy('role')
+                    ->groupBy('email')
+                    ->groupBy('password')
+                    ->groupBy('remember_token')
+                    ->groupBy('created_at')
+                    ->groupBy('updated_at')
+                    ->paginate(20,['id','uname','name','phn','role','email','password']);
+            }
+            else
+            {
+                $users=user::orderBy('uname','desc')
+                    ->groupBy('uname')
+                    ->groupBy('id')
+                    ->groupBy('name')
+                    ->groupBy('phn')
+                    ->groupBy('role')
+                    ->groupBy('email')
+                    ->groupBy('password')
+                    ->groupBy('remember_token')
+                    ->groupBy('created_at')
+                    ->groupBy('updated_at')
+                    ->paginate(20,['id','uname','name','phn','role','email','password']);
+            }
+
+            $cols=\Schema::getColumnListing('users');
+            return view ('joins/users', compact('users','cols','sel','search'));
+        }
+        else
+        {
+            return redirect('/');
+        }
     }
 
 

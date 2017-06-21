@@ -20,11 +20,14 @@ Route::get('/reception', 'SysController@visitor_log');
 Route::get('/databank', 'SysController@databank');
 Route::get('/visa', 'SysController@visa');
 Route::get('/deployment', 'SysController@deployment');
+Route::get('/users', 'SysController@users');
+Route::get('/add_user', 'SysController@add_user');
 
 Route::post('/reception', 'SysController@visitor_log');
 Route::post('/databank', 'SysController@databank');
 Route::post('/visa', 'SysController@visa');
 Route::post('/deployment', 'SysController@deployment');
+Route::post('/users', 'SysController@users');
 
 Route::post('/add', 'SysController@add');
 
