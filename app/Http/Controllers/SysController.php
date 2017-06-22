@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\visitor_type;
 use App\visitor_log;
 use App\databank;
 use App\visaprocess;
 use App\vrflown;
 use App\User;
+use App\user_role;
 
 class SysController extends Controller
 {
@@ -73,10 +75,9 @@ class SysController extends Controller
             }
 
             $cols=\Schema::getColumnListing('visitor_logs');
-
-
+            $types=visitor_type::all();
             $db_table="visitor_logs";
-            return view('joins.visitor_log',compact('cols','logs','db_table','sel','search'));
+            return view('joins.visitor_log',compact('cols','logs','types','db_table','sel','search'));
         }else
         {
             return redirect('/');
@@ -423,45 +424,28 @@ class SysController extends Controller
     {
         if(\Auth::user() && (\Auth::user()->role=='admin' || \Auth::user()->role=='superadmin'))
         {
-            $sel="";
-            $search="";
 
-            if (!empty($request->all()) && $request->sel!="" && $request->search!="")
+            if (!empty($request->all()))
             {
-                $sel = $request->sel;
-                $search = $request->search;
-                $users=user::where($sel, 'LIKE', '%' . $search . '%')
-                    ->orderBy('uname','desc')
-                    ->groupBy('uname')
-                    ->groupBy('id')
-                    ->groupBy('name')
-                    ->groupBy('phn')
-                    ->groupBy('role')
-                    ->groupBy('email')
-                    ->groupBy('password')
-                    ->groupBy('remember_token')
-                    ->groupBy('created_at')
-                    ->groupBy('updated_at')
-                    ->paginate(20,['id','uname','name','phn','role','email','password']);
+                $pasa=new User;
+                $discard=['id','remember_token','created_at','updated_at'];
+                $cols=\Schema::getColumnListing('users');
+                foreach($request->all() as $key=>$value)
+                {
+                    if(in_array($key,$cols) && !in_array($key,$discard))
+                    {
+                        if($key=='password')
+                            $pasa->$key=bcrypt($value);
+                        else
+                            $pasa->$key=$value;
+                    }
+                }
+                $pasa->save();
+                session()->flash('message', 'Data Added Successfully!');
             }
-            else
-            {
-                $users=user::orderBy('uname','desc')
-                    ->groupBy('uname')
-                    ->groupBy('id')
-                    ->groupBy('name')
-                    ->groupBy('phn')
-                    ->groupBy('role')
-                    ->groupBy('email')
-                    ->groupBy('password')
-                    ->groupBy('remember_token')
-                    ->groupBy('created_at')
-                    ->groupBy('updated_at')
-                    ->paginate(20,['id','uname','name','phn','role','email','password']);
-            }
-
+            $roles=user_role::all();
             $cols=\Schema::getColumnListing('users');
-            return view ('joins/users', compact('users','cols','sel','search'));
+            return view ('joins/add_user', compact('cols','roles','msg'));
         }
         else
         {

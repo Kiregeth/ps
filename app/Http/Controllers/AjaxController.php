@@ -15,13 +15,13 @@ class AjaxController extends Controller
 
         // Perform MySQL ADD
         $query=array();
-
+        $required=[];
         $array = explode(",", $val);
         $db_table = $array[0];
         switch ($db_table)
         {
-            case 'visistor_logs':
-                $required = ['visitor_name', 'contact_no', 'visit_purpose'];
+            case 'visitor_logs':
+                $required = ['visitor_name', 'contact_no','type', 'visit_purpose'];
                 break;
             case 'databanks':
                 $required=['Ref_No','Date','Candidates_Name','Contact_No','DOB','PP_NO','Trade','Company'];
@@ -39,7 +39,7 @@ class AjaxController extends Controller
             } else {
 
                 $value = explode(":", $arr);
-                if (in_array($value[0], $required) && ($value[1]==null || $value[1]=="")) {
+                if (in_array($value[0], $required)) {
                     $err = $value[0] . " field is required";
                     break;
                 }

@@ -1,4 +1,4 @@
-@extends('layouts.dash_app',['title'=>'deployment'])
+@extends('layouts.dash_app',['title'=>'users'])
 
 @section('content')
     <style>

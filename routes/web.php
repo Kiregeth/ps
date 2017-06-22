@@ -28,6 +28,7 @@ Route::post('/databank', 'SysController@databank');
 Route::post('/visa', 'SysController@visa');
 Route::post('/deployment', 'SysController@deployment');
 Route::post('/users', 'SysController@users');
+Route::post('/add_user', 'SysController@add_user');
 
 Route::post('/add', 'SysController@add');
 

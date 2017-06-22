@@ -8,8 +8,10 @@
     .modal-dialog {
     width: 80% !important;
     }
-    .modal-content input[type=text], .modal-content input[type=number] {
+    .modal-content input[type=text], .modal-content input[type=number], .modal-content select {
         max-height: 24px;
+        padding: 0 0 0 10px;
+        margin:2px;
     }
     .modal-content input[readonly]
     {
@@ -50,6 +52,7 @@
         padding:5px;
     }
     </style>
+    @php $required=['visitor_name','contact_no','type','visit_purpose']; @endphp
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
@@ -98,7 +101,18 @@
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             @foreach ($cols as $col)
                                 @if($col!='sn' && $col!='time' && $col!="created_at" && $col!="updated_at")
-                                    <td><input id="qa_{{$col}}" name="{{$col}}" placeholder="{{$col}}" required/></td>
+                                    @if($col=='type')
+                                        <td>
+                                            <select id="qa_{{$col}}" name="{{$col}}">
+                                                @foreach($types as $type)
+                                                    <option value="{{$type->type}}">{{$type->type}}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </td>
+                                    @else
+                                        <td><input id="qa_{{$col}}" name="{{$col}}" placeholder="{{$col}} @if(in_array($col,$required))*@endif" required/></td>
+                                    @endif
                                 @endif
                             @endforeach
                             <td>&nbsp</td>
@@ -186,17 +200,25 @@
                             @if($col!="sn" && $col!="time" && $col!="created_at" && $col!="updated_at")
                                 <div class="row">
                                     <div class="col-xs-4 col-md-4"><label class="control-label pull-right"
-                                                                          for="{{ $col }}_0">{{ $col }}:</label>
+                                                                          for="{{ $col }}_0">{{ $col }} @if(in_array($col,$required))*@endif:</label>
                                     </div>
                                     <div class="col-xs-8 col-md-8">
+                                        @if($col=='type')
+                                        <select id="qa_{{$col}}" name="{{$col}}" class="form-control">
+                                            @foreach($types as $type)
+                                                <option value="{{$type->type}}">{{$type->type}}</option>
+                                            @endforeach
+                                        </select>
+                                        @else
                                         <input
                                                 type="text"
                                                 class="form-control"
                                                 id="{{ $col }}_0"
                                                 name="{{ $col }}"
                                                 placeholder="Enter {{ $col }} here!"
-                                        @if($col!="remarks") {{" required"}} @endif
+                                        @if(in_array($col,$required)) {{" required"}} @endif
                                         />
+                                        @endif
                                     </div>
                                 </div>
                             @endif
