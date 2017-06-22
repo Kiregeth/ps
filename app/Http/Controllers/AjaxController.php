@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AjaxController extends Controller
 {
@@ -61,32 +62,45 @@ class AjaxController extends Controller
         $w_val=$request->w_val;
         $col=$request->col;
         $val=$request->val;
-        $check=\DB::table('databanks')->select()->where($w_col,$w_val)->first();
-        if(count($check)>0)
+        if($db_table=='users')
         {
-            $cols=\Schema::getColumnListing('databanks');
-            if(in_array($col,$cols))
-            {
-                \DB::table('databanks')->where($w_col, $w_val)->update([$col => $val]);
+            $check = \DB::table($db_table)->select()->where($w_col, $w_val)->first();
+            if (count($check) > 0) {
+                $cols = \Schema::getColumnListing($db_table);
+                if (in_array($col, $cols)) {
+                    \DB::table($db_table)->where($w_col, $w_val)->update([$col => $val]);
+                    if($col=='role') {
+                        if (Auth::user()->uname == $check->uname) {
+                            //echo Auth::user()->role;
+                            Auth::user()->role = $val;
+                        }
+                    }
+                }
             }
         }
-        $check=\DB::table('visaprocesses')->select()->where($w_col,$w_val)->first();
-        if(count($check)>0)
-        {
-            $cols=\Schema::getColumnListing('visaprocesses');
-            if(in_array($col,$cols)) {
-                \DB::table('visaprocesses')->where($w_col, $w_val)->update([$col => $val]);
+        else {
+            $check = \DB::table('databanks')->select()->where($w_col, $w_val)->first();
+            if (count($check) > 0) {
+                $cols = \Schema::getColumnListing('databanks');
+                if (in_array($col, $cols)) {
+                    \DB::table('databanks')->where($w_col, $w_val)->update([$col => $val]);
+                }
+            }
+            $check = \DB::table('visaprocesses')->select()->where($w_col, $w_val)->first();
+            if (count($check) > 0) {
+                $cols = \Schema::getColumnListing('visaprocesses');
+                if (in_array($col, $cols)) {
+                    \DB::table('visaprocesses')->where($w_col, $w_val)->update([$col => $val]);
+                }
+            }
+            $check = \DB::table('vrflowns')->select()->where($w_col, $w_val)->first();
+            if (count($check) > 0) {
+                $cols = \Schema::getColumnListing('vrflowns');
+                if (in_array($col, $cols)) {
+                    \DB::table('vrflowns')->where($w_col, $w_val)->update([$col => $val]);
+                }
             }
         }
-        $check=\DB::table('vrflowns')->select()->where($w_col,$w_val)->first();
-        if(count($check)>0)
-        {
-            $cols=\Schema::getColumnListing('vrflowns');
-            if(in_array($col,$cols)) {
-                \DB::table('vrflowns')->where($w_col, $w_val)->update([$col => $val]);
-            }
-        }
-
     }
 
     public function delete(Request $request)

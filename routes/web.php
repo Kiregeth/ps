@@ -40,3 +40,5 @@ Route::post('/quick_edit','AjaxController@quick_edit');
 Route::post('/visaprocess','AjaxController@visaprocess');
 Route::post('/deploy','AjaxController@deploy');
 Route::post('/cancel','AjaxController@cancel');
+
+Route::get('get_logout', '\App\Http\Controllers\Auth\LoginController@get_logout');

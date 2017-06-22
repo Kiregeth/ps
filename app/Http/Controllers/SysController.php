@@ -413,7 +413,8 @@ class SysController extends Controller
 
             $cols=\Schema::getColumnListing('users');
             $db_table='users';
-            return view ('joins/users', compact('users','cols','sel','search','db_table'));
+            $roles=user_role::all();
+            return view ('joins/users', compact('users','cols','sel','search','db_table','roles'));
         }
         else
         {

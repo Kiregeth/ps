@@ -60,7 +60,14 @@
             padding:5px;
         }
     </style>
-    @php $discard=['created_at','updated_at','password','remember_token'] @endphp
+    @php
+        $discard=['created_at','updated_at','password','remember_token'];
+        $opt_roles=[];
+        foreach($roles as $role)
+        {
+            $opt_roles[]=$role->role;
+        }
+    @endphp
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
@@ -226,12 +233,33 @@
 
                 var id=document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
 
+                var cname=$('#myTable').find('tr:eq(0) th:eq('+(myCol+1)+')').html();
+                var pri="";
+                var roles={!! json_encode($opt_roles) !!};
 
-                $(this).html(
+                if(cname.toString()==='ROLE')
+                {
+                    pri="<select name='"+colArray[myCol]+'_'+myRow+"' id='"+colArray[myCol]+'_'+myRow+"'>";
+                    var x;
+                    for(x in roles)
+                    {
+                        var req="";
+                        if(roles[x]===OriginalContent)
+                        {
+                            req='selected';
+                        }
+                        pri+="<option value='"+roles[x]+"' "+req+">"+roles[x]+"</option>";
+                    }
+                    pri+="</select>";
+                }
+                else
+                {
+                    pri="<input placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>";
+                }
 
-                    "<input placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
-                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
-                );
+
+                pri+="<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='id' value='"+id+"' />";
+                $(this).html(pri);
 
                 $(this).children().first().focus();
 
@@ -265,32 +293,31 @@
             var method = form.method;
             var action = form.action;
 
-
             var where=document.getElementById('where_'+myRow+'_'+myCol);
             var where_val = where.value;
             var where_col = where.name;
 
-//            $.ajax({
-//                url: action,
-//                type: method,
-//                data: {
-//                    db_table:'databanks',
-//                    val: value,
-//                    col: column,
-//                    w_col: where_col,
-//                    w_val: where_val
-//                },
-//                cache: false,
-//                timeout: 10000,
-//                success: function (data){
-//                    if (data) {
-//                        alert(data);
-//                    }
-//// Load output into a P
-//                    else {
-//                    }
-//                }
-//            });
+            $.ajax({
+                url: action,
+                type: method,
+                data: {
+                    db_table:'users',
+                    val: value,
+                    col: column,
+                    w_col: where_col,
+                    w_val: where_val
+                },
+                cache: false,
+                timeout: 10000,
+                success: function (data){
+                    if (data) {
+                        alert(data);
+                    }
+// Load output into a P
+                    else {
+                    }
+                }
+            });
 // Prevent normal submission of form
             return false;
         }
