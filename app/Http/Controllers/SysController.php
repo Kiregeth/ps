@@ -382,9 +382,9 @@ class SysController extends Controller
                 $sel = $request->sel;
                 $search = $request->search;
                 $users=user::where($sel, 'LIKE', '%' . $search . '%')
-                    ->orderBy('uname','desc')
-                    ->groupBy('uname')
+                    ->orderBy('id','desc')
                     ->groupBy('id')
+                    ->groupBy('uname')
                     ->groupBy('name')
                     ->groupBy('phn')
                     ->groupBy('role')
@@ -412,7 +412,8 @@ class SysController extends Controller
             }
 
             $cols=\Schema::getColumnListing('users');
-            return view ('joins/users', compact('users','cols','sel','search'));
+            $db_table='users';
+            return view ('joins/users', compact('users','cols','sel','search','db_table'));
         }
         else
         {
@@ -434,10 +435,34 @@ class SysController extends Controller
                 {
                     if(in_array($key,$cols) && !in_array($key,$discard))
                     {
-                        if($key=='password')
-                            $pasa->$key=bcrypt($value);
-                        else
-                            $pasa->$key=$value;
+                        if($key=='password') {
+                            $pasa->$key = bcrypt($value);
+                        }
+                        else if($key=='email')
+                        {
+                            $email_list=User::get(['email']);
+                            $temp=[];
+                            $i=0;
+
+                            foreach($email_list as $e)
+                            {
+                                $temp[]=$e->email;
+                                $i++;
+                            }
+
+                            if(in_array($value,$temp))
+                            {
+                                $pri="<h1 style='color:Red'>Error: Email Already Exist</h1>"."<br /><a class='btn btn-link' title='Go Back' href='/add_user'>Go Back</a>";
+                                return $pri;
+                            }
+                            else
+                            {
+                                $pasa->$key = $value;
+                            }
+                        }
+                        else {
+                            $pasa->$key = $value;
+                        }
                     }
                 }
                 $pasa->save();
@@ -445,6 +470,7 @@ class SysController extends Controller
             }
             $roles=user_role::all();
             $cols=\Schema::getColumnListing('users');
+
             return view ('joins/add_user', compact('cols','roles','msg'));
         }
         else
