@@ -42,3 +42,9 @@ Route::post('/deploy','AjaxController@deploy');
 Route::post('/cancel','AjaxController@cancel');
 
 Route::get('get_logout', '\App\Http\Controllers\Auth\LoginController@get_logout');
+
+Route::get('/check', function()
+{
+    if (!extension_loaded('imagick'))
+        return 'imagick not installed';
+});

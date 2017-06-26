@@ -40,7 +40,7 @@ class AjaxController extends Controller
             } else {
 
                 $value = explode(":", $arr);
-                if (in_array($value[0], $required)) {
+                if (in_array($value[0], $required) && ($value[1]==''||empty($value[1]))) {
                     $err = $value[0] . " field is required";
                     break;
                 }
