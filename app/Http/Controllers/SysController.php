@@ -480,5 +480,28 @@ class SysController extends Controller
         }
     }
 
+    public function change_pwd(Request $request)
+    {
+        $msg="";
+        $msg_class="";
+        if (!empty($request->all()))
+        {
+            if (\Hash::check($request->old_pwd, \Auth::user()->password))
+            {
+                $password=\Hash::make($request->new_pwd);
+                User::where('uname', \Auth::user()->uname)
+                    ->update(['password' => $password]);
+                $msg="Password Changed!";
+                $msg_class="bg-success";
+
+            }
+            else
+            {
+                $msg="Old Password Invalid";
+                $msg_class="bg-danger";
+            }
+        }
+        return view('change_pwd',compact('msg','msg_class'));
+    }
 
 }

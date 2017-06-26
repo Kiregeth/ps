@@ -23,6 +23,8 @@ Route::get('/deployment', 'SysController@deployment');
 Route::get('/users', 'SysController@users');
 Route::get('/add_user', 'SysController@add_user');
 
+Route::get('/change_pwd', 'SysController@change_pwd');
+
 Route::post('/reception', 'SysController@visitor_log');
 Route::post('/databank', 'SysController@databank');
 Route::post('/visa', 'SysController@visa');
@@ -31,6 +33,8 @@ Route::post('/users', 'SysController@users');
 Route::post('/add_user', 'SysController@add_user');
 
 Route::post('/add', 'SysController@add');
+
+Route::post('/change_pwd', 'SysController@change_pwd');
 
 
 Route::post('/delete', 'AjaxController@delete');

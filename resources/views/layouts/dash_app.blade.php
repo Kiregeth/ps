@@ -99,18 +99,21 @@
                         </div>
 
                         <div class="sidebar-user-material-menu">
-                            <a href="#user-nav" data-toggle="collapse"><span>My account</span> <i class="caret"></i></a>
+                            <a href="#user-nav" data-toggle="collapse" @if($title=='change_pwd' || $title=='change_dp')aria-expanded="true" @endif>
+                                <span>My account</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                            </a>
                         </div>
                     </div>
 
-                    <div class="navigation-wrapper collapse" id="user-nav">
+                    <div class="navigation-wrapper collapse @if($title=='change_pwd' || $title=='change_dp')in @endif" id="user-nav">
                         <ul class="navigation">
-                            <li><a href="#"><i class="icon-user-plus"></i> <span>My profile</span></a></li>
-                            <li><a href="#"><i class="icon-cog5"></i> <span>Account settings</span></a></li>
+                            <li><a href="#"><i class="icon-user-plus"></i> <span>Change Display Picture</span></a></li>
+                            <li class="@if ($title === 'change_pwd') active @endif"><a href="/change_pwd"><i class="icon-cog5"></i> <span>Change Password</span></a></li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
+
                                     <i class="icon-switch2"></i> <span>Logout</span>
                                 </a>
 
