@@ -47,8 +47,21 @@ Route::post('/cancel','AjaxController@cancel');
 
 Route::get('get_logout', '\App\Http\Controllers\Auth\LoginController@get_logout');
 
+
+
+// test routes
 Route::get('/check', function()
 {
     if (!extension_loaded('imagick'))
         return 'imagick not installed';
 });
+
+Route::get('/pdf', function()
+{
+    $pdf = App::make('dompdf.wrapper');
+    $asd="<h1>asdasd</h1>";
+    $pdf->loadHTML($asd)->save(public_path('/my_stored_file.pdf'));
+    return "done";
+});
+
+
