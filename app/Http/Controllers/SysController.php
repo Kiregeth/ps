@@ -88,8 +88,14 @@ class SysController extends Controller
     public function application_form(Request $request)
     {
         if(\Auth::user()) {
-            return view('joins.application_form');
+            $cols=\Schema::getColumnListing('app_forms');
+            return view('joins.application_form',compact('cols'));
         }
+        else
+        {
+            return redirect('/');
+        }
+
     }
 
     public function databank(Request $request)
