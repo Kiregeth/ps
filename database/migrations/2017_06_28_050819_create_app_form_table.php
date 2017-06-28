@@ -30,6 +30,7 @@ class CreateAppFormTable extends Migration
             $table->string('spouse_name');
             $table->string('passport_no');
             $table->string('place_of_issue');
+            $table->string('date_of_issue');
             $table->string('date_of_expiry');
             $table->integer('height_feet');
             $table->integer('height_inch');
