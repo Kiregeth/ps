@@ -21,6 +21,7 @@
                    'dob','gender','marital_status','passport_no','place_of_issue',
                    'date_of_issue','date_of_expiry','height_feet','height_inch','weight',
                    'parent_name','prior_experience'];
+        $numeric=['height_feet','height_inch','weight',]
     @endphp
     <div class="container">
         <div class="row">
@@ -108,7 +109,10 @@
                                                     <input id="married" type="radio" value="married" name="marital_status">
                                                     <label class="control-label" for="married">Married </label>
                                                 @else
-                                                <input type="text" class="form-control" name="{{$col}}" id="{{$col}}" placeholder="{{ucfirst(preg_replace("/_+/", " ", "$col"))}}"/>
+                                                <input type="text" class="form-control"
+                                                       name="{{$col}}" id="{{$col}}"
+                                                       placeholder="{{ucfirst(preg_replace("/_+/", " ", "$col"))}} @if(in_array($col,$required))*@endif"
+                                                />
                                                 @endif
                                             </div>
                                         </div>
