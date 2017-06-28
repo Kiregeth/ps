@@ -150,6 +150,11 @@
                                 <a href="/deployment"><i class="fa fa-share-square-o"></i> Deployment </a>
                             </li>
 
+                            <h5>Forms and Data</h5>
+                            <li class="@if ($title === 'application_form') active @endif">
+                                <a href="/application_form"><i class="fa fa-plus-circle"></i> Add Applicants git </a>
+                            </li>
+
                             @if(Auth::user()->role=='admin' || Auth::user()->role=='admin')
                             <h5>User Management</h5>
                                 <li class="@if ($title === 'add_user') active @endif">

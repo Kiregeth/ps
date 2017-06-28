@@ -17,6 +17,8 @@ Auth::routes();
 
 Route::get('/dashboard', 'SysController@dashboard')->name('dash');
 Route::get('/reception', 'SysController@visitor_log');
+Route::get('/application_form', 'SysController@application_form');
+
 Route::get('/databank', 'SysController@databank');
 Route::get('/visa', 'SysController@visa');
 Route::get('/deployment', 'SysController@deployment');
@@ -26,6 +28,7 @@ Route::get('/add_user', 'SysController@add_user');
 Route::get('/change_pwd', 'SysController@change_pwd');
 
 Route::post('/reception', 'SysController@visitor_log');
+Route::post('/application_form', 'SysController@application_form');
 Route::post('/databank', 'SysController@databank');
 Route::post('/visa', 'SysController@visa');
 Route::post('/deployment', 'SysController@deployment');
@@ -52,8 +55,15 @@ Route::get('get_logout', '\App\Http\Controllers\Auth\LoginController@get_logout'
 // test routes
 Route::get('/check', function()
 {
-    if (!extension_loaded('imagick'))
-        return 'imagick not installed';
+    $img = Image::make(public_path('css/img/login-bg.jpg'));
+    $img->text('foo', 500, 500, function($font) {
+        $font->file(public_path('img_font/times.ttf'));
+        $font->size('500');
+        $font->color('#000');
+        $font->align('center');
+        $font->valign('top');
+    });
+    return $img->response('jpg');
 });
 
 Route::get('/pdf', function()

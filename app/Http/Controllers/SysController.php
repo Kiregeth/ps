@@ -85,6 +85,13 @@ class SysController extends Controller
 
     }
 
+    public function application_form(Request $request)
+    {
+        if(\Auth::user()) {
+            return view('joins.application_form');
+        }
+    }
+
     public function databank(Request $request)
     {
         if (\Auth::user()) {
@@ -503,5 +510,7 @@ class SysController extends Controller
         }
         return view('change_pwd',compact('msg','msg_class'));
     }
+
+
 
 }
