@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Intervention\Image\Facades\Image;
+
 use Illuminate\Http\Request;
 use App\visitor_type;
 use App\visitor_log;
@@ -113,7 +115,9 @@ class SysController extends Controller
                 $pasa->photo=$photo_path;
                 $pasa->save();
 
-
+                $this->app_form_generate($insert_id);
+                session()->flash('message', 'Application Form Submitted Successfully!');
+                return back();
             }
             $cols=\Schema::getColumnListing('app_forms');
             return view('joins.application_form',compact('cols'));
@@ -544,6 +548,122 @@ class SysController extends Controller
         return view('change_pwd',compact('msg','msg_class'));
     }
 
+    public function app_form_generate($ref_no)
+    {
+        $data=app_form::where('ref_no',$ref_no)->first();
+        $img = Image::make(public_path('images/temp.jpg'));
+        $font_style=function($font) {
+            $font->file(public_path('img_font/times.ttf'));
+            $font->size('24');
+            $font->color('#000');
+        };
+        $img->text($data->ref_no, 175, 290,$font_style);
+        $img->text($data->name, 265, 357,$font_style);
+        $img->text($data->position, 950, 357,$font_style);
+        $img->text($data->telephone_no, 265, 410,$font_style);
+        $img->text($data->mobile_no, 570, 410,$font_style);
+        $img->text($data->religion, 950, 410,$font_style);
+        $img->text($data->address, 265, 465,$font_style);
+        $img->text($data->contact_address, 265, 520,$font_style);
+        $img->text($data->email, 265, 575,$font_style);
+        $img->text($data->qualification, 825, 575,$font_style);
 
+        //inserting dob date
+        $time_dob = strtotime($data->date_of_birth);
+        $dob_y= date('Y', $time_dob);
+        $dob_m= date('m', $time_dob);
+        $dob_d= date('d', $time_dob);
+
+        $img->text($dob_d[0], 235, 630,$font_style);
+        $img->text($dob_d[1], 275, 630,$font_style);
+        $img->text($dob_m[0], 330, 630,$font_style);
+        $img->text($dob_m[1], 370, 630,$font_style);
+        $img->text($dob_y[0], 430, 630,$font_style);
+        $img->text($dob_y[1], 470, 630,$font_style);
+        $img->text($dob_y[2], 510, 630,$font_style);
+        $img->text($dob_y[3], 550, 630,$font_style);
+
+        //checkboxes
+        if($data->gender=='male')
+        {
+            $img->text("■", 796, 630,$font_style);
+        }
+        else
+        {
+            $img->text("■", 923, 630,$font_style);
+        }
+
+        if($data->marital_status=='single')
+        {
+            $img->text("■", 224, 681,$font_style);
+        }
+        else
+        {
+            $img->text("■", 322, 681,$font_style);
+        }
+
+        if($data->spouse_name!=null && $data->spouse_name!="")
+        {
+            $img->text($data->spouse_name, 650, 683,$font_style);
+        }
+
+        $img->text($data->passport_no, 265, 735,$font_style);
+
+        //inserting doi date
+        $time_doi = strtotime($data->date_of_issue);
+        $doi_y= date('Y', $time_doi);
+        $doi_m= date('m', $time_doi);
+        $doi_d= date('d', $time_doi);
+
+        $img->text($doi_d[0], 572, 737,$font_style);
+        $img->text($doi_d[1], 600, 737,$font_style);
+        $img->text($doi_m[0], 642, 737,$font_style);
+        $img->text($doi_m[1], 672, 737,$font_style);
+        $img->text($doi_y[0], 714, 737,$font_style);
+        $img->text($doi_y[1], 743, 737,$font_style);
+        $img->text($doi_y[2], 770, 737,$font_style);
+        $img->text($doi_y[3], 798, 737,$font_style);
+
+        $img->text($data->place_of_issue, 1005, 735,$font_style);
+
+        //inserting doi date
+        $time_doe = strtotime($data->date_of_expiry);
+        $doe_y= date('Y', $time_doe);
+        $doe_m= date('m', $time_doe);
+        $doe_d= date('d', $time_doe);
+
+        $img->text($doe_d[0], 233, 797,$font_style);
+        $img->text($doe_d[1], 263, 797,$font_style);
+        $img->text($doe_m[0], 313, 797,$font_style);
+        $img->text($doe_m[1], 347, 797,$font_style);
+        $img->text($doe_y[0], 397, 797,$font_style);
+        $img->text($doe_y[1], 433, 797,$font_style);
+        $img->text($doe_y[2], 465, 797,$font_style);
+        $img->text($doe_y[3], 497, 797,$font_style);
+
+        $img->text($data->height_feet, 645, 790,$font_style);
+        $img->text($data->height_inch, 750, 790,$font_style);
+        $img->text($data->weight, 975, 790,$font_style);
+        $img->text("kg.", 1030, 790,$font_style);
+
+        $img->text($data->parent_name, 265, 845,$font_style);
+        $img->text($data->prior_experience, 265, 895,$font_style);
+        $photo=Image::make(public_path('images/'.$data->photo))->resize(170, 220);
+        $img->insert($photo,"",1010,85);
+
+        $path=public_path('/images/app_forms/L'.$data->ref_no.'/app_form_'.$data->ref_no.".jpg");
+        $img->save($path,50);
+
+
+        return;
+    }
+
+    public function font_style($font)
+    {
+        $font->file(public_path('img_font/times.ttf'));
+        $font->size('14');
+        $font->color('#000');
+        $this->font_style($font);
+    }
 
 }

@@ -51,7 +51,6 @@ Route::post('/cancel','AjaxController@cancel');
 Route::get('get_logout', '\App\Http\Controllers\Auth\LoginController@get_logout');
 
 
-
 // test routes
 Route::get('/check', function()
 {

@@ -18,6 +18,16 @@
         .form-group{
             margin-bottom:10px;
         }
+        .clear {
+            display: inline;
+            padding: 5px;
+            border-radius: 10px;
+            background: #9d9d9d;
+            color: black;
+            text-align: center;
+            cursor: pointer;
+            margin-left: 5px;
+        }
     </style>
     @php
         $discard=['ref_no','name','position','telephone_no','mobile_no','document_list','photo','created_at','updated_at'];
@@ -29,10 +39,13 @@
         $date=['date_of_birth','date_of_issue','date_of_expiry']
     @endphp
     <div class="container">
+        @if(session()->has('message'))
+            <h1 align="center" class="alert alert-success">{{session()->get('message')}}</h1>
+        @endif
         <div class="row">
             <div class="col-xs-offset-1 col-md-8 col-xs-8">
                 <div class="panel panel-info">
-                    <div class="panel-heading">Application Form</div>
+                    <div class="panel-heading"><h5>Application Form</h5></div>
                     <form class="form-horizontal" name="app_form" id="app_form" method="post" action="/application_form" onsubmit="return validation();" enctype="multipart/form-data">
                         {{csrf_field()}}
                         <div class="panel-body">
@@ -129,9 +142,23 @@
                                                 @endif
                                             </div>
                                         </div>
+                                @endif
+                            @endforeach
+                            </div>
+                            <div id="doc_upload">
+                                <h5><strong>Document Upload</strong></h5>
+                                <div id="cv_doc-selected" class="selected"></div>
+                                <div class="form-group" id="cv_group">
+                                    <a class="btn btn-success" name="u_cv_sel" id="u_cv_sel">Upload CV</a>
+                                    &nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-success">Generate CV</a>
+                                </div>
 
-                                    @endif
-                                @endforeach
+
+
+                                <input type="file" name="cv_doc" id="cv_doc" style="display:none;"/>
+                            </div>
+                            <div class="col-sm-12 col-xs-12 hidden-md hidden-lg">
                             </div>
                         </div>
                         <div class="panel-footer">
@@ -164,14 +191,36 @@
             var mss=document.getElementById("single");
             var msm=document.getElementById("married");
 
-            if(genm.checked==false && genf.checked==false){
+            if(genm.checked===false && genf.checked===false){
                 alert("Select gender");
                 return false;
             }
-            if(mss.checked==false && msm.checked==false){
+            if(mss.checked===false && msm.checked===false){
                 alert("Select marital status");
                 return false;
             }
+        }
+
+        $('#u_cv_sel').on('click', function() {
+            $('#cv_doc').trigger('click');
+        });
+        $('#cv_doc').bind('change', function() {
+            var fileName = '';
+            var index = 0;
+            fileName = $(this).val();
+            index=(fileName.lastIndexOf("\\") + 1);
+            fileName=fileName.substr(index);
+            $('#cv_doc-selected').html
+            (
+                "<h5 class='bg-success'><div class='btn btn-danger' id='pp_doc_clear' onclick='clear_cv()'>&nbsp;X&nbsp;</div> &nbsp; CV copy uploaded! ("+fileName+") </h5>"
+            );
+            $('#cv_group').hide();
+        });
+        function clear_cv() {
+            event.preventDefault();
+            $('input[type="file"]#cv_doc').val('');
+            $('#cv_doc-selected').html('');
+            $('#cv_group').show();
         }
     </script>
 @endsection
