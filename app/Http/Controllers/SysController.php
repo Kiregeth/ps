@@ -10,6 +10,7 @@ use App\visaprocess;
 use App\vrflown;
 use App\User;
 use App\user_role;
+use App\app_form;
 
 class SysController extends Controller
 {
@@ -88,6 +89,32 @@ class SysController extends Controller
     public function application_form(Request $request)
     {
         if(\Auth::user()) {
+            if (!empty($request->all()))
+            {
+                $pasa=new app_form();
+                $discard=['_token','ref_no','submit'];
+                foreach($request->all() as $key=>$value)
+                {
+                    if(!in_array($key,$discard))
+                    {
+                        $pasa->$key=$value;
+                    }
+                }
+                $pasa->save();
+
+                $pasa=app_form::all()->last();
+                $insert_id=$pasa->ref_no;
+                $d="L".$insert_id;
+                $dir=\File::makeDirectory(public_path("images/app_forms/").$d);
+
+                $photo_path = $request->file('photo')->storeAs(
+                    "/app_forms/".$d, "photo_".$insert_id.".jpg"
+                );
+                $pasa->photo=$photo_path;
+                $pasa->save();
+
+
+            }
             $cols=\Schema::getColumnListing('app_forms');
             return view('joins.application_form',compact('cols'));
         }

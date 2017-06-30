@@ -32,6 +32,8 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">Application Form</div>
                     <form class="form-horizontal" name="app_form" id="app_form" method="post" action="/application_form" onsubmit="return validation();" enctype="multipart/form-data">
+                        <?php echo e(csrf_field()); ?>
+
                         <div class="panel-body">
                             <div class="row col-md-12 col-xs-12">
                                 <div class="col-md-6">
