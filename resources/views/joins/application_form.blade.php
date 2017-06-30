@@ -2,6 +2,9 @@
 
 @section('content')
     <style>
+        .modal-dialog {
+            width: 60% !important;
+        }
         label{
             font-size: 9px;
             font-weight: bold;
@@ -149,9 +152,9 @@
                                 <h5><strong>Document Upload</strong></h5>
                                 <div id="cv_doc-selected" class="selected"></div>
                                 <div class="form-group" id="cv_group">
-                                    <a class="btn btn-success" name="u_cv_sel" id="u_cv_sel">Upload CV</a>
+                                    <a title="Upload Title" class="btn btn-success" name="u_cv_sel" id="u_cv_sel">Upload CV</a>
                                     &nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;
-                                    <a class="btn btn-success">Generate CV</a>
+                                    <a title="Generate CV" class="btn btn-success" data-toggle="modal" data-target="#modal_cv">Generate CV</a>
                                 </div>
 
 
@@ -169,6 +172,132 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal_cv" role="dialog">
+        <div class="modal-dialog" >
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form method="post" name="frm_add" action="/temp_cv">
+                    {{ csrf_field() }}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h5 class="modal-title">Add CV Info</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label" for="father_name">Father's Name: * </label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" id="father_name" name="father_name" placeholder="Enter Father's Name *" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label" for="mother_name">Mother's Name: * </label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" id="mother_name" name="mother_name" placeholder="Enter Mother's Name *" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label" for="nationality">Nationality: * </label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" id="nationality" name="nationality" placeholder="Enter Nationality *" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label" for="languages_known">Languages Known: * </label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" id="languages_known" name="languages_known" placeholder="Enter Langueages Known *" />
+                            </div>
+                        </div>
+                        <h6>Education Qualification:</h6>
+                        <table width="100%" class="table-striped">
+                            <thead>
+                            <tr>
+                                <th>Sn.</th>
+                                <th>Qualification</th>
+                                <th>Name of Institute</th>
+                                <th>Passed Year</th>
+                                <th>Grades Obtained</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1. *</td>
+                                <td><input type="text" name="qualification_1" id="qualification_1" placeholder="Qualification(1) *"></td>
+                                <td><input type="text" name="name_of_institute_1" id="name_of_institute_1" placeholder="Name Of Institute(1) *"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(1) *"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(1) *"></td>
+                            </tr>
+                            <tr>
+                                <td>2. </td>
+                                <td><input type="text" name="qualification_2" id="qualification_2" placeholder="Qualification(2)"></td>
+                                <td><input type="text" name="name_of_institute_2" id="name_of_institute_2" placeholder="Name Of Institute(2)"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(2)"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(2)"></td>
+                            </tr>
+                            <tr>
+                                <td>3. </td>
+                                <td><input type="text" name="qualification_3" id="qualification_3" placeholder="Qualification(3)"></td>
+                                <td><input type="text" name="name_of_institute_3" id="name_of_institute_3" placeholder="Name Of Institute(3)"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(3)"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(3)"></td>
+                            </tr>
+                            <tr>
+                                <td>4. </td>
+                                <td><input type="text" name="qualification_4" id="qualification_4" placeholder="Qualification(4)"></td>
+                                <td><input type="text" name="name_of_institute_4" id="name_of_institute_4" placeholder="Name Of Institute(4)"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(4)"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(4)"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <h6>Experience Record:</h6>
+                        <table width="100%" class="table-striped">
+                            <thead>
+                            <tr>
+                                <th>Sn.</th>
+                                <th>Qualification</th>
+                                <th>Name of Institute</th>
+                                <th>Passed Year</th>
+                                <th>Grades Obtained</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1. *</td>
+                                <td><input type="text" name="qualification_1" id="qualification_1" placeholder="Qualification(1) *"></td>
+                                <td><input type="text" name="name_of_institute_1" id="name_of_institute_1" placeholder="Name Of Institute(1) *"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(1) *"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(1) *"></td>
+                            </tr>
+                            <tr>
+                                <td>2. </td>
+                                <td><input type="text" name="qualification_2" id="qualification_2" placeholder="Qualification(2)"></td>
+                                <td><input type="text" name="name_of_institute_2" id="name_of_institute_2" placeholder="Name Of Institute(2)"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(2)"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(2)"></td>
+                            </tr>
+                            <tr>
+                                <td>3. </td>
+                                <td><input type="text" name="qualification_3" id="qualification_3" placeholder="Qualification(3)"></td>
+                                <td><input type="text" name="name_of_institute_3" id="name_of_institute_3" placeholder="Name Of Institute(3)"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(3)"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(3)"></td>
+                            </tr>
+                            <tr>
+                                <td>4. </td>
+                                <td><input type="text" name="qualification_4" id="qualification_4" placeholder="Qualification(4)"></td>
+                                <td><input type="text" name="name_of_institute_4" id="name_of_institute_4" placeholder="Name Of Institute(4)"></td>
+                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(4)"></td>
+                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(4)"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <script type="text/javascript">
         function readURL(input, temp) {
