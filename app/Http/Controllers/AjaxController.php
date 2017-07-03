@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\cv;
+use App\cv_edu;
+use App\cv_exp;
 
 class AjaxController extends Controller
 {
@@ -208,5 +211,125 @@ class AjaxController extends Controller
         }
 
         \DB::table($db_table3)->where($w_col, $w_id)->update(['State' => 'vc','Remarks'=>$temp_status,'Old_VP_Date'=>$temp_date]);
+    }
+
+    public function cv_save(Request $request)
+    {
+        if(cv::where('ref_no',0)->exists())
+        {
+            cv::where('ref_no',0)->delete();
+        }
+        $cv=new cv;
+        $cv->ref_no=0;
+        $cv->father_name=$request->father_name;
+        $cv->mother_name=$request->mother_name;
+        $cv->nationality=$request->nationality;
+        $cv->languages_known=$request->languages_known;
+        $cv->save();
+
+        if(cv_edu::where('ref_no',0)->exists())
+        {
+            cv_edu::where('ref_no',0)->delete();
+        }
+
+        $cv_edu1=new cv_edu;
+        $cv_edu1->ref_no=0;
+        $cv_edu1->edu_id=1;
+        $cv_edu1->qualification=$request->qualification_1;
+        $cv_edu1->name_of_institution=$request->name_of_institution_1;
+        $cv_edu1->year_of_passing=$request->year_of_passing_1;
+        $cv_edu1->grades_obtained=$request->grades_obtained_1;
+        $cv_edu1->save();
+
+
+        if($request->qualification_2!==null && $request->qualification_2!=="")
+        {
+        $cv_edu2=new cv_edu;
+        $cv_edu2->ref_no=0;
+        $cv_edu2->edu_id=2;
+        $cv_edu2->qualification=$request->qualification_2;
+        $cv_edu2->name_of_institution=$request->name_of_institution_2;
+        $cv_edu2->year_of_passing=$request->year_of_passing_2;
+        $cv_edu2->grades_obtained=$request->grades_obtained_2;
+        $cv_edu2->save();
+        }
+        if($request->qualification_3!==null && $request->qualification_3!=="")
+        {
+            $cv_edu3=new cv_edu;
+            $cv_edu3->ref_no=0;
+            $cv_edu3->edu_id=3;
+            $cv_edu3->qualification=$request->qualification_3;
+            $cv_edu3->name_of_institution=$request->name_of_institution_3;
+            $cv_edu3->year_of_passing=$request->year_of_passing_3;
+            $cv_edu3->grades_obtained=$request->grades_obtained_3;
+            $cv_edu3->save();
+        }
+        if($request->qualification_4!==null && $request->qualification_4!=="")
+        {
+            $cv_edu4=new cv_edu;
+            $cv_edu4->ref_no=0;
+            $cv_edu4->edu_id=4;
+            $cv_edu4->qualification=$request->qualification_4;
+            $cv_edu4->name_of_institution=$request->name_of_institution_4;
+            $cv_edu4->year_of_passing=$request->year_of_passing_4;
+            $cv_edu4->grades_obtained=$request->grades_obtained_4;
+            $cv_edu4->save();
+        }
+
+        if(cv_exp::where('ref_no',0)->exists())
+        {
+            cv_exp::where('ref_no',0)->delete();
+        }
+
+        $cv_exp1=new cv_exp;
+        $cv_exp1->ref_no=0;
+        $cv_exp1->exp_id=1;
+        $cv_exp1->name_of_company=$request->name_of_company_1;
+        $cv_exp1->designation=$request->designation_1;
+        $cv_exp1->start_year=$request->start_year_1;
+        $cv_exp1->end_year=$request->end_year_1;
+        $cv_exp1->country=$request->country_1;
+        $cv_exp1->reason_for_leave=$request->reason_for_leave_1;
+        $cv_exp1->save();
+
+        if($request->name_of_company_2!==null && $request->name_of_company_2!=="")
+        {
+            $cv_exp2=new cv_exp;
+            $cv_exp2->ref_no=0;
+            $cv_exp2->exp_id=2;
+            $cv_exp2->name_of_company=$request->name_of_company_2;
+            $cv_exp2->designation=$request->designation_2;
+            $cv_exp2->start_year=$request->start_year_2;
+            $cv_exp2->end_year=$request->end_year_2;
+            $cv_exp2->country=$request->country_2;
+            $cv_exp2->reason_for_leave=$request->reason_for_leave_2;
+            $cv_exp2->save();
+        }
+        if($request->name_of_company_3!==null && $request->name_of_company_3!=="")
+        {
+            $cv_exp3=new cv_exp;
+            $cv_exp3->ref_no=0;
+            $cv_exp3->exp_id=3;
+            $cv_exp3->name_of_company=$request->name_of_company_3;
+            $cv_exp3->designation=$request->designation_3;
+            $cv_exp3->start_year=$request->start_year_3;
+            $cv_exp3->end_year=$request->end_year_3;
+            $cv_exp3->country=$request->country_3;
+            $cv_exp3->reason_for_leave=$request->reason_for_leave_3;
+            $cv_exp3->save();
+        }
+        if($request->name_of_company_4!==null && $request->name_of_company_4!=="")
+        {
+            $cv_exp4=new cv_exp;
+            $cv_exp4->ref_no=0;
+            $cv_exp4->exp_id=4;
+            $cv_exp4->name_of_company=$request->name_of_company_4;
+            $cv_exp4->designation=$request->designation_4;
+            $cv_exp4->start_year=$request->start_year_4;
+            $cv_exp4->end_year=$request->end_year_4;
+            $cv_exp4->country=$request->country_4;
+            $cv_exp4->reason_for_leave=$request->reason_for_leave_4;
+            $cv_exp4->save();
+        }
     }
 }

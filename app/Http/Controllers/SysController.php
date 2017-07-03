@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Intervention\Image\Facades\Image;
 
 use Illuminate\Http\Request;
+use App;
 use App\visitor_type;
 use App\visitor_log;
 use App\databank;
@@ -13,6 +14,9 @@ use App\vrflown;
 use App\User;
 use App\user_role;
 use App\app_form;
+use App\cv;
+use App\cv_edu;
+use App\cv_exp;
 
 class SysController extends Controller
 {
@@ -94,7 +98,7 @@ class SysController extends Controller
             if (!empty($request->all()))
             {
                 $pasa=new app_form();
-                $discard=['_token','ref_no','submit'];
+                $discard=['_token','ref_no','submit','cv_doc'];
                 foreach($request->all() as $key=>$value)
                 {
                     if(!in_array($key,$discard))
@@ -116,6 +120,17 @@ class SysController extends Controller
                 $pasa->save();
 
                 $this->app_form_generate($insert_id);
+
+                //uploading files
+                if ($request->hasFile('cv_doc')) {
+                    $request->file('cv_doc')->storeAs(
+                        "/app_forms/".$d, "cv_".$insert_id.".".$request->cv_doc->getClientOriginalExtension()
+                    );
+                }
+                else{
+                    $this->cv_generate($insert_id);
+                }
+
                 session()->flash('message', 'Application Form Submitted Successfully!');
                 return back();
             }
@@ -664,6 +679,56 @@ class SysController extends Controller
         $font->size('14');
         $font->color('#000');
         $this->font_style($font);
+    }
+
+    public function cv_generate($ref_no)
+    {
+        $pdf = App::make('dompdf.wrapper');
+        $app=app_form::find($ref_no);
+
+        $cv_old=cv::where('ref_no',0)->first();
+        $cv=new cv;
+        $cv->ref_no=$ref_no;
+        $cv->father_name=$cv_old->father_name;
+        $cv->mother_name=$cv_old->mother_name;
+        $cv->nationality=$cv_old->nationality;
+        $cv->languages_known=$cv_old->languages_known;
+        $cv->save();
+
+
+        $asd="<img  height='220px' width='170px' src='".str_replace('\\','/',public_path("images/".$app->photo))."'>";
+        $asd.="<div style='margin-left:auto;margin-right:auto'><h3>"."Name: ".$app->name."</h3></div>";
+
+        $asd.="<br/><br/><br/>";
+        $asd.="<div style='padding:20px;width:80%;margin-left: auto; margin-right: auto; border: 2px solid black;'>";
+        $asd.="Gender: ". $app->gender."<br />";
+        $asd.="Date of Birth: ". $app->date_of_birth."<br />";
+
+        $asd.="Father's Name:".$cv->father_name."<br />";
+        $asd.="Mother's Name:".$cv->mother_name."<br />";
+
+        $asd.="Address: ". $app->contact_address."<br />";
+        $asd.="Marital Status: ". $app->marital_status."<br />";
+        $asd.="Height: ". $app->height_feet."ft. ".$app->height_inch."in."."<br />";
+
+        $asd.="Nationality:".$cv->nationality."<br />";
+        $asd.="languages_known:".$cv->languages_known."<br />";
+
+        $asd.="Religion: ". $app->religion."<br />";
+        $asd.="Passport No.: ". $app->passport_no."<br />";
+        $asd.="Email: ". $app->email."<br />";
+        if($app->mobile_no!==null && $app->mobile_no!=="")
+        {
+            $asd.="Contact No.: ". $app->mobile_no."<br />";
+        }
+        else
+        {
+            $asd.="Contact No.: ". $app->telephone_no."<br />";
+        }
+
+        $asd.="</div>";
+        $pdf->loadHTML($asd)->save(public_path('/images/app_forms/L'.$ref_no.'/cv_'.$ref_no.".pdf"));
+        return;
     }
 
 }

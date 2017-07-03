@@ -3,7 +3,7 @@
 @section('content')
     <style>
         .modal-dialog {
-            width: 60% !important;
+            width: 80% !important;
         }
         label{
             font-size: 9px;
@@ -103,7 +103,7 @@
                                             <img src="{{asset('/images/default.jpg')}}" alt="preview" id="preview" height="144px" width="116px"/>
                                         </div>
                                         <br />
-                                        <input class="center-block" type="file" name="photo" id="photo" onchange="readURL(this,'#preview')" />
+                                        <input class="center-block" type="file" name="photo" id="photo" onchange="readURL(this,'#preview')" required />
                                         <p>Image type must be in .jpg format</p>
                                     </div>
                                 </div>
@@ -152,9 +152,9 @@
                                 <h5><strong>Document Upload</strong></h5>
                                 <div id="cv_doc-selected" class="selected"></div>
                                 <div class="form-group" id="cv_group">
-                                    <a title="Upload Title" class="btn btn-success" name="u_cv_sel" id="u_cv_sel">Upload CV</a>
+                                    <a title="Upload Title" class="btn btn-success" name="u_cv_sel" id="u_cv_sel">Upload CV *</a>
                                     &nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;
-                                    <a title="Generate CV" class="btn btn-success" data-toggle="modal" data-target="#modal_cv">Generate CV</a>
+                                    <a title="Generate CV" class="btn btn-success" data-toggle="modal" data-target="#modal_cv">Generate CV *</a>
                                 </div>
 
 
@@ -181,7 +181,8 @@
                     {{ csrf_field() }}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h5 class="modal-title">Add CV Info</h5>
+                        <h5 class="modal-title"><strong>Add CV Info</strong> (Fields with * is required)</h5>
+
                     </div>
                     <div class="modal-body">
                         <div class="form-group row">
@@ -208,7 +209,7 @@
                                 <input class="form-control" type="text" id="languages_known" name="languages_known" placeholder="Enter Langueages Known *" />
                             </div>
                         </div>
-                        <h6>Education Qualification:</h6>
+                        <h6 style="text-decoration: underline"><strong>Education Qualification:</strong></h6>
                         <table width="100%" class="table-striped">
                             <thead>
                             <tr>
@@ -222,76 +223,92 @@
                             <tbody>
                             <tr>
                                 <td>1. *</td>
-                                <td><input type="text" name="qualification_1" id="qualification_1" placeholder="Qualification(1) *"></td>
-                                <td><input type="text" name="name_of_institute_1" id="name_of_institute_1" placeholder="Name Of Institute(1) *"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(1) *"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(1) *"></td>
+                                <td><input type="text" name="qualification_1" id="qualification_1" placeholder="Qualification(1) *" required></td>
+                                <td><input type="text" name="name_of_institution_1" id="name_of_institution_1" placeholder="Name Of Institute(1) *" required></td>
+                                <td><input type="text" name="year_of_passing_1" id="year_of_passing_1" placeholder="Year of Passing(1) *" required></td>
+                                <td><input type="text" name="grades_obtained_1" id="grades_obtained_1" placeholder="Grades Obtained(1) *" required></td>
                             </tr>
                             <tr>
                                 <td>2. </td>
                                 <td><input type="text" name="qualification_2" id="qualification_2" placeholder="Qualification(2)"></td>
-                                <td><input type="text" name="name_of_institute_2" id="name_of_institute_2" placeholder="Name Of Institute(2)"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(2)"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(2)"></td>
+                                <td><input type="text" name="name_of_institution_2" id="name_of_institution_2" placeholder="Name Of Institute(2)"></td>
+                                <td><input type="text" name="year_of_passing_2" id="year_of_passing_2" placeholder="Year of Passing(2)"></td>
+                                <td><input type="text" name="grades_obtained_2" id="grades_obtained_2" placeholder="Grades Obtained(2)"></td>
                             </tr>
                             <tr>
                                 <td>3. </td>
                                 <td><input type="text" name="qualification_3" id="qualification_3" placeholder="Qualification(3)"></td>
-                                <td><input type="text" name="name_of_institute_3" id="name_of_institute_3" placeholder="Name Of Institute(3)"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(3)"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(3)"></td>
+                                <td><input type="text" name="name_of_institution_3" id="name_of_institution_3" placeholder="Name Of Institute(3)"></td>
+                                <td><input type="text" name="year_of_passing_3" id="year_of_passing_3" placeholder="Year of Passing(3)"></td>
+                                <td><input type="text" name="grades_obtained_3" id="grades_obtained_3" placeholder="Grades Obtained(3)"></td>
                             </tr>
                             <tr>
                                 <td>4. </td>
                                 <td><input type="text" name="qualification_4" id="qualification_4" placeholder="Qualification(4)"></td>
-                                <td><input type="text" name="name_of_institute_4" id="name_of_institute_4" placeholder="Name Of Institute(4)"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(4)"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(4)"></td>
+                                <td><input type="text" name="name_of_institution_4" id="name_of_institution_4" placeholder="Name Of Institute(4)"></td>
+                                <td><input type="text" name="year_of_passing_4" id="year_of_passing_4" placeholder="Year of Passing(4)"></td>
+                                <td><input type="text" name="grades_obtained_4" id="grades_obtained_4" placeholder="Grades Obtained(4)"></td>
                             </tr>
                             </tbody>
                         </table>
-                        <h6>Experience Record:</h6>
+                        <h6 style="text-decoration: underline"><strong>Experience Record:</strong></h6>
                         <table width="100%" class="table-striped">
                             <thead>
                             <tr>
                                 <th>Sn.</th>
-                                <th>Qualification</th>
-                                <th>Name of Institute</th>
-                                <th>Passed Year</th>
-                                <th>Grades Obtained</th>
+                                <th>Name of Company</th>
+                                <th>Designation</th>
+                                <th>Start Year</th>
+                                <th>End Year</th>
+                                <th>Country</th>
+                                <th>Reason for Leave</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 <td>1. *</td>
-                                <td><input type="text" name="qualification_1" id="qualification_1" placeholder="Qualification(1) *"></td>
-                                <td><input type="text" name="name_of_institute_1" id="name_of_institute_1" placeholder="Name Of Institute(1) *"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(1) *"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(1) *"></td>
+                                <td><input type="text" name="name_of_company_1" id="name_of_company_1" placeholder="Name of Company(1) *" required></td>
+                                <td><input type="text" name="designation_1" id="designation_1" placeholder="Designation(1) *" required></td>
+                                <td><input type="text" name="start_year_1" id="start_year_1" placeholder="Start Year(1) *" required></td>
+                                <td><input type="text" name="end_year_1" id="end_year_1" placeholder="End Year(1) *" required></td>
+                                <td><input type="text" name="country_1" id="country_1" placeholder="Country(1) *" required></td>
+                                <td><input type="text" name="reason_for_leave_1" id="reason_for_leave_1" placeholder="Reason for Leave(1) *" required></td>
                             </tr>
                             <tr>
-                                <td>2. </td>
-                                <td><input type="text" name="qualification_2" id="qualification_2" placeholder="Qualification(2)"></td>
-                                <td><input type="text" name="name_of_institute_2" id="name_of_institute_2" placeholder="Name Of Institute(2)"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(2)"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(2)"></td>
+                                <td>2.</td>
+                                <td><input type="text" name="name_of_company_2" id="name_of_company_2" placeholder="Name of Company(2)"></td>
+                                <td><input type="text" name="designation_2" id="designation_2" placeholder="Designation(2)"></td>
+                                <td><input type="text" name="start_year_2" id="start_year_2" placeholder="Start Year(2)"></td>
+                                <td><input type="text" name="end_year_2" id="end_year_2" placeholder="End Year(2)"></td>
+                                <td><input type="text" name="country_2" id="country_2" placeholder="Country(2)"></td>
+                                <td><input type="text" name="reason_for_leave_2" id="reason_for_leave_2" placeholder="Reason for Leave(2)"></td>
                             </tr>
                             <tr>
-                                <td>3. </td>
-                                <td><input type="text" name="qualification_3" id="qualification_3" placeholder="Qualification(3)"></td>
-                                <td><input type="text" name="name_of_institute_3" id="name_of_institute_3" placeholder="Name Of Institute(3)"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(3)"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(3)"></td>
+                                <td>3.</td>
+                                <td><input type="text" name="name_of_company_3" id="name_of_company_3" placeholder="Name of Company(3)"></td>
+                                <td><input type="text" name="designation_3" id="designation_3" placeholder="Designation(3)"></td>
+                                <td><input type="text" name="start_year_3" id="start_year_3" placeholder="Start Year(3)"></td>
+                                <td><input type="text" name="end_year_3" id="end_year_3" placeholder="End Year(3)"></td>
+                                <td><input type="text" name="country_3" id="country_3" placeholder="Country(3)"></td>
+                                <td><input type="text" name="reason_for_leave_3" id="reason_for_leave_3" placeholder="Reason for Leave(3)"></td>
                             </tr>
                             <tr>
-                                <td>4. </td>
-                                <td><input type="text" name="qualification_4" id="qualification_4" placeholder="Qualification(4)"></td>
-                                <td><input type="text" name="name_of_institute_4" id="name_of_institute_4" placeholder="Name Of Institute(4)"></td>
-                                <td><input type="text" name="year_of_passing" id="year_of_passing" placeholder="Year of Passing(4)"></td>
-                                <td><input type="text" name="grades_obtained" id="grades_obtained" placeholder="Grades Odtained(4)"></td>
+                                <td>4.</td>
+                                <td><input type="text" name="name_of_company_4" id="name_of_company_4" placeholder="Name of Company(4)"></td>
+                                <td><input type="text" name="designation_4" id="designation_4" placeholder="Designation(4)"></td>
+                                <td><input type="text" name="start_year_4" id="start_year_4" placeholder="Start Year(4)"></td>
+                                <td><input type="text" name="end_year_4" id="end_year_4" placeholder="End Year(4)"></td>
+                                <td><input type="text" name="country_4" id="country_4" placeholder="Country(4)"></td>
+                                <td><input type="text" name="reason_for_leave_4" id="reason_for_leave_4" placeholder="Reason for Leave(4)"></td>
                             </tr>
+
+
                             </tbody>
                         </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-success" id="generate">Generate</a>
                     </div>
                 </form>
             </div>
@@ -328,6 +345,12 @@
                 alert("Select marital status");
                 return false;
             }
+            if($('#cv_doc-selected').html()==="") {
+                alert("CV must be generated or uploaded");
+                return false;
+            }
+
+
         }
 
         $('#u_cv_sel').on('click', function() {
@@ -351,5 +374,84 @@
             $('#cv_doc-selected').html('');
             $('#cv_group').show();
         }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $("#generate").on('click',function(){
+            var err='';
+            if(cv_validate()===true)
+            {
+                var fields = {}
+                    ,varNames = ["father_name","mother_name","nationality","languages_known",
+                    "qualification_1","name_of_institution_1","year_of_passing_1","grades_obtained_1",
+                    "qualification_2","name_of_institution_2","year_of_passing_2","grades_obtained_2",
+                    "qualification_3","name_of_institution_3","year_of_passing_3","grades_obtained_3",
+                    "qualification_4","name_of_institution_4","year_of_passing_4","grades_obtained_4",
+                    "name_of_company_1","designation_1","start_year_1","end_year_1","country_1","reason_for_leave_1",
+                    "name_of_company_2","designation_2","start_year_2","end_year_2","country_2","reason_for_leave_2",
+                    "name_of_company_3","designation_3","start_year_3","end_year_3","country_3","reason_for_leave_3",
+                    "name_of_company_4","designation_4","start_year_4","end_year_4","country_4","reason_for_leave_4"
+                ];
+                for (var i=0;i<varNames.length;i+=1) {
+                    if(document.getElementById(varNames[i])!==null && document.getElementById(varNames[i]).value!=="")
+                    {
+                        fields[varNames[i]]=document.getElementById(varNames[i]).value;
+                    }
+                }
+
+                $.ajax({
+                    method: 'post',
+                    url: '/cv_save',
+                    data: fields,
+                    cache: false,
+                    timeout: 10000,
+                    success: function (response){
+                        if (response) {
+                            alert(response);
+                        }
+                        // Load output into a P
+                        else {
+                            $('#cv_doc-selected').html
+                            (
+                                "<h5 class='bg-success'><div class='btn btn-danger' id='pp_doc_clear' onclick='clear_cv()'>&nbsp;X&nbsp;</div> &nbsp; CV data entered!</h5>"
+                            );
+                            $('#cv_group').hide();
+
+                            $('#modal_cv').modal('hide');
+                        }
+                    }
+                });
+
+            }
+        });
+
+        function cv_validate()
+        {
+            var myVariables = {}
+                ,varNames = ["father_name","mother_name","nationality","languages_known",
+                             "qualification_1","name_of_institution_1","year_of_passing_1","grades_obtained_1",
+                             "name_of_company_1","designation_1","start_year_1","end_year_1","country_1","reason_for_leave_1"
+                            ];
+            for (var i=0;i<varNames.length;i+=1){
+                myVariables[varNames[i]] = document.getElementById(varNames[i]);
+                if(myVariables[varNames[i]]===null || myVariables[varNames[i]].value==="")
+                {
+                    myVariables[varNames[i]].placeholder="This field is required!";
+                    myVariables[varNames[i]].style.borderColor ="red";
+                    myVariables[varNames[i]].focus();
+                    return false;
+                }
+                else
+                {
+                    myVariables[varNames[i]].style.borderColor ="#EBE9ED";
+                }
+            }
+            return true;
+        }
+
     </script>
 @endsection
