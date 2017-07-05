@@ -17,6 +17,7 @@ use App\app_form;
 use App\cv;
 use App\cv_edu;
 use App\cv_exp;
+use Dompdf\Dompdf;
 
 class SysController extends Controller
 {
@@ -683,7 +684,7 @@ class SysController extends Controller
 
     public function cv_generate($ref_no)
     {
-        $pdf = App::make('dompdf.wrapper');
+
         $app=app_form::find($ref_no);
 
         $cv_old=cv::where('ref_no',0)->first();
@@ -694,40 +695,150 @@ class SysController extends Controller
         $cv->nationality=$cv_old->nationality;
         $cv->languages_known=$cv_old->languages_known;
         $cv->save();
-
-
-        $asd="<img  height='220px' width='170px' src='".str_replace('\\','/',public_path("images/".$app->photo))."'>";
-        $asd.="<div style='margin-left:auto;margin-right:auto'><h3>"."Name: ".$app->name."</h3></div>";
+        $asd="<!DOCTYPE html>
+            <html>
+            <head>";
+        $asd.="<style>
+                @page{margin: 1in 1.5in 1in 1in;}
+                table {
+                    border-collapse: collapse;
+                }
+                
+                table, td, th {
+                    border: 1px solid black;
+                }
+                td,th{
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+                p{
+                    margin-bottom:5px;
+                    margin-top:5px;
+                }
+                
+                </style>
+                </head>";
+        $asd.="<body>";
+//        $asd.="<img  height='220px' width='170px' src='".str_replace('\\','/',public_path("images/".$app->photo))."' />";
+        $asd.="<h3>"."Name: ".$app->name."</h3>";
 
         $asd.="<br/><br/><br/>";
-        $asd.="<div style='padding:20px;width:80%;margin-left: auto; margin-right: auto; border: 2px solid black;'>";
-        $asd.="Gender: ". $app->gender."<br />";
-        $asd.="Date of Birth: ". $app->date_of_birth."<br />";
+        $asd.="<div style='padding:20px; border: 2px solid black;'>";
+        $asd.="<p><strong>Gender: </strong>". ucfirst($app->gender)."</p>";
+        $asd.="<p><strong>Date of Birth: </strong>". $app->date_of_birth."</p>";
 
-        $asd.="Father's Name:".$cv->father_name."<br />";
-        $asd.="Mother's Name:".$cv->mother_name."<br />";
+        $asd.="<p><strong>Father's Name: </strong>".$cv->father_name."</p>";
+        $asd.="<p><strong>Mother's Name: </strong>".$cv->mother_name."</p>";
 
-        $asd.="Address: ". $app->contact_address."<br />";
-        $asd.="Marital Status: ". $app->marital_status."<br />";
-        $asd.="Height: ". $app->height_feet."ft. ".$app->height_inch."in."."<br />";
+        $asd.="<p><strong>Address: </strong>". $app->contact_address."</p>";
+        $asd.="<p><strong>Marital Status: </strong>". ucfirst($app->marital_status)."</p>";
+        $asd.="<p><strong>Height: </strong>". $app->height_feet."ft. ".$app->height_inch."in."."</p>";
 
-        $asd.="Nationality:".$cv->nationality."<br />";
-        $asd.="languages_known:".$cv->languages_known."<br />";
+        $asd.="<p><strong>Nationality: </strong>".$cv->nationality."</p>";
+        $asd.="<p><strong>Languages Known: </strong>".$cv->languages_known."</p>";
 
-        $asd.="Religion: ". $app->religion."<br />";
-        $asd.="Passport No.: ". $app->passport_no."<br />";
-        $asd.="Email: ". $app->email."<br />";
+        $asd.="<p><strong>Religion: </strong>". $app->religion."</p>";
+        $asd.="<p><strong>Passport No.: </strong>". $app->passport_no."</p>";
+        $asd.="<p><strong>Email: </strong>". $app->email."</p>";
         if($app->mobile_no!==null && $app->mobile_no!=="")
         {
-            $asd.="Contact No.: ". $app->mobile_no."<br />";
+            $asd.="<p><strong>Contact No.: </strong>". $app->mobile_no."</p>";
         }
         else
         {
-            $asd.="Contact No.: ". $app->telephone_no."<br />";
+            $asd.="<p><strong>Contact No.: </strong>". $app->telephone_no."</p>";
         }
 
         $asd.="</div>";
-        $pdf->loadHTML($asd)->save(public_path('/images/app_forms/L'.$ref_no.'/cv_'.$ref_no.".pdf"));
+
+        $cv_exps=cv_exp::where('ref_no',0)->get(['name_of_company','designation','start_year','end_year','country','reason_for_leave']);
+        $i=1;
+        $asd.="<br /><h3>Experience Record:</h3><br />";
+        $asd.="<table width='100%'>";
+        $asd.="<tr>";
+        $asd.="<th>Sn.</th>
+               <th>Name of Company</th>  
+               <th>Designation</th>  
+               <th>Start Year</th>  
+               <th>End Year</th>  
+               <th>Country</th>  
+               <th>Reason for Leave</th>  
+              ";
+        $asd.="</tr>";
+        $new_cv_exp=[];
+        $req_exp=['name_of_company','designation','start_year','end_year','country','reason_for_leave'];
+        foreach($cv_exps as $cv_exp)
+        {
+            $asd.="<tr>";
+            $new_cv_exp[$i]=new cv_exp;
+            $new_cv_exp[$i]->ref_no=$ref_no;
+            $new_cv_exp[$i]->exp_id=$i;
+
+            $asd.="<td>".$i."</td>";
+            foreach($req_exp as $key)
+            {
+                if(in_array($key,$req_exp))
+                {
+                    $new_cv_exp[$i]->$key=$cv_exp->$key;
+                    $asd.="<td>".$cv_exp->$key."</td>";
+                }
+            }
+            $new_cv_exp[$i]->save();
+            $i++;
+            $asd.="</tr>";
+
+        }
+        $asd.="</table>";
+
+//        $asd.="<div class='breakNow'></div>";
+
+        $cv_edus=cv_edu::where('ref_no',0)->get(['qualification','name_of_institution','year_of_passing','grades_obtained']);
+        $i=1;
+        $asd.="<br /><h3>Educational Qualification:</h3><br />";
+        $asd.="<table width='100%'>";
+        $asd.="<tr>";
+        $asd.="<th>Sn.</th>
+               <th>Qualification</th>  
+               <th>Name of Institute</th>  
+               <th>Year of Passing</th>  
+               <th>Grades Obtained</th>  
+              ";
+        $asd.="</tr>";
+        $req_edu=['qualification','name_of_institution','year_of_passing','grades_obtained'];
+        $new_cv_edu=[];
+        foreach($cv_edus as $cv_edu)
+        {
+            $asd.="<tr>";
+            $new_cv_edu[$i]=new cv_edu;
+            $new_cv_edu[$i]->ref_no=$ref_no;
+            $new_cv_edu[$i]->edu_id=$i;
+            $asd.="<td>".$i."</td>";
+            foreach($req_edu as $key)
+            {
+                if(in_array($key,$req_edu))
+                {
+                    $new_cv_edu[$i]->$key=$cv_edu->$key;
+                    $asd.="<td>".$cv_edu->$key."</td>";
+                }
+            }
+            $new_cv_edu[$i]->save();
+            $i++;
+            $asd.="</tr>";
+
+        }
+        $asd.="</table>";
+        $asd.="</body>";
+        $asd.="</html>";
+
+        $pdf = new Dompdf();
+//        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($asd);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        $output = $pdf->output();
+        $path=public_path('/images/app_forms/L'.$ref_no.'/cv_'.$ref_no.".pdf");
+        file_put_contents($path, $output);
+//        $pdf->stream(public_path('/images/app_forms/L'.$ref_no.'/cv_'.$ref_no.".pdf"));
         return;
     }
 
