@@ -99,7 +99,7 @@ class SysController extends Controller
             if (!empty($request->all()))
             {
                 $pasa=new app_form();
-                $discard=['_token','ref_no','submit','cv_doc'];
+                $discard=['_token','ref_no','submit','cv_doc','pp_doc','edu_doc','exp_doc','training_doc','driving_doc'];
                 foreach($request->all() as $key=>$value)
                 {
                     if(!in_array($key,$discard))
@@ -120,8 +120,7 @@ class SysController extends Controller
                 $pasa->photo=$photo_path;
                 $pasa->save();
 
-                $this->app_form_generate($insert_id);
-
+                $doc_list="Photo,   ";
                 //uploading files
                 if ($request->hasFile('cv_doc')) {
                     $request->file('cv_doc')->storeAs(
@@ -131,6 +130,43 @@ class SysController extends Controller
                 else{
                     $this->cv_generate($insert_id);
                 }
+                $doc_list.="CV,   ";
+
+                if ($request->hasFile('pp_doc')) {
+                    $request->file('pp_doc')->storeAs(
+                        "/app_forms/".$d, "pp_".$insert_id.".".$request->pp_doc->getClientOriginalExtension()
+                    );
+                    $doc_list.="PP Copy,   ";
+                }
+                if ($request->hasFile('edu_doc')) {
+                    $request->file('edu_doc')->storeAs(
+                        "/app_forms/".$d, "edu_".$insert_id.".".$request->edu_doc->getClientOriginalExtension()
+                    );
+                    $doc_list.="Educational Document,   ";
+                }
+                if ($request->hasFile('exp_doc')) {
+                    $request->file('exp_doc')->storeAs(
+                        "/app_forms/".$d, "exp_".$insert_id.".".$request->exp_doc->getClientOriginalExtension()
+                    );
+                    $doc_list.="Experience Certificate,   ";
+                }
+                if ($request->hasFile('training_doc')) {
+                    $request->file('training_doc')->storeAs(
+                        "/app_forms/".$d, "training_".$insert_id.".".$request->training_doc->getClientOriginalExtension()
+                    );
+                    $doc_list.="Training Document,   ";
+                }
+                if ($request->hasFile('driving_doc')) {
+                    $request->file('driving_doc')->storeAs(
+                        "/app_forms/".$d, "driving_".$insert_id.".".$request->driving_doc->getClientOriginalExtension()
+                    );
+                    $doc_list.="Driving Licence,   ";
+                }
+
+                $doc_list=substr($doc_list,0,strlen($doc_list)-4);
+
+
+                $this->app_form_generate($insert_id,$doc_list);
 
                 session()->flash('message', 'Application Form Submitted Successfully!');
                 return back();
@@ -564,7 +600,7 @@ class SysController extends Controller
         return view('change_pwd',compact('msg','msg_class'));
     }
 
-    public function app_form_generate($ref_no)
+    public function app_form_generate($ref_no,$doc_list)
     {
         $data=app_form::where('ref_no',$ref_no)->first();
         $img = Image::make(public_path('images/temp.jpg'));
@@ -663,7 +699,31 @@ class SysController extends Controller
         $img->text("kg.", 1030, 790,$font_style);
 
         $img->text($data->parent_name, 265, 845,$font_style);
-        $img->text($data->prior_experience, 265, 895,$font_style);
+
+        if(strlen($data->prior_experience)<85)
+        {
+            $img->text($data->prior_experience, 265, 895,$font_style);
+        }
+        else
+        {
+            $part1=substr($data->prior_experience,0,85)."-";
+            $part2=substr($data->prior_experience,85,85);
+            $img->text($part1, 265, 895,$font_style);
+            $img->text($part2, 265, 945,$font_style);
+        }
+
+        if(strlen($doc_list)<85)
+        {
+            $img->text($doc_list, 265, 995,$font_style);
+        }
+        else
+        {
+            $part1=substr($doc_list,0,85)."-";
+            $part2=substr($doc_list,85,85);
+            $img->text($part1, 265, 995,$font_style);
+            $img->text($part2, 265, 1045,$font_style);
+        }
+
         $photo=Image::make(public_path('images/'.$data->photo))->resize(170, 220);
         $img->insert($photo,"",1010,85);
 

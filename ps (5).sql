@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 30, 2017 at 12:21 PM
--- Server version: 5.5.39
--- PHP Version: 7.1.1
+-- Generation Time: Jul 05, 2017 at 11:13 AM
+-- Server version: 10.1.24-MariaDB
+-- PHP Version: 7.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -56,14 +58,6 @@ CREATE TABLE `app_forms` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `app_forms`
---
-
-INSERT INTO `app_forms` (`ref_no`, `name`, `position`, `telephone_no`, `mobile_no`, `religion`, `address`, `contact_address`, `email`, `qualification`, `date_of_birth`, `gender`, `marital_status`, `spouse_name`, `passport_no`, `place_of_issue`, `date_of_issue`, `date_of_expiry`, `height_feet`, `height_inch`, `weight`, `parent_name`, `prior_experience`, `document_list`, `photo`, `created_at`, `updated_at`) VALUES
-(1, 'test', 'check', 'asd', '5547', 'hindu?', 'asd', 'asd', 'asdf@gmail.com', 'asd', '0001-01-01', 'female', 'married', 'asdasd', '1', '1', '0001-01-01', '0001-01-01', 4, 4, 4, 'asd', 'asd', NULL, 'app_forms/L1/photo_1.jpg', '2017-06-29 23:11:45', '2017-06-29 23:11:45'),
-(2, 'err', 'check', '9849554764', '554789', 'asd', 'a', 'das', 'dsa@gmail.com', 'da', '0002-02-02', 'male', 'single', '2', '2', '2', '0002-02-02', '0002-02-22', 2, 2, 2, '2', '2', NULL, 'app_forms/L2/photo_2.jpg', '2017-06-30 02:02:59', '2017-06-30 02:02:59');
-
 -- --------------------------------------------------------
 
 --
@@ -88,12 +82,12 @@ CREATE TABLE `cvs` (
 --
 
 CREATE TABLE `cv_edus` (
-  `ref_no` int(11) NOT NULL,
-  `edu_no` int(11) NOT NULL,
-  `qualification` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name_of_institution` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `year_of_passing` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `grades_obtained` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ref_no` int(11) NOT NULL DEFAULT '0',
+  `edu_id` int(11) NOT NULL,
+  `qualification` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name_of_institution` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `year_of_passing` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `grades_obtained` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -107,12 +101,12 @@ CREATE TABLE `cv_edus` (
 CREATE TABLE `cv_exps` (
   `ref_no` int(11) NOT NULL,
   `exp_id` int(11) NOT NULL,
-  `name_of_company` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `designation` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_year` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `end_year` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `country` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reason_for_leave` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name_of_company` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `designation` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_year` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `end_year` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reason_for_leave` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -143,7 +137,7 @@ CREATE TABLE `databanks` (
   `PP_Resubmitted_Date` varchar(100) DEFAULT NULL,
   `State` varchar(20) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
@@ -1641,7 +1635,8 @@ INSERT INTO `databanks` (`Ref_No`, `Date`, `Candidates_Name`, `Contact_No`, `DOB
 (54464, '5-May-17', 'Bishal Bhomjan', '9813472737', '1998', '10165379', 'No PP', '', 'Ramu Singjali', 'Assistant Technician', 'ACTS', '', '', '', '', '', '', 'vf', '2017-06-14 05:33:31', '0000-00-00 00:00:00'),
 (54465, '5-May-17 3', 'Dev Pariyar', '9803741620', '1999', '10167323', 'D/Bank', '', 'Dhani Ram Chaudhary', 'Assistant Stocker', 'Gulf Falcon', '', '', '', 'Final interview selected', '', '', 'vf', '2017-06-19 09:15:54', '0000-00-00 00:00:00'),
 (54469, 'checks', 'Binod Dhungana', '9843911130', '1994', '9930398', 'D/Bank', '', 'Manoj Sah', 'Assistant Stocker', 'Gulf Falcon', 'change?', '', NULL, 'change?', '', '11-May-17', 'vc', '2017-06-22 10:01:43', '0000-00-00 00:00:00'),
-(54470, '5', '1', '1', '1', '1', '', '', '456', '1', '1', '', '', '', '', '', '', 'vp', '2017-06-22 09:47:33', '0000-00-00 00:00:00');
+(54470, '5', '1', '1', '1', '1', '', '', '456', '1', '1', '', '', '', '', '', '', 'vp', '2017-06-22 09:47:33', '0000-00-00 00:00:00'),
+(54471, '1', '1', '1', '1', '11', '1', '1', '1', '1', '1', '1', '1', NULL, '1', '1', '1', 'vp', '2017-07-05 08:54:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -7561,7 +7556,7 @@ CREATE TABLE `visaprocesses` (
   `PP_Resubmitted_Date` varchar(100) DEFAULT NULL,
   `State_Vp` varchar(5) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
@@ -7598,7 +7593,8 @@ INSERT INTO `visaprocesses` (`Ref_No`, `Date`, `Candidates_Name`, `Contact_No`, 
 (54452, '3-May-17', 'Roshan Khadka', '9841318568', '1991', '6031526', 'No PP', '', 'INV ', 'Supervisor', 'Al Meera', '', NULL, '', '', '', 'vp', '2017-06-14 09:28:56', '0000-00-00 00:00:00'),
 (54464, '5-May-17', 'Bishal Bhomjan', '9813472737', '1998', '10165379', 'No PP', '', 'Ramu Singjali', 'Assistant Technician', 'ACTS', '', NULL, '', '', '', 'vf', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (54465, '5-May-17 3 ', 'Dev Pariyar', '9803741620', '1999', '10167323', 'D/Bank', '', 'Dhani Ram Chaudhary', 'Assistant Stocker', 'Gulf Falcon', '', NULL, '', '', '', 'vf', '2017-06-19 09:15:54', '0000-00-00 00:00:00'),
-(54470, '5', '1', '1', '1', '1', '', '', '456', '1', '1', '', NULL, '', '', '', 'vp', '2017-06-22 09:47:33', '0000-00-00 00:00:00');
+(54470, '5', '1', '1', '1', '1', '', '', '456', '1', '1', '', NULL, '', '', '', 'vp', '2017-06-22 09:47:33', '0000-00-00 00:00:00'),
+(54471, '1', '1', '1', '1', '11', '1', '1', '1', '1', '1', '1', NULL, '1', '1', '1', 'vp', '2017-07-05 08:54:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -7615,8 +7611,8 @@ CREATE TABLE `visitor_logs` (
   `visit_purpose` varchar(100) NOT NULL DEFAULT 'asd',
   `remarks` varchar(100) NOT NULL DEFAULT 'asd',
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
@@ -7624,7 +7620,8 @@ CREATE TABLE `visitor_logs` (
 --
 
 INSERT INTO `visitor_logs` (`sn`, `visitor_name`, `contact_no`, `type`, `pp_no`, `visit_purpose`, `remarks`, `time`, `created_at`, `updated_at`) VALUES
-(1, 'asd', 'asd', 'other', 'asd', 'asd', '', '2017-06-23 06:09:40', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 'asd', 'asd', 'other', 'asd', 'asd', '', '2017-06-23 06:09:40', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 'a', 'a', 'agent', 'a', 'a', 'a', '2017-07-04 09:57:23', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -7678,7 +7675,7 @@ CREATE TABLE `vrflowns` (
   `Demand_No` varchar(100) DEFAULT NULL,
   `Visa_No` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
@@ -12522,7 +12519,7 @@ ALTER TABLE `vrflowns`
 -- AUTO_INCREMENT for table `app_forms`
 --
 ALTER TABLE `app_forms`
-  MODIFY `ref_no` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ref_no` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `cvs`
 --
@@ -12547,12 +12544,13 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `visitor_logs`
 --
 ALTER TABLE `visitor_logs`
-  MODIFY `sn` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `sn` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `visitor_types`
 --
 ALTER TABLE `visitor_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

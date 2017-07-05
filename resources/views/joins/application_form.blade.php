@@ -21,16 +21,36 @@
         .form-group{
             margin-bottom:10px;
         }
-        .clear {
-            display: inline;
-            padding: 5px;
-            border-radius: 10px;
-            background: #9d9d9d;
-            color: black;
-            text-align: center;
-            cursor: pointer;
-            margin-left: 5px;
+
+        select{
+            width: 100%;
+            height:100%;
+            overflow:hidden;
+            margin-top:8px;
+            background-image:none;
+            margin-left:10px;
         }
+
+        select option {
+            width:100%;
+            background: none repeat scroll 0 0 #E5E3E3;
+            border: 1px dotted #CCCCCC;
+            padding: 10px;
+            line-height: 15px;
+            text-indent: 3px;
+            text-transform: capitalize;
+            z-index: -9999;
+            cursor: pointer;
+        }
+        #cv_group{
+            margin-left:13px;
+            margin-right:auto;
+        }
+        .selected
+        {
+            margin-left:13px;
+        }
+
     </style>
     @php
         $discard=['ref_no','name','position','telephone_no','mobile_no','document_list','photo','created_at','updated_at'];
@@ -151,6 +171,12 @@
                             <div id="doc_upload">
                                 <h5><strong>Document Upload</strong></h5>
                                 <div id="cv_doc-selected" class="selected"></div>
+                                <div id="pp_doc-selected" class="selected"></div>
+                                <div id="edu_doc-selected" class="selected"></div>
+                                <div id="exp_doc-selected" class="selected"></div>
+                                <div id="training_doc-selected" class="selected"></div>
+                                <div id="driving_doc-selected" class="selected"></div>
+
                                 <div class="form-group" id="cv_group">
                                     <a title="Upload Title" class="btn btn-success" name="u_cv_sel" id="u_cv_sel">Upload CV *</a>
                                     &nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;
@@ -158,10 +184,32 @@
                                 </div>
 
 
+                                <select size="5" title="upload documents">
+                                    <option id="option_pp_doc"> PP Copy* </option>
+                                    <option id="option_edu_doc"> Educational Document </option>
+                                    <option id="option_exp_doc"> Experience Certificate </option>
+                                    <option id="option_training_doc"> Training Certificate </option>
+                                    <option id="option_driving_doc"> Driving Licence </option>
+                                </select>
 
-                                <input type="file" name="cv_doc" id="cv_doc" style="display:none;"/>
+
+
                             </div>
-                            <div class="col-sm-12 col-xs-12 hidden-md hidden-lg">
+                            <div class="hidden-xs hidden-md hidden-lg">
+                                {{--upload cv--}}
+                                <input type="file" name="cv_doc" id="cv_doc" style="display:none;"/>
+                                {{--upload pp copy--}}
+                                <input type="file" name="pp_doc" id="pp_doc" style="display:none;" required/>
+                                {{--upload educational document--}}
+                                <input type="file" name="edu_doc" id="edu_doc" style="display:none;"/>
+                                {{--upload experience cirtificate--}}
+                                <input type="file" name="exp_doc" id="exp_doc" style="display:none;"/>
+                                {{--upload training document--}}
+                                <input type="file" name="training_doc" id="training_doc" style="display:none;"/>
+                                {{--upload diving licence--}}
+                                <input type="file" name="driving_doc" id="driving_doc" style="display:none;"/>
+
+
                             </div>
                         </div>
                         <div class="panel-footer">
@@ -353,6 +401,7 @@
 
         }
 
+        //CV Processing
         $('#u_cv_sel').on('click', function() {
             $('#cv_doc').trigger('click');
         });
@@ -364,7 +413,7 @@
             fileName=fileName.substr(index);
             $('#cv_doc-selected').html
             (
-                "<h5 class='bg-success'><div class='btn btn-danger' id='pp_doc_clear' onclick='clear_cv()'>&nbsp;X&nbsp;</div> &nbsp; CV copy uploaded! ("+fileName+") </h5>"
+                "<h5 class='bg-success'><div class='btn btn-danger' id='cv_doc_clear' onclick='clear_cv()'>&nbsp;X&nbsp;</div> &nbsp; CV copy* uploaded! ("+fileName+") </h5>"
             );
             $('#cv_group').hide();
         });
@@ -451,6 +500,113 @@
                 }
             }
             return true;
+        }
+
+        //Other Doc Processing
+        $('#option_pp_doc').on('click', function() {
+            $('#pp_doc').trigger('click');
+        });
+        $('#pp_doc').bind('change', function() {
+            var fileName = '';
+            var index = 0;
+            fileName = $(this).val();
+            index=(fileName.lastIndexOf("\\") + 1);
+            fileName=fileName.substr(index);
+            $('#pp_doc-selected').html
+            (
+                "<h5 class='bg-success'><div class='btn btn-danger' id='pp_doc_clear' onclick='clear_pp()'>&nbsp;X&nbsp;</div> &nbsp; PP copy* uploaded! ("+fileName+") </h5>"
+            );
+            $('#option_pp_doc').hide();
+        });
+        function clear_pp() {
+            event.preventDefault();
+            $('input[type="file"]#pp_doc').val('');
+            $('#pp_doc-selected').html('');
+            $('#option_pp_doc').show();
+        }
+        $('#option_edu_doc').on('click', function() {
+            $('#edu_doc').trigger('click');
+        });
+        $('#edu_doc').bind('change', function() {
+            var fileName = '';
+            var index = 0;
+            fileName = $(this).val();
+            index=(fileName.lastIndexOf("\\") + 1);
+            fileName=fileName.substr(index);
+            $('#edu_doc-selected').html
+            (
+                "<h5 class='bg-success'><div class='btn btn-danger' id='edu_doc_clear' onclick='clear_edu()'>&nbsp;X&nbsp;</div> &nbsp; Educational Document uploaded! ("+fileName+") </h5>"
+            );
+            $('#option_edu_doc').hide();
+        });
+        function clear_edu() {
+            event.preventDefault();
+            $('input[type="file"]#edu_doc').val('');
+            $('#edu_doc-selected').html('');
+            $('#option_edu_doc').show();
+        }
+        $('#option_exp_doc').on('click', function() {
+            $('#exp_doc').trigger('click');
+        });
+        $('#exp_doc').bind('change', function() {
+            var fileName = '';
+            var index = 0;
+            fileName = $(this).val();
+            index=(fileName.lastIndexOf("\\") + 1);
+            fileName=fileName.substr(index);
+            $('#exp_doc-selected').html
+            (
+                "<h5 class='bg-success'><div class='btn btn-danger' id='exp_doc_clear' onclick='clear_exp()'>&nbsp;X&nbsp;</div> &nbsp; Experience certificate uploaded! ("+fileName+") </h5>"
+            );
+            $('#option_exp_doc').hide();
+        });
+        function clear_exp() {
+            event.preventDefault();
+            $('input[type="file"]#exp_doc').val('');
+            $('#exp_doc-selected').html('');
+            $('#option_exp_doc').show();
+        }
+        $('#option_training_doc').on('click', function() {
+            $('#training_doc').trigger('click');
+        });
+        $('#training_doc').bind('change', function() {
+            var fileName = '';
+            var index = 0;
+            fileName = $(this).val();
+            index=(fileName.lastIndexOf("\\") + 1);
+            fileName=fileName.substr(index);
+            $('#training_doc-selected').html
+            (
+                "<h5 class='bg-success'><div class='btn btn-danger' id='training_doc_clear' onclick='clear_training()'>&nbsp;X&nbsp;</div> &nbsp; Training Document uploaded! ("+fileName+") </h5>"
+            );
+            $('#option_training_doc').hide();
+        });
+        function clear_training() {
+            event.preventDefault();
+            $('input[type="file"]#training_doc').val('');
+            $('#training_doc-selected').html('');
+            $('#option_training_doc').show();
+        }
+        $('#option_driving_doc').on('click', function() {
+            $('#driving_doc').trigger('click');
+        });
+        $('#driving_doc').bind('change', function() {
+            var fileName = '';
+            var index = 0;
+            fileName = $(this).val();
+            index=(fileName.lastIndexOf("\\") + 1);
+            fileName=fileName.substr(index);
+            $('#driving_doc-selected').html
+            (
+                "<h5 class='bg-success'><div class='btn btn-danger' id='driving_doc_clear' onclick='clear_driving()'>&nbsp;X&nbsp;</div> &nbsp; Driving licence uploaded! ("+fileName+") </h5>"
+            );
+            $('#option_driving_doc').hide();
+        });
+        function clear_driving() {
+            event.preventDefault();
+            $('input[type="file"]#driving_doc').val('');
+            $('#driving_doc-selected').html('');
+            $('#option_driving_doc').show();
         }
 
     </script>
