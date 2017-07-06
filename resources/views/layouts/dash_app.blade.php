@@ -49,13 +49,22 @@
         padding-left:20px;
         color:white;
     }
-    .li-head a, .li-head a:focus, .li-head a:hover {
-        color:white;
+    a, a:focus, a:hover {
+        color:white !important;
     }
     .li-head>i {
         float: right;
         margin-top: 2px;
-        padding-right: 20px;
+
+    }
+    .navigation li>.has-ul:after {
+        display:none;
+    }
+    .footer a, .footer a:focus, .footer a:hover{
+        color: green !important;
+    }
+    .bootstrap-select a{
+        color:deepskyblue !important;
     }
 </style>
 
@@ -150,61 +159,59 @@
                             <li class="@if ($title === 'dashboard') active @endif">
                                 <a href="/" ><i class="fa fa-home"></i> Dashboard </a>
                             </li>
-
-                            {{--<div class="sidebar-user-material-menu">--}}
-                                <a class="li-head" href="#operation-nav" data-toggle="collapse" @if($title=='change_pwd' || $title=='change_dp')aria-expanded="true" @endif>
+                            <li>
+                                <a class="li-head" href="#operation-nav" data-toggle="collapse">
                                     <span>Operation Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                                 </a>
-                            {{--</div>--}}
-
-                            <div class="navigation-wrapper collapse @if($title=='change_pwd' || $title=='change_dp')in @endif" id="operation-nav">
-                                <ul class="navigation">
-                                    <li><a href="#"><i class="icon-user-plus"></i> <span>Change Display Picture</span></a></li>
-                                    <li class="@if ($title === 'change_pwd') active @endif"><a href="/change_pwd"><i class="icon-cog5"></i> <span>Change Password</span></a></li>
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-
-                                            <i class="icon-switch2"></i> <span>Logout</span>
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <h5>Operational Management</h5>
-                            <li class="@if ($title === 'visitor_log') active @endif">
-                                <a href="/reception"><i class="fa fa-university"></i> Visitor Log </a>
+                                <div class="navigation-wrapper collapse @if($title=='visitor_log' || $title=='application_form' || $title=='app_forms')in @endif" id="operation-nav">
+                                    <ul class="navigation">
+                                        <li class="@if ($title === 'visitor_log') active @endif">
+                                            <a href="/reception"><i class="fa fa-university"></i> Visitor Log </a>
+                                        </li>
+                                        <li class="@if ($title === 'application_form') active @endif">
+                                            <a href="/application_form"><i class="fa fa-plus-circle"></i> Add Applicants</a>
+                                        </li>
+                                        <li class="@if ($title === 'app_forms') active @endif">
+                                            <a href="/app_forms"><i class="fa fa-table"></i> Application Forms</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
-                            <li class="@if ($title === 'databank') active @endif">
-                                <a href="/databank"><i class="fa  fa-database"></i> Databank </a>
+                            <li>
+                                <a class="li-head" href="#old-operation-nav" data-toggle="collapse">
+                                    <span>Old Operation Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                                </a>
+                                <div class="navigation-wrapper collapse @if($title=='databank' || $title=='visa' || $title=='deployment')in @endif" id="old-operation-nav">
+                                    <ul class="navigation">
+                                        <li class="@if ($title === 'databank') active @endif">
+                                            <a href="/databank"><i class="fa  fa-database"></i>Old Databank </a>
+                                        </li>
+                                        <li class="@if ($title === 'visa') active @endif">
+                                            <a href="/visa"><i class="fa fa-cc-visa"></i>Old Visa Process </a>
+                                        </li>
+                                        <li class="@if ($title === 'deployment') active @endif">
+                                            <a href="/deployment"><i class="fa fa-share-square-o"></i>Old Deployment </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
-                            <li class="@if ($title === 'visa') active @endif">
-                                <a href="/visa"><i class="fa fa-cc-visa"></i> Visa Process </a>
-                            </li>
-                            <li class="@if ($title === 'deployment') active @endif">
-                                <a href="/deployment"><i class="fa fa-share-square-o"></i> Deployment </a>
-                            </li>
-
-                            <h5>Forms and Data</h5>
-                            <li class="@if ($title === 'application_form') active @endif">
-                                <a href="/application_form"><i class="fa fa-plus-circle"></i> Add Applicants</a>
-                            </li>
-
-                            @if(Auth::user()->role=='admin' || Auth::user()->role=='admin')
-                            <h5>User Management</h5>
-                                <li class="@if ($title === 'add_user') active @endif">
-                                    <a href="/add_user"><i class="fa fa-user-plus"></i> Add User</a>
-                                </li>
-                            <li class="@if ($title === 'users') active @endif">
-                                <a href="/users"><i class="fa fa-users"></i> Users </a>
+                            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+                            <li>
+                                <a class="li-head" href="#user-mgmt-nav" data-toggle="collapse">
+                                    <span>User Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                                </a>
+                                <div class="navigation-wrapper collapse @if($title=='add_user' || $title=='users')in @endif" id="user-mgmt-nav">
+                                    <ul class="navigation">
+                                        <li class="@if ($title === 'add_user') active @endif">
+                                            <a href="/add_user"><i class="fa fa-user-plus"></i> Add User</a>
+                                        </li>
+                                        <li class="@if ($title === 'users') active @endif">
+                                            <a href="/users"><i class="fa fa-users"></i> Users </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                             @endif
-
                         </ul>
                     </div>
                 </div>
@@ -232,7 +239,7 @@
 
                 <!-- Footer -->
                 <div class="footer">
-                    &copy;Pasa IT Solution 2017 <a class="btn btn-link" href="http://itspasa.com.np" style="color:green">www.itspasa.com.np</a>
+                    &copy;Pasa IT Solution 2017 <a target="_blank" class="btn btn-link" href="http://itspasa.com.np" style="color:green">www.itspasa.com.np</a>
                 </div>
                 <!-- /footer -->
 

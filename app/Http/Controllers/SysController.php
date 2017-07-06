@@ -164,6 +164,9 @@ class SysController extends Controller
                 }
 
                 $doc_list=substr($doc_list,0,strlen($doc_list)-4);
+                $pasa=app_form::where('ref_no',$insert_id)->first();
+                $pasa->document_list=$doc_list;
+                $pasa->save();
 
 
                 $this->app_form_generate($insert_id,$doc_list);
@@ -179,6 +182,99 @@ class SysController extends Controller
             return redirect('/');
         }
 
+    }
+
+    public function app_forms(Request $request)
+    {
+        if(\Auth::user())
+        {
+            $sel="";
+            $search="";
+
+            $asd=['ref_no','name','position','telephone_no','mobile_no',
+                  'religion','address','contact_address','email','qualification',
+                  'date_of_birth','gender','marital_status','spouse_name','passport_no',
+                  'place_of_issue','date_of_issue','date_of_expiry','height_feet','height_inch',
+                  'weight','parent_name','prior_experience','document_list','photo'];
+
+            if (!empty($request->all()) && $request->sel!="" && $request->search!="") {
+                $sel=$request->sel;
+                $search=$request->search;
+                $datas=app_form::where($sel, 'LIKE', '%' . $search . '%')
+                    ->groupBy('ref_no')
+                    ->groupBy('name')
+                    ->groupBy('position')
+                    ->groupBy('telephone_no')
+                    ->groupBy('mobile_no')
+                    ->groupBy('religion')
+                    ->groupBy('address')
+                    ->groupBy('contact_address')
+                    ->groupBy('email')
+                    ->groupBy('qualification')
+                    ->groupBy('date_of_birth')
+                    ->groupBy('gender')
+                    ->groupBy('marital_status')
+                    ->groupBy('spouse_name')
+                    ->groupBy('passport_no')
+                    ->groupBy('place_of_issue')
+                    ->groupBy('date_of_issue')
+                    ->groupBy('date_of_expiry')
+                    ->groupBy('height_feet')
+                    ->groupBy('height_inch')
+                    ->groupBy('weight')
+                    ->groupBy('parent_name')
+                    ->groupBy('prior_experience')
+                    ->groupBy('document_list')
+                    ->groupBy('photo')
+                    ->groupBy('created_at')
+                    ->groupBy('updated_at')->paginate(20,['ref_no','name','position','telephone_no','mobile_no',
+                        'religion','address','contact_address','email','qualification',
+                        'date_of_birth','gender','marital_status','spouse_name','passport_no',
+                        'place_of_issue','date_of_issue','date_of_expiry','height_feet','height_inch',
+                        'weight','parent_name','prior_experience','document_list','photo']);
+            }
+            else{
+                $datas=app_form::orderBy('ref_no','desc')
+                    ->groupBy('ref_no')
+                    ->groupBy('name')
+                    ->groupBy('position')
+                    ->groupBy('telephone_no')
+                    ->groupBy('mobile_no')
+                    ->groupBy('religion')
+                    ->groupBy('address')
+                    ->groupBy('contact_address')
+                    ->groupBy('email')
+                    ->groupBy('qualification')
+                    ->groupBy('date_of_birth')
+                    ->groupBy('gender')
+                    ->groupBy('marital_status')
+                    ->groupBy('spouse_name')
+                    ->groupBy('passport_no')
+                    ->groupBy('place_of_issue')
+                    ->groupBy('date_of_issue')
+                    ->groupBy('date_of_expiry')
+                    ->groupBy('height_feet')
+                    ->groupBy('height_inch')
+                    ->groupBy('weight')
+                    ->groupBy('parent_name')
+                    ->groupBy('prior_experience')
+                    ->groupBy('document_list')
+                    ->groupBy('photo')
+                    ->groupBy('created_at')
+                    ->groupBy('updated_at')->paginate(20,['ref_no','name','position','telephone_no','mobile_no',
+                        'religion','address','contact_address','email','qualification',
+                        'date_of_birth','gender','marital_status','spouse_name','passport_no',
+                        'place_of_issue','date_of_issue','date_of_expiry','height_feet','height_inch',
+                        'weight','parent_name','prior_experience','document_list','photo']);
+            }
+            $cols=\Schema::getColumnListing('app_forms');
+            $db_table='app_forms';
+            return view('joins.app_forms',compact('cols','datas','sel','search','db_table'));
+        }
+        else
+        {
+            return redirect('/');
+        }
     }
 
     public function databank(Request $request)

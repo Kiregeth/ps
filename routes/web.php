@@ -18,10 +18,12 @@ Auth::routes();
 Route::get('/dashboard', 'SysController@dashboard')->name('dash');
 Route::get('/reception', 'SysController@visitor_log');
 Route::get('/application_form', 'SysController@application_form');
+Route::get('/app_forms', 'SysController@app_forms');
 
 Route::get('/databank', 'SysController@databank');
 Route::get('/visa', 'SysController@visa');
 Route::get('/deployment', 'SysController@deployment');
+
 Route::get('/users', 'SysController@users');
 Route::get('/add_user', 'SysController@add_user');
 
@@ -29,9 +31,12 @@ Route::get('/change_pwd', 'SysController@change_pwd');
 
 Route::post('/reception', 'SysController@visitor_log');
 Route::post('/application_form', 'SysController@application_form');
+Route::post('/app_forms', 'SysController@app_forms');
+
 Route::post('/databank', 'SysController@databank');
 Route::post('/visa', 'SysController@visa');
 Route::post('/deployment', 'SysController@deployment');
+
 Route::post('/users', 'SysController@users');
 Route::post('/add_user', 'SysController@add_user');
 
