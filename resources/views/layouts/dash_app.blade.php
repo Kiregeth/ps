@@ -45,6 +45,18 @@
     .navigation .fa{
         color: #fff !important;
     }
+    .li-head{
+        padding-left:20px;
+        color:white;
+    }
+    .li-head a, .li-head a:focus, .li-head a:hover {
+        color:white;
+    }
+    .li-head>i {
+        float: right;
+        margin-top: 2px;
+        padding-right: 20px;
+    }
 </style>
 
 <body>
@@ -138,6 +150,32 @@
                             <li class="@if ($title === 'dashboard') active @endif">
                                 <a href="/" ><i class="fa fa-home"></i> Dashboard </a>
                             </li>
+
+                            {{--<div class="sidebar-user-material-menu">--}}
+                                <a class="li-head" href="#operation-nav" data-toggle="collapse" @if($title=='change_pwd' || $title=='change_dp')aria-expanded="true" @endif>
+                                    <span>Operation Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                                </a>
+                            {{--</div>--}}
+
+                            <div class="navigation-wrapper collapse @if($title=='change_pwd' || $title=='change_dp')in @endif" id="operation-nav">
+                                <ul class="navigation">
+                                    <li><a href="#"><i class="icon-user-plus"></i> <span>Change Display Picture</span></a></li>
+                                    <li class="@if ($title === 'change_pwd') active @endif"><a href="/change_pwd"><i class="icon-cog5"></i> <span>Change Password</span></a></li>
+                                    <li>
+                                        <a href="{{ route('logout') }}"
+                                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+
+                                            <i class="icon-switch2"></i> <span>Logout</span>
+                                        </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+
                             <h5>Operational Management</h5>
                             <li class="@if ($title === 'visitor_log') active @endif">
                                 <a href="/reception"><i class="fa fa-university"></i> Visitor Log </a>
