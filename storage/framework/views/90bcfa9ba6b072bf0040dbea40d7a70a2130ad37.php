@@ -51,7 +51,7 @@
 
     </style>
     <?php 
-        $discard=['ref_no','name','position','telephone_no','mobile_no','document_list','photo','created_at','updated_at'];
+        $discard=['ref_no','name','position','telephone_no','mobile_no','document_list','photo','app_status','created_at','updated_at'];
         $required=['religion','address','contact_address','email','qualification',
                    'dob','gender','marital_status','passport_no','place_of_issue',
                    'date_of_issue','date_of_expiry','height_feet','height_inch','weight',
