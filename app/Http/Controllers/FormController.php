@@ -30,6 +30,24 @@ class FormController extends Controller
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
         return back();
     }
+    public function add_to_visa(Request $request)
+    {
+        $pasa=new new_databank();
+        $cols=\Schema::getColumnListing('new_databanks');
+        $discard=['created_at','updated_at','date','db_status'];
+
+        foreach($cols as $col)
+        {
+            if(!in_array($col,$discard))
+            {
+                $pasa->$col=$request->$col;
+            }
+        }
+        $pasa->save();
+        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'db']);
+        session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
+        return back();
+    }
     public function add(Request $request)
     {
         switch ($request->db_table)

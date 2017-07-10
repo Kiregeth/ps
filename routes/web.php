@@ -63,10 +63,18 @@ Route::post('/deployment', 'OldDbController@deployment');
 
 Route::post('/add', 'FormController@add');
 Route::post('/add_to_db', 'FormController@add_to_db');
+Route::post('/add_to_visa', 'FormController@add_to_visa');
 
 /*
  * NewDbController Routes
  */
+Route::get('/new_databank', 'NewDbController@new_databank');
+Route::get('/new_visa', 'NewDbController@new_visa');
+Route::get('/new_deployment', 'NewDbController@new_deployment');
+
+Route::post('/new_databank', 'NewDbController@new_databank');
+Route::post('/new_visa', 'NewDbController@new_visa');
+Route::post('/new_deployment', 'NewDbController@new_deployment');
 
 
 
@@ -81,6 +89,7 @@ Route::post('/visaprocess','AjaxController@visaprocess');
 Route::post('/deploy','AjaxController@deploy');
 Route::post('/cancel','AjaxController@cancel');
 Route::post('/cv_save','AjaxController@cv_save');
+
 
 
 ////Route::get('get_logout', '\App\Http\Controllers\Auth\LoginController@get_logout');

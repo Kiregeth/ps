@@ -62,7 +62,7 @@
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <div class="row">
-                    <div class="col-xs-6 col-md-6"><h1>Visa Process</h1></div>
+                    <div class="col-xs-6 col-md-6"><h1>Old Visa Process</h1></div>
                     <div class="col-xs-6 col-md-6 center-blocks">
                         <form action="/visa" method="POST" name="search-form" id="search-form">
                             {{csrf_field()}}

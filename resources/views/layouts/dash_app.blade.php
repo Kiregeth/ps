@@ -183,10 +183,10 @@
                                 <div class="navigation-wrapper collapse @if($title=='new_databank' || $title=='new_visa' || $title=='new_deployment')in @endif" id="databank-nav">
                                     <ul class="navigation">
                                         <li class="@if ($title === 'new_databank') active @endif">
-                                            <a href="/new_databank"><i class="fa  fa-database"></i>Databank </a>
+                                            <a href="/new_databank"><i class="fa fa-database"></i>Databank </a>
                                         </li>
                                         <li class="@if ($title === 'new_visa') active @endif">
-                                            <a href="/new_visa"><i class="fa  fa-cc_visa"></i>Visa Process </a>
+                                            <a href="/new_visa"><i class="fa fa-cc-visa"></i>Visa Process </a>
                                         </li>
                                         <li class="@if ($title === 'new_deloyment') active @endif">
                                             <a href="/new_deployment"><i class="fa  fa-share-square-o"></i>Deployment </a>

@@ -6,19 +6,9 @@ use Intervention\Image\Facades\Image;
 
 use Illuminate\Http\Request;
 use App;
-use App\visitor_type;
-use App\visitor_log;
-use App\databank;
-use App\visaprocess;
-use App\vrflown;
 use App\User;
 use App\user_role;
-use App\app_form;
-use App\cv;
-use App\cv_edu;
-use App\cv_exp;
-use App\new_databank;
-use Dompdf\Dompdf;
+
 
 class SysController extends Controller
 {
