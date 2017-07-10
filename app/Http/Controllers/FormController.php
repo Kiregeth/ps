@@ -33,11 +33,12 @@ class FormController extends Controller
     }
     public function add_to_visa(Request $request)
     {
-        $pasa=new new_databank();
+        $pasa=new new_visa_process();
         $pasa->ref_no=$request->ref_no;
         $pasa->visa_process_date=$request->visa_process_date;
         $pasa->save();
         app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vp']);
+        new_databank::where('ref_no', $request->ref_no)->update(['db_status' => 'vp']);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
         return back();
     }

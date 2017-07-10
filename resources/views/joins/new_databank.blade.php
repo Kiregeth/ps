@@ -8,8 +8,10 @@
         .modal-dialog {
             width: 80% !important;
         }
-        .modal-content input[type=text], .modal-content input[type=number] {
-            max-height: 24px;
+        .modal-content input[type=text], .modal-content input[type=number], .modal-content select {
+            max-height: 20px;
+            padding: 0 0 0 10px;
+            margin:2px;
         }
         .modal-content input[readonly]
         {
@@ -29,19 +31,20 @@
             text-decoration: none;
             cursor: pointer;
         }
-        th .center-block a{
-            padding:0 !important;
-            margin:0 !important;
-        }
         .fa{
-            color: #000;
+            color:#000;
         }
         th,td{
             padding:0 !important;
             padding-left:5px !important;
             padding-right:5px !important;
-            min-width:100px;
+            min-width: 100px;
         }
+
+        a.btn.btn-link{
+            padding:0;
+        }
+
         .caret{
             display:none;
         }
@@ -54,7 +57,10 @@
         {
             padding:5px;
         }
-
+        .form-control
+        {
+            max-height: 20px;
+        }
     </style>
     @php
             $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
@@ -64,12 +70,15 @@
 
     @endphp
         <div class="container">
+            @if(session()->has('message'))
+                <h3 align="center" class="alert alert-success">{{session()->get('message')}}</h3>
+            @endif
             <div class="row">
                 <div class="col-md-12 col-xs-12">
                     <div class="row">
                         <div class="col-xs-6 col-md-6"><h1>Databank</h1></div>
                         <div class="col-xs-6 col-md-6 center-blocks">
-                            <form action="/app_forms" method="POST" name="search-form" id="search-form">
+                            <form action="/new_databank" method="POST" name="search-form" id="search-form">
                                 {{csrf_field()}}
                                 <h5><label for="search">Search:</label></h5>
                                 <select class="selectpicker" name="sel" id="sel" data-style="btn-info">

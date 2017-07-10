@@ -114,12 +114,18 @@
                             @foreach ($datas as $data)
                                 <tr @if($data->app_status==='db')
                                     style="background-color: #BED661;color:white;"
+                                    @elseif($data->app_status=='vp')
+                                    style='background-color: lightgreen;'
+                                    @elseif($data->app_status== 'vc')
+                                    style='background-color: lightcoral;'
+                                    @elseif($data->app_status== 'vf')
+                                    style='background-color: lightblue;'
                                     @endif>
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            @if($data->app_status!=='db')
+                                            @if($data->app_status!=='db' && $data->app_status!=='vp' && $data->app_status!=='vf')
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#db_{{$data->ref_no}}"
                                                 title="add to databank"><i class="fa fa-database"></i></a>
                                             @endif
