@@ -197,29 +197,31 @@
                         {{csrf_field()}}
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
-                                                                      for="{{$data->ref_no. '_' . $j}}">{{ucfirst(preg_replace('/_+/', ' ', $col))}}@if(in_array($col,$db_required))*@endif:</label>
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'ref_no'}}">Ref No:</label>
                                 </div>
                                 <div class="col-xs-7 col-md-7"><input
-                                                type="date"
-                                                class="form-control"
-                                                id="{{$data->ref_no. '_' . $j}}"
-                                                name="{{$col}}"
-                                                placeholder="Enter {{ucfirst(preg_replace('/_+/', ' ', $col))}} here!@if(in_array($col,$db_required))*@endif"
-                                                @if($col==='ref_no')value="{{$data->ref_no}}"  readonly @endif @if(in_array($col,$db_required)) required @endif/>
+                                            type="text"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'ref_no'}}"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="{{$data->ref_no}}"  readonly />
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
-                                                                      for="{{$data->ref_no. '_' . ''}}">{{ucfirst(preg_replace('/_+/', ' ', $col))}}@if(in_array($col,$db_required))*@endif:</label>
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'visa_process_date'}}">Visa Process Date*:</label>
                                 </div>
                                 <div class="col-xs-7 col-md-7"><input
                                             type="date"
                                             class="form-control"
-                                            id="{{$data->ref_no. '_' . $j}}"
-                                            name="{{$col}}"
-                                            placeholder="Enter {{ucfirst(preg_replace('/_+/', ' ', $col))}} here!@if(in_array($col,$db_required))*@endif"
-                                            @if($col==='ref_no')value="{{$data->ref_no}}"  readonly @endif @if(in_array($col,$db_required)) required @endif/>
+                                            id="{{$data->ref_no. '_' . 'visa_process_date'}}"
+                                            name="visa_process_date"
+                                            placeholder="Enter Visa Process Date here!"
+                                            required />
                                 </div>
                             </div>
                         </div>

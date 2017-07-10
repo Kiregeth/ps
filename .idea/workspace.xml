@@ -2,21 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="93ee0158-94ac-40cc-a897-bd38a4123707" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/joins/new_databank.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/AjaxController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/AjaxController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/FormController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/FormController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/NewDbController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/NewDbController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/OldDbController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/OldDbController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/SysController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/SysController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/joins/databank.blade.php" afterPath="$PROJECT_DIR$/resources/views/joins/databank.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/joins/deployment.blade.php" afterPath="$PROJECT_DIR$/resources/views/joins/deployment.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/joins/visa.blade.php" afterPath="$PROJECT_DIR$/resources/views/joins/visa.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/layouts/dash_app.blade.php" afterPath="$PROJECT_DIR$/resources/views/layouts/dash_app.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/web.php" afterPath="$PROJECT_DIR$/routes/web.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/framework/views/2449419308b85a51b3c4b6f3e5ee36a18918a798.php" afterPath="$PROJECT_DIR$/storage/framework/views/2449419308b85a51b3c4b6f3e5ee36a18918a798.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/framework/views/9e4111454df10b01c58a7fd7ee4560dd52d66dae.php" afterPath="$PROJECT_DIR$/storage/framework/views/9e4111454df10b01c58a7fd7ee4560dd52d66dae.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/logs/laravel.log" afterPath="$PROJECT_DIR$/storage/logs/laravel.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/joins/new_databank.blade.php" afterPath="$PROJECT_DIR$/resources/views/joins/new_databank.blade.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -98,30 +86,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="new_databank.blade.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="new_databank.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/joins/new_databank.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="199" column="42" lean-forward="false" selection-start-line="199" selection-start-column="42" selection-end-line="199" selection-end-column="42" />
+            <state relative-caret-position="314">
+              <caret line="218" column="54" lean-forward="false" selection-start-line="218" selection-start-column="54" selection-end-line="218" selection-end-column="54" />
               <folding>
                 <element signature="e#6432#8164#0#HTML" expanded="false" />
-                <marker date="1499677192932" expanded="true" signature="1309:1698" ph="..." />
-                <marker date="1499677192932" expanded="true" signature="1318:1612" ph="..." />
-                <marker date="1499677192932" expanded="true" signature="1627:1698" ph="..." />
+                <marker date="1499677762946" expanded="true" signature="1309:1698" ph="..." />
+                <marker date="1499677762946" expanded="true" signature="1318:1612" ph="..." />
+                <marker date="1499677762946" expanded="true" signature="1627:1698" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FormController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="FormController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FormController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="32" column="31" lean-forward="false" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
+            <state relative-caret-position="306">
+              <caret line="37" column="18" lean-forward="false" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
-                <element signature="e#205#826#0#PHP" expanded="false" />
-                <element signature="e#831#1454#0#PHP" expanded="false" />
+                <element signature="e#231#852#0#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -285,10 +272,10 @@
         <option value="$PROJECT_DIR$/resources/views/joins/visa.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/joins/deployment.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/NewDbController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/FormController.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/AjaxController.php" />
         <option value="$PROJECT_DIR$/resources/views/joins/new_databank.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/FormController.php" />
       </list>
     </option>
   </component>
@@ -995,12 +982,12 @@
       <workItem from="1499333461472" duration="529000" />
       <workItem from="1499403142809" duration="16773000" />
       <workItem from="1499606948417" duration="1219000" />
-      <workItem from="1499662680989" duration="11483000" />
+      <workItem from="1499662680989" duration="12846000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="267274000" />
+    <option name="totallyTimeSpent" value="268637000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1472,18 +1459,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FormController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="32" column="31" lean-forward="false" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
-          <folding>
-            <element signature="e#40#68#0#PHP" expanded="true" />
-            <element signature="e#205#826#0#PHP" expanded="false" />
-            <element signature="e#831#1454#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
@@ -1526,13 +1501,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/joins/new_databank.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="199" column="42" lean-forward="false" selection-start-line="199" selection-start-column="42" selection-end-line="199" selection-end-column="42" />
+        <state relative-caret-position="314">
+          <caret line="218" column="54" lean-forward="false" selection-start-line="218" selection-start-column="54" selection-end-line="218" selection-end-column="54" />
           <folding>
             <element signature="e#6432#8164#0#HTML" expanded="false" />
-            <marker date="1499677192932" expanded="true" signature="1309:1698" ph="..." />
-            <marker date="1499677192932" expanded="true" signature="1318:1612" ph="..." />
-            <marker date="1499677192932" expanded="true" signature="1627:1698" ph="..." />
+            <marker date="1499677762946" expanded="true" signature="1309:1698" ph="..." />
+            <marker date="1499677762946" expanded="true" signature="1318:1612" ph="..." />
+            <marker date="1499677762946" expanded="true" signature="1627:1698" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FormController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="37" column="18" lean-forward="false" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
+          <folding>
+            <element signature="e#40#68#0#PHP" expanded="true" />
+            <element signature="e#231#852#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -8,6 +8,7 @@ use App\visitor_log;
 use App\databank;
 use App\app_form;
 use App\new_databank;
+use App\new_visa_process;
 
 
 class FormController extends Controller
@@ -33,18 +34,10 @@ class FormController extends Controller
     public function add_to_visa(Request $request)
     {
         $pasa=new new_databank();
-        $cols=\Schema::getColumnListing('new_databanks');
-        $discard=['created_at','updated_at','date','db_status'];
-
-        foreach($cols as $col)
-        {
-            if(!in_array($col,$discard))
-            {
-                $pasa->$col=$request->$col;
-            }
-        }
+        $pasa->ref_no=$request->ref_no;
+        $pasa->visa_process_date=$request->visa_process_date;
         $pasa->save();
-        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'db']);
+        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vp']);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
         return back();
     }
