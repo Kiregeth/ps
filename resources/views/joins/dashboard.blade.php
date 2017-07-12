@@ -11,7 +11,8 @@
                         You are logged in!
                         <a href="{{ route('logout') }}"
                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();"
+                        style="color: #00ACC1 !important;">
                             Logout
                         </a>
 

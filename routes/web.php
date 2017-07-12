@@ -64,6 +64,7 @@ Route::post('/deployment', 'OldDbController@deployment');
 Route::post('/add', 'FormController@add');
 Route::post('/add_to_db', 'FormController@add_to_db');
 Route::post('/add_to_visa', 'FormController@add_to_visa');
+Route::post('/add_to_deployment', 'FormController@add_to_deployment');
 
 /*
  * NewDbController Routes
@@ -89,6 +90,11 @@ Route::post('/visaprocess','AjaxController@visaprocess');
 Route::post('/deploy','AjaxController@deploy');
 Route::post('/cancel','AjaxController@cancel');
 Route::post('/cv_save','AjaxController@cv_save');
+
+Route::post('/delete_new','AjaxController@delete_new');
+Route::post('/cancel_new','AjaxController@cancel_new');
+
+
 
 
 

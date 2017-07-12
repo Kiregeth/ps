@@ -11,33 +11,115 @@ class NewDbController extends Controller
 {
     public function new_databank(Request $request)
     {
-        $sel="";
-        $search="";
+        if (\Auth::user()) {
+            $sel = "";
+            $search = "";
 
-        $app_cols=\Schema::getColumnListing('app_forms');
-        $db_cols=\Schema::getColumnListing('new_databanks');
+//        $app_cols=\Schema::getColumnListing('app_forms');
+//        $db_cols=\Schema::getColumnListing('new_databanks');
+            if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
+                $sel = $request->sel;
+                if ($sel === 'ref_no') {
+                    $sel = 'new_databanks.' . $sel;
+                }
+                $search = $request->search;
+                $datas = \DB::table('app_forms')
+                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
+                    ->where($sel, 'LIKE', '%' . $search . '%')
+                    ->orderBy('new_databanks.ref_no', 'desc')
+                    ->paginate(20);
 
-        $datas= \DB::table('app_forms')
-            ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-            ->paginate(20);
+            } else {
+                $datas = \DB::table('app_forms')
+                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
+                    ->orderBy('new_databanks.ref_no', 'desc')
+                    ->paginate(20);
+            }
 
+            $db_table = 'new_databanks';
 
-        return view("joins.new_databank",compact('app_cols','db_cols','sel','search','datas'));
+            return view("joins.new_databank", compact('db_table', 'sel', 'search', 'datas'));
+        }
+        else
+        {
+            return redirect('/');
+        }
     }
 
-    public function getByPage($page = 1, $limit = 10)
+    function new_visa(Request $request)
     {
-        $results = \StdClass;
-        $results->page = $page;
-        $results->limit = $limit;
-        $results->totalItems = 0;
-        $results->items = array();
+        if (\Auth::user()) {
+            $sel = "";
+            $search = "";
 
-        $users = $this->model->skip($limit * ($page - 1))->take($limit)->get();
+//        $app_cols=\Schema::getColumnListing('app_forms');
+//        $db_cols=\Schema::getColumnListing('new_databanks');
+            if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
+                $sel = $request->sel;
+                if ($sel === 'ref_no' || $sel==='date') {
+                    $sel = 'new_visa_processes.' . $sel;
+                }
+                $search = $request->search;
+                $datas = \DB::table('app_forms')
+                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
+                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->where($sel, 'LIKE', '%' . $search . '%')
+                    ->orderBy('new_visa_processes.ref_no', 'desc')
+                    ->paginate(20);
 
-        $results->totalItems = $this->model->count();
-        $results->items = $users->all();
+            } else {
+                $datas = \DB::table('app_forms')
+                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
+                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->orderBy('new_visa_processes.ref_no', 'desc')
+                    ->paginate(20);
+            }
 
-        return $results;
+            $db_table = 'new_visa_processes';
+
+            return view("joins.new_visa", compact('db_table', 'sel', 'search', 'datas'));
+        }
+        else
+        {
+            return redirect('/');
+        }
+    }
+
+    function new_deployment(Request $request)
+    {
+        if (\Auth::user()) {
+            $sel = "";
+            $search = "";
+
+            if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
+                $sel = $request->sel;
+                if ($sel === 'ref_no' || $sel==='date') {
+                    $sel = 'new_vr_flowns.' . $sel;
+                }
+                $search = $request->search;
+                $datas = \DB::table('app_forms')
+                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
+                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_vr_flowns','app_forms.ref_no', '=', 'new_vr_flowns.ref_no')
+                    ->where($sel, 'LIKE', '%' . $search . '%')
+                    ->orderBy('new_vr_flowns.ref_no', 'desc')
+                    ->paginate(20);
+
+            } else {
+                $datas = \DB::table('app_forms')
+                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
+                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_vr_flowns','app_forms.ref_no', '=', 'new_vr_flowns.ref_no')
+                    ->orderBy('new_vr_flowns.ref_no', 'desc')
+                    ->paginate(20);
+            }
+
+            $db_table = 'new_vr_flowns';
+            return view("joins.new_deployment", compact('db_table', 'sel', 'search', 'datas'));
+        }
+        else
+        {
+            return redirect('/');
+        }
     }
 }

@@ -125,7 +125,7 @@
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            @if($data->app_status!=='db' && $data->app_status!=='vp' && $data->app_status!=='vf')
+                                            @if($data->app_status!=='db' && $data->app_status!=='vc' && $data->app_status!=='vp' && $data->app_status!=='vf')
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#db_{{$data->ref_no}}"
                                                 title="add to databank"><i class="fa fa-database"></i></a>
                                             @endif

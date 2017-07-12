@@ -81,6 +81,7 @@
                             <form action="/new_databank" method="POST" name="search-form" id="search-form">
                                 {{csrf_field()}}
                                 <h5><label for="search">Search:</label></h5>
+                                @php if(strpos($sel, '.') !== false) $sel=substr($sel, strpos($sel, ".") + 1) @endphp
                                 <select class="selectpicker" name="sel" id="sel" data-style="btn-info">
                                     @foreach($fields as $col)
                                         @if(!in_array($col,$discard))
@@ -246,12 +247,48 @@
     @endforeach
 
     <script type="text/javascript">
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        $(function (){
+            $(".delete").click(function(){
+                var name=$(this).attr("name");
+                var val=parseInt(name.substr(0,name.lastIndexOf('_')));
+                var col='ref_no';
+                var result = confirm("Want to delete?");
+                if (result) {
+                    $.ajax({
+                        url: '/delete_new',
+                        type: 'post',
+                        data: {
+                            db_table:'{{$db_table}}',
+                            w_val: val,
+                            w_col: col
+                        },
+                        cache: false,
+                        timeout: 10000,
+                        success: function (data){
+                            if (data) {
+                                alert(data);
+                            }
+// Load output into a P
+                            else {
+                                location.reload(true);
+//                        $('#notice').text('Deleted');
+//                        $('#notice').fadeOut().fadeIn();
+
+                            }
+                        }
+                    });
+                }
+
+
+            });
+        });
+
     </script>
 
 

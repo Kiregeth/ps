@@ -9,6 +9,7 @@ use App\databank;
 use App\app_form;
 use App\new_databank;
 use App\new_visa_process;
+use App\new_vr_flown;
 
 
 class FormController extends Controller
@@ -39,7 +40,24 @@ class FormController extends Controller
         $pasa->save();
         app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vp']);
         new_databank::where('ref_no', $request->ref_no)->update(['db_status' => 'vp']);
-        session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
+        session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into visa process!');
+        return back();
+    }
+    public function add_to_deployment(Request $request)
+    {
+        $pasa=new new_vr_flown();
+        foreach ($request->all() as $key=>$value)
+        {
+            if($key!=='_token')
+            {
+                $pasa->$key=$value;
+            }
+        }
+        $pasa->save();
+        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vf']);
+        new_databank::where('ref_no', $request->ref_no)->update(['db_status' => 'vf']);
+        new_visa_process::where('ref_no', $request->ref_no)->update(['vp_status' => 'vf']);
+        session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into deployment!');
         return back();
     }
     public function add(Request $request)

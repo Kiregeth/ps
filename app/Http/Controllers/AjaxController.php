@@ -333,4 +333,32 @@ class AjaxController extends Controller
         }
     }
 
+    public function delete_new(Request $request)
+    {
+        $db_table=$request->db_table;
+        $col=$request->w_col;
+        $value=$request->w_val;
+        \DB::table($db_table)->where($col, $value)->delete();
+        \DB::table('new_visa_processes')->where($col, $value)->delete();
+        \DB::table('new_vr_flowns')->where($col, $value)->delete();
+        \DB::table('app_forms')->where($col, $value)->update(['app_status' => null]);
+
+    }
+
+    public function cancel_new(Request $request)
+    {
+        $db_table=$request->db_table;
+        $col=$request->w_col;
+        $value=$request->w_val;
+
+        $visa_process_dates=\DB::table('new_visa_processes')->where($col, $value)->first(['visa_process_date']);
+        $d=$visa_process_dates->visa_process_date;
+        \DB::table('new_databanks')->where($col, $value)->update(['old_vp_date' => $d]);
+
+        \DB::table('new_visa_processes')->where($col, $value)->delete();
+        \DB::table('new_vr_flowns')->where($col, $value)->delete();
+
+        \DB::table('app_forms')->where($col, $value)->update(['app_status' => 'vc']);
+        \DB::table('new_databanks')->where($col, $value)->update(['db_status' => 'vc']);
+    }
 }
