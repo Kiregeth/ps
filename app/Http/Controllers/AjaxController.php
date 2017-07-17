@@ -361,4 +361,41 @@ class AjaxController extends Controller
         \DB::table('app_forms')->where($col, $value)->update(['app_status' => 'vc']);
         \DB::table('new_databanks')->where($col, $value)->update(['db_status' => 'vc']);
     }
+
+    public function quick_edit_new(Request $request)
+    {
+        $w_col = $request->w_col;
+        $w_val = $request->w_val;
+        $col = $request->col;
+        $val = $request->val;
+        $check = \DB::table('app_forms')->select()->where($w_col, $w_val)->first();
+        if (count($check) > 0) {
+            $cols = \Schema::getColumnListing('app_forms');
+            if (in_array($col, $cols)) {
+                \DB::table('app_forms')->where($w_col, $w_val)->update([$col => $val]);
+            }
+        }
+        $check = \DB::table('new_databanks')->select()->where($w_col, $w_val)->first();
+        if (count($check) > 0) {
+            $cols = \Schema::getColumnListing('new_databanks');
+            if (in_array($col, $cols)) {
+                \DB::table('new_databanks')->where($w_col, $w_val)->update([$col => $val]);
+            }
+        }
+        $check = \DB::table('new_visa_processes')->select()->where($w_col, $w_val)->first();
+        if (count($check) > 0) {
+            $cols = \Schema::getColumnListing('new_visa_processes');
+            if (in_array($col, $cols)) {
+                \DB::table('new_visa_processes')->where($w_col, $w_val)->update([$col => $val]);
+            }
+        }
+        $check = \DB::table('new_deployments')->select()->where($w_col, $w_val)->first();
+        if (count($check) > 0) {
+            $cols = \Schema::getColumnListing('new_deployments');
+            if (in_array($col, $cols)) {
+                \DB::table('new_deployments')->where($w_col, $w_val)->update([$col => $val]);
+            }
+        }
+    }
+
 }

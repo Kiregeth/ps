@@ -93,6 +93,7 @@ Route::post('/cv_save','AjaxController@cv_save');
 
 Route::post('/delete_new','AjaxController@delete_new');
 Route::post('/cancel_new','AjaxController@cancel_new');
+Route::post('/quick_edit_new','AjaxController@quick_edit_new');
 
 
 
