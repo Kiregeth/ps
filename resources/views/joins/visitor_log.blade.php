@@ -1,57 +1,6 @@
 @extends('layouts.dash_app',['title'=>'visitor_log'])
 
 @section('content')
-    <style>
-        * {
-            font-family:Consolas;
-        }
-    .modal-dialog {
-    width: 80% !important;
-    }
-    .modal-content input[type=text], .modal-content input[type=number], .modal-content select {
-        max-height: 24px;
-        padding: 0 0 0 10px;
-        margin:2px;
-    }
-    .modal-content input[readonly]
-    {
-    background-color:grey;
-    max-height:20px;
-    color:white;
-    }
-    .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    }
-    .close:hover,
-    .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-    }
-    .fa{
-        color:#000;
-    }
-    th,td{
-        padding:0 !important;
-        padding-left:5px !important;
-        padding-right:5px !important;
-    }
-    .caret{
-        display:none;
-    }
-    .select
-    {
-        color:blue !important;
-    }
-
-    .btn-info
-    {
-        padding:5px;
-    }
-    </style>
     @php $required=['visitor_name','contact_no','type','visit_purpose']; @endphp
     <div class="container">
         <div class="row">
@@ -117,6 +66,7 @@
                             @endforeach
                             <td>&nbsp</td>
                         </tr>
+                        @php $i=0; $datas_array=array(); @endphp
                         @foreach ($logs as $log)
                             <tr>
                                 <th style="min-width: 100px; text-align: center">
@@ -127,10 +77,12 @@
                                 </th>
                                 @foreach ($cols as $col)
                                     @if($col!='created_at' && $col!='updated_at')
+                                        @php $datas_array[$i][$col]=$log->$col; @endphp
                                     <td> {{$log->$col}} </td>
                                     @endif
                                 @endforeach
                             </tr>
+                            @php $i++; @endphp
                         @endforeach
                         </tbody>
                     </table>
@@ -138,6 +90,19 @@
                 </form>
             </div>
             <br/>
+        </div>
+        <div class="export">
+            <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                Export to Excel
+            </a>
+
+            <form id="excel-form" action="/export" method="POST" style="display: none;">
+                {{ csrf_field() }}
+                <input type="text" name="file" id="file" value="Visitor Log" />
+                <input type="text" name="colsString" id="colsString" value="{{serialize($cols)}}" />
+                <input type="text" name="discardString" id="discardString" value="{{serialize(['created_at','updated_at'])}}" />
+                <input type="text" name="datasString" id="datasString" value="{{serialize($datas_array)}}" />
+            </form>
         </div>
         @if($sel!="" && $search!="")
             <div class="center-block">{{$logs->appends(['sel' => $sel,'search'=>$search])->render()}}</div>

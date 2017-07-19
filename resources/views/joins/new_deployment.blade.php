@@ -1,71 +1,11 @@
-@extends('layouts.dash_app',['title'=>'new_deployments'])
+@extends('layouts.dash_app',['title'=>'new_deployment'])
 
 @section('content')
-<style>
-    * {
-        font-family:Consolas;
-    }
-    .modal-dialog {
-        width: 80% !important;
-    }
-    .modal-content input[type=text], .modal-content input[type=number], .modal-content select {
-        max-height: 20px;
-        padding: 0 0 0 10px;
-        margin:2px;
-    }
-    .modal-content input[readonly]
-    {
-        background-color:grey;
-        max-height:20px;
-        color:white;
-    }
-    .close {
-        color: #aaaaaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-    .close:hover,
-    .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .fa{
-        color:#000;
-    }
-    th,td{
-        padding:0 !important;
-        padding-left:5px !important;
-        padding-right:5px !important;
-        min-width: 100px;
-    }
-
-    a.btn.btn-link{
-        padding:0;
-    }
-
-    .caret{
-        display:none;
-    }
-    .select
-    {
-        color:blue !important;
-    }
-
-    .btn-info
-    {
-        padding:5px;
-    }
-    .form-control
-    {
-        max-height: 20px;
-    }
-</style>
 @php
 $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
-'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','visa_process_date',
-'pp_returned_date','pp_resubmitted_date','remarks','db_status'];
+'pp_status','local_agent','la_contact','trade','company','wp_expiry','offer_letter_received_date','visa_process_date',
+'pp_returned_date','pp_resubmitted_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date','remarks','db_status'];
+$date=['date_of_birth','wp_expiry','offer_letter_received_date','pp_returned_date','pp_resubmitted_date','visa_process_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date'];
 $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
 @endphp
 <div class="container">
@@ -97,7 +37,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                 </div>
             </div>
             <br/>
-            <form id='ajax-form' method='post' action='/'>
+            <form id='ajax-form' method='post' action='/quick_edit_new'>
                 {{ csrf_field() }}
                 <table class="table table-striped table-bordered editableTable" id="myTable">
                     <thead>
@@ -111,6 +51,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                     </tr>
                     </thead>
                     <tbody>
+                    @php $i=0; $datas_array=array(); @endphp
                     @foreach ($datas as $data)
                     <tr>
 
@@ -119,25 +60,42 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
                                 <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                    title="view"><i class="fa fa-eye"></i></a>
+                                @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
                                 <a class="cancel btn btn-link" name="{{$data->ref_no}}_cancel"
                                    title="visa cancel"><i class="fa fa-times"></i></a>
-                                @if($data->vp_status!='vf' && $data->vp_status!='vc')
-                                <a class="btn btn-link" data-toggle="modal" data-target="#deploy_{{$data->ref_no}}"
-                                   title="add to deployment"><i class="fa fa-paper-plane"></i></a>
+                                    @if($data->vp_status!='vf' && $data->vp_status!='vc')
+                                    <a class="btn btn-link" data-toggle="modal" data-target="#deploy_{{$data->ref_no}}"
+                                       title="add to deployment"><i class="fa fa-paper-plane"></i></a>
+                                    @endif
                                 @endif
                             </div>
                         </th>
                         @foreach ($fields as $col)
                         @if(!in_array($col,$discard))
+                        @php $datas_array[$i][$col]=$data->$col; @endphp
                         <td> {{$data->$col}} </td>
                         @endif
                         @endforeach
                     </tr>
+                    @php $i++; @endphp
                     @endforeach
                     </tbody>
                 </table>
             </form>
         </div>
+    </div>
+    <div class="export">
+        <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+            Export to Excel
+        </a>
+
+        <form id="excel-form" action="/export" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="text" name="file" id="file" value="New Deployment" />
+            <input type="text" name="colsString" id="colsString" value="{{serialize($fields)}}" />
+            <input type="text" name="discardString" id="discardString" value="{{serialize($discard)}}" />
+            <input type="text" name="datasString" id="datasString" value="{{serialize($datas_array)}}" />
+        </form>
     </div>
     @if($sel!="" && $search!="")
     <div class="center-block">{{$datas->appends(['sel' => $sel,'search'=>$search])->render()}}</div>
@@ -183,6 +141,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
 
 <script type="text/javascript">
+    @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -224,6 +183,106 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
         });
     });
+    $(function () {
+        $("td").dblclick(function () {
+            var OriginalContent = $(this).text();
+            OriginalContent = OriginalContent.trim();
+
+            $(this).addClass("cellEditing");
+            var myCol = $(this).index() - 1;
+            var $tr = $(this).closest('tr');
+            var myRow = $tr.index() + 1;
+
+
+            var colArray = {!! json_encode($fields) !!} ;
+            var dateArray= {!! json_encode($date) !!};
+
+            var id = document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
+            var type;
+            var x;
+            var count=0;
+            for(x in dateArray)
+            {
+                if(colArray[myCol]===dateArray[x])
+                {
+                    count++;
+                    break;
+                }
+            }
+            if(count>0) type='date'; else type='text';
+            if(colArray[myCol]==='email') type='email';
+            if(colArray[myCol]!=='ref_no' && colArray[myCol]!=='date')
+            {
+                $(this).html(
+                    "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
+                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
+                );
+
+                $(this).children().first().focus();
+
+                $(this).children().first().keypress(function (e) {
+                    if (e.which == 13) {
+                        var res=autosubmit(colArray,myCol,myRow);
+                        var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
+                        $(this).parent().text(val);
+                        $(this).parent().removeClass("cellEditing");
+                    }
+                });
+
+                $(this).children().first().blur(function(){
+
+                    var res=autosubmit(colArray,myCol,myRow);
+                    var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
+                    $(this).parent().text(val);
+                    $(this).parent().removeClass("cellEditing");
+                });
+            }
+        });
+    });
+
+    function autosubmit(colArray,myCol,myRow)
+    {
+        var input=document.getElementById(colArray[myCol]+'_'+myRow);
+
+        var column = input.name;
+        column=column.substr(0, column.lastIndexOf('_'));
+        var value = input.value;
+        var form = document.getElementById('ajax-form');
+        var method = form.method;
+        var action = form.action;
+
+
+        var where=document.getElementById('where_'+myRow+'_'+myCol);
+        var where_val = where.value;
+        var where_col = where.name;
+
+        $.ajax({
+            url: action,
+            type: method,
+            data: {
+                db_table:'{{$db_table}}',
+                val: value,
+                col: column,
+                w_col: where_col,
+                w_val: where_val
+            },
+            cache: false,
+            timeout: 10000,
+            success: function (data){
+                if (data) {
+                    alert(data);
+                }
+// Load output into a P
+                else {
+
+
+                }
+            }
+        });
+// Prevent normal submission of form
+        return false;
+    }
+    @endif
 
 </script>
 

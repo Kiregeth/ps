@@ -10,7 +10,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>PASA | {{strtoupper($title)}}</title>
+    <title>PASA | {{strtoupper(preg_replace('/_+/', ' ', $title))}}</title>
 
     <!-- Scripts -->
     <script>
@@ -26,6 +26,9 @@
     <link href="{{asset('/css/theme/core.css')}}" rel="stylesheet">
     <link href="{{asset('/css/theme/components.css')}}" rel="stylesheet">
     <link href="{{asset('/css/theme/colors.css')}}" rel="stylesheet">
+
+    <link href="{{asset('/css/default.css')}}" rel="stylesheet">
+    <link href="{{asset('/css/operation.css')}}" rel="stylesheet">
     <!-- /global stylesheets -->
 
     <!-- Core JS files -->
@@ -41,30 +44,7 @@
 </head>
 
 <style rel="stylesheet" type="text/css">
-    .navigation .fa{
-        color: #fff !important;
-    }
-    .li-head{
-        padding-left:20px;
-        color:white;
-    }
-    a, a:focus, a:hover {
-        color:white !important;
-    }
-    .li-head>i {
-        float: right;
-        margin-top: 2px;
 
-    }
-    .navigation li>.has-ul:after {
-        display:none;
-    }
-    .footer a, .footer a:focus, .footer a:hover{
-        color: green !important;
-    }
-    .bootstrap-select a{
-        color:deepskyblue !important;
-    }
 </style>
 
 <body>
@@ -188,7 +168,7 @@
                                         <li class="@if ($title === 'new_visa') active @endif">
                                             <a href="/new_visa"><i class="fa fa-cc-visa"></i>Visa Process </a>
                                         </li>
-                                        <li class="@if ($title === 'new_deloyment') active @endif">
+                                        <li class="@if ($title === 'new_deployment') active @endif">
                                             <a href="/new_deployment"><i class="fa  fa-share-square-o"></i>Deployment </a>
                                         </li>
                                     </ul>

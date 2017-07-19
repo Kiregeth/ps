@@ -1,67 +1,6 @@
 @extends('layouts.dash_app',['title'=>'new_databank'])
 
 @section('content')
-    <style>
-        * {
-            font-family:Consolas;
-        }
-        .modal-dialog {
-            width: 80% !important;
-        }
-        .modal-content input[type=text], .modal-content input[type=number], .modal-content select {
-            max-height: 20px;
-            padding: 0 0 0 10px;
-            margin:2px;
-        }
-        .modal-content input[readonly]
-        {
-            background-color:grey;
-            max-height:20px;
-            color:white;
-        }
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .fa{
-            color:#000;
-        }
-        th,td{
-            padding:0 !important;
-            padding-left:5px !important;
-            padding-right:5px !important;
-            min-width: 100px;
-        }
-
-        a.btn.btn-link{
-            padding:0;
-        }
-
-        .caret{
-            display:none;
-        }
-        .select
-        {
-            color:blue !important;
-        }
-
-        .btn-info
-        {
-            padding:5px;
-        }
-        .form-control
-        {
-            max-height: 20px;
-        }
-    </style>
     @php
             $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
                    'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date',
@@ -113,6 +52,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @php $i=0; $datas_array=array(); @endphp
                             @foreach ($datas as $data)
                                 <tr
                                         @if($data->db_status=='vp')
@@ -129,27 +69,44 @@
 
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            @if($data->db_status!='vp' && $data->db_status!='vf')
-                                                <a class="btn btn-link" data-toggle="modal" data-target="#visa_{{$data->ref_no}}"
-                                                   title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
+                                            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+                                                @if($data->db_status!='vp' && $data->db_status!='vf')
+                                                    <a class="btn btn-link" data-toggle="modal" data-target="#visa_{{$data->ref_no}}"
+                                                       title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
+                                                @endif
+                                                <a title="delete" class="delete btn btn-link" name="{{$data->ref_no}}_delete">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
                                             @endif
-                                            <a title="delete" class="delete btn btn-link" name="{{$data->ref_no}}_delete">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
                                         </div>
                                     </th>
                                     @foreach ($fields as $col)
                                         @if(!in_array($col,$discard))
+                                            @php $datas_array[$i][$col]=$data->$col; @endphp
                                             <td> {{$data->$col}} </td>
                                         @endif
                                     @endforeach
                                 </tr>
+                                @php $i++; @endphp
                             @endforeach
                             </tbody>
                         </table>
                     </form>
                 </div>
             </div>
+                <div class="export">
+                    <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                        Export to Excel
+                    </a>
+
+                    <form id="excel-form" action="/export" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                        <input type="text" name="file" id="file" value="New Databank" />
+                        <input type="text" name="colsString" id="colsString" value="{{serialize($fields)}}" />
+                        <input type="text" name="discardString" id="discardString" value="{{serialize($discard)}}" />
+                        <input type="text" name="datasString" id="datasString" value="{{serialize($datas_array)}}" />
+                    </form>
+                </div>
             @if($sel!="" && $search!="")
                 <div class="center-block">{{$datas->appends(['sel' => $sel,'search'=>$search])->render()}}</div>
             @else
@@ -248,6 +205,7 @@
     @endforeach
 
     <script type="text/javascript">
+    @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -316,7 +274,7 @@
                 }
                 if(count>0) type='date'; else type='text';
                 if(colArray[myCol]==='email') type='email';
-                if(colArray[myCol]!=='date')
+                if(colArray[myCol]!=='ref_no' && colArray[myCol]!=='date')
                 {
                     $(this).html(
                         "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
@@ -387,7 +345,7 @@
 // Prevent normal submission of form
             return false;
         }
-
+    @endif
     </script>
 
 

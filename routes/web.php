@@ -124,4 +124,19 @@ Route::post('/quick_edit_new','AjaxController@quick_edit_new');
 //    return "done";
 //});
 
+Route::post('/export','FormController@export_to_excel');
 
+Route::get('/check',function (){
+
+    Excel::create('Databank Export', function($excel) {
+        $excel->sheet('Sheet1', function($sheet) {
+            $headings = array('check1', 'check2');
+            $sheet->setOrientation('landscape');
+            $sheet->fromArray(array(
+                array('data1', 'data2'),
+                array('data3', 'data4')
+            ), null, 'A1', false, false);
+            $sheet->prependRow(1, $headings);
+        });
+    })->export('xls');
+});

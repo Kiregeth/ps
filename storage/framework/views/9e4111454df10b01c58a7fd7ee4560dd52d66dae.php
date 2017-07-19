@@ -1,59 +1,4 @@
 <?php $__env->startSection('content'); ?>
-    <style>
-        * {
-            font-family:Consolas;
-        }
-        .modal-dialog {
-            width: 80% !important;
-        }
-        .modal-content input[type=text], .modal-content input[type=number] {
-            max-height: 24px;
-        }
-        .modal-content input[readonly]
-        {
-            background-color:grey;
-            max-height:20px;
-            color:white;
-        }
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        th .center-block a{
-            padding:0 !important;
-            margin:0 !important;
-        }
-        .fa{
-            color: #000;
-        }
-        th,td{
-            padding:0 !important;
-            padding-left:5px !important;
-            padding-right:5px !important;
-        }
-        .caret{
-            display:none;
-        }
-        .select
-        {
-            color:blue !important;
-        }
-
-        .btn-info
-        {
-            padding:5px;
-        }
-
-    </style>
-
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
@@ -98,17 +43,17 @@
                             </thead>
 
                             <tbody>
-
+                            <?php  if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin') $read=""; else $read="readonly";  ?>
                             <tr>
                                 <td align="center"><a class="btn btn-link" id="quick_add"><strong><i class="fa fa-plus-square"></i></strong></a></td>
                                 <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
                                 <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php if($col!='State' && $col!="created_at" && $col!="updated_at"): ?>
-                                        <td><input id="qa_<?php echo e($col); ?>" name="<?php echo e($col); ?>" placeholder="<?php echo e($col); ?> <?php if(in_array($col,$required)): ?>*<?php endif; ?>" required/></td>
+                                        <td><input id="qa_<?php echo e($col); ?>" name="<?php echo e($col); ?>" placeholder="<?php echo e($col); ?> <?php if(in_array($col,$required)): ?>*<?php endif; ?>" <?php echo e($read); ?> required/></td>
                                     <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tr>
-
+                            <?php  $i=0; $datas_array=array();  ?>
                             <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr
                                 <?php if($data->State=='vp'): ?>
@@ -125,21 +70,25 @@
 
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->Ref_No); ?>"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            <?php if($data->State!='vp' && $data->State!='vf'): ?>
-                                            <a title="visa processing" class="visa btn btn-link" name="<?php echo e($data->Ref_No); ?>_visa"><i
-                                                        class="fa fa-cc-visa"></i></a>
-                                            <?php endif; ?>
+                                            <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
+                                                <?php if($data->State!='vp' && $data->State!='vf'): ?>
+                                                <a title="visa processing" class="visa btn btn-link" name="<?php echo e($data->Ref_No); ?>_visa"><i
+                                                            class="fa fa-cc-visa"></i></a>
+                                                <?php endif; ?>
                                             <a title="delete" class="delete btn btn-link" name="<?php echo e($data->Ref_No); ?>_delete">
                                                 <i class="fa fa-trash-o"></i>
                                             </a>
+                                            <?php endif; ?>
                                         </div>
                                     </th>
                                     <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <?php if($col!='created_at' && $col!='updated_at' && $col!='State'): ?>
+                                            <?php  $datas_array[$i][$col]=$data->$col;  ?>
                                             <td> <?php echo e($data->$col); ?> </td>
                                         <?php endif; ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tr>
+                                <?php  $i++;  ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
@@ -148,6 +97,20 @@
             </div>
         </div>
         <br>
+        <div class="export">
+            <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                Export to Excel
+            </a>
+
+            <form id="excel-form" action="/export" method="POST" style="display: none;">
+                <?php echo e(csrf_field()); ?>
+
+                <input type="text" name="file" id="file" value="Databank" />
+                <input type="text" name="colsString" id="colsString" value="<?php echo e(serialize($cols)); ?>" />
+                <input type="text" name="discardString" id="discardString" value="<?php echo e(serialize(['created_at','updated_at','State'])); ?>" />
+                <input type="text" name="datasString" id="datasString" value="<?php echo e(serialize($datas_array)); ?>" />
+            </form>
+        </div>
         <?php if($sel!="" && $search!=""): ?>
             <div class="center-block"><?php echo e($datas->appends(['sel' => $sel,'search'=>$search])->render()); ?></div>
         <?php else: ?>
@@ -241,7 +204,7 @@
 
 
     <script type="text/javascript">
-
+    <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -433,7 +396,7 @@
 // Prevent normal submission of form
             return false;
         }
-
+    <?php endif; ?>
     </script>
 <?php $__env->stopSection(); ?>
 

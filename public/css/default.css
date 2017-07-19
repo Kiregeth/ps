@@ -1,0 +1,24 @@
+.navigation .fa{
+    color: #fff !important;
+}
+.li-head{
+    padding-left:20px;
+    color:white;
+}
+a, a:focus, a:hover {
+    color:white !important;
+}
+.li-head>i {
+    float: right;
+    margin-top: 2px;
+
+}
+.navigation li>.has-ul:after {
+    display:none;
+}
+.footer a, .footer a:focus, .footer a:hover{
+    color: green !important;
+}
+.bootstrap-select a{
+    color:deepskyblue !important;
+}

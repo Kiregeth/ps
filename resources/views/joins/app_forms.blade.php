@@ -61,9 +61,15 @@
         {
             max-height: 20px;
         }
+        .export{
+             padding-top:20px;
+             padding-bottom:20px;
+         }
+
     </style>
     @php
         $discard=['photo','app_status','created_at','updated_at','date','db_status'];
+        $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
         $db_required=['trade','company'];
     @endphp
@@ -95,62 +101,79 @@
                     </div>
                 </div>
                 <br/>
-                <form id='ajax-form' method='post' action='/'>
+                <form id='ajax-form' method='post' action='/quick_edit_new'>
                     {{ csrf_field() }}
-                    <div class="">
-                        <table class="table table-striped table-bordered editableTable" >
-                            <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                @foreach($cols as $col)
+                    <table class="table table-striped table-bordered editableTable" id="myTable">
+                        <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            @foreach($cols as $col)
+                                @if(!in_array($col,$discard))
+                                    <th>{{strtoupper(preg_replace('/_+/', ' ', $col))}}</th>
+                                @endif
+                            @endforeach
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        @php $i=0; $datas_array=array(); @endphp
+                        @foreach ($datas as $data)
+                            <tr @if($data->app_status==='db')
+                                style="background-color: #BED661;color:white;"
+                                @elseif($data->app_status=='vp')
+                                style='background-color: lightgreen;'
+                                @elseif($data->app_status== 'vc')
+                                style='background-color: lightcoral;'
+                                @elseif($data->app_status== 'vf')
+                                style='background-color: lightblue;'
+                                    @endif>
+                                <th style="min-width: 100px; text-align: center">
+                                    <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
+                                        <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
+                                           title="view"><i class="fa fa-eye"></i></a>
+                                        @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+                                            @if($data->app_status!=='db' && $data->app_status!=='vc' && $data->app_status!=='vp' && $data->app_status!=='vf')
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#db_{{$data->ref_no}}"
+                                                   title="add to databank"><i class="fa fa-database"></i></a>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </th>
+                                @foreach ($cols as $col)
                                     @if(!in_array($col,$discard))
-                                        <th>{{strtoupper(preg_replace('/_+/', ' ', $col))}}</th>
+                                        @php $datas_array[$i][$col]=$data->$col; @endphp
+                                        <td> {{$data->$col}} </td>
                                     @endif
                                 @endforeach
                             </tr>
-                            </thead>
-
-                            <tbody>
-                            @foreach ($datas as $data)
-                                <tr @if($data->app_status==='db')
-                                    style="background-color: #BED661;color:white;"
-                                    @elseif($data->app_status=='vp')
-                                    style='background-color: lightgreen;'
-                                    @elseif($data->app_status== 'vc')
-                                    style='background-color: lightcoral;'
-                                    @elseif($data->app_status== 'vf')
-                                    style='background-color: lightblue;'
-                                    @endif>
-                                    <th style="min-width: 100px; text-align: center">
-                                        <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-                                            <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
-                                               title="view"><i class="fa fa-eye"></i></a>
-                                            @if($data->app_status!=='db' && $data->app_status!=='vc' && $data->app_status!=='vp' && $data->app_status!=='vf')
-                                                <a class="btn btn-link" data-toggle="modal" data-target="#db_{{$data->ref_no}}"
-                                                title="add to databank"><i class="fa fa-database"></i></a>
-                                            @endif
-                                        </div>
-                                    </th>
-                                    @foreach ($cols as $col)
-                                        @if(!in_array($col,$discard))
-                                            <td> {{$data->$col}} </td>
-                                        @endif
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @php $i++; @endphp
+                        @endforeach
+                        </tbody>
+                    </table>
                 </form>
             </div>
             <br/>
         </div>
+        <div class="export">
+                <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                    Export to Excel
+                </a>
+
+                <form id="excel-form" action="/export" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                    <input type="text" name="file" id="file" value="App Form" />
+                    <input type="text" name="colsString" id="colsString" value="{{serialize($cols)}}" />
+                    <input type="text" name="discardString" id="discardString" value="{{serialize($discard)}}" />
+                    <input type="text" name="datasString" id="datasString" value="{{serialize($datas_array)}}" />
+                </form>
+            </div>
         @if($sel!="" && $search!="")
             <div class="center-block">{{$datas->appends(['sel' => $sel,'search'=>$search])->render()}}</div>
         @else
             <div class="center-block">{{$datas->render()}}</div>
         @endif
         <br/>
+
     </div>
 
     @foreach($datas as $data)
@@ -242,5 +265,117 @@
 
             </div>
         </div>
+
+        <script>
+            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $(function () {
+                $("td").dblclick(function () {
+                    var OriginalContent = $(this).text();
+                    OriginalContent = OriginalContent.trim();
+
+                    $(this).addClass("cellEditing");
+                    var myCol = $(this).index() - 1;
+                    var $tr = $(this).closest('tr');
+                    var myRow = $tr.index() + 1;
+
+
+                    var colArray = {!! json_encode($cols) !!} ;
+                    var dateArray= {!! json_encode($date) !!};
+
+                    var id = document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
+                    var type;
+                    var x;
+                    var count=0;
+                    for(x in dateArray)
+                    {
+                        if(colArray[myCol]===dateArray[x])
+                        {
+                            count++;
+                            break;
+                        }
+                    }
+                    if(count>0) type='date'; else type='text';
+                    if(colArray[myCol]==='email') type='email';
+
+                    if(colArray[myCol]!=='ref_no' && colArray[myCol]!=='date')
+                    {
+                        $(this).html(
+                            "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
+                            "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
+                        );
+
+                        $(this).children().first().focus();
+
+                        $(this).children().first().keypress(function (e) {
+                            if (e.which == 13) {
+                                var res=autosubmit(colArray,myCol,myRow);
+                                var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
+                                $(this).parent().text(val);
+                                $(this).parent().removeClass("cellEditing");
+                            }
+                        });
+
+                        $(this).children().first().blur(function(){
+
+                            var res=autosubmit(colArray,myCol,myRow);
+                            var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
+                            $(this).parent().text(val);
+                            $(this).parent().removeClass("cellEditing");
+                        });
+                    }
+                });
+            });
+
+            function autosubmit(colArray,myCol,myRow)
+            {
+
+                var input=document.getElementById(colArray[myCol]+'_'+myRow);
+
+                var column = input.name;
+                column=column.substr(0, column.lastIndexOf('_'));
+                var value = input.value;
+                var form = document.getElementById('ajax-form');
+                var method = form.method;
+                var action = form.action;
+
+
+
+                var where=document.getElementById('where_'+myRow+'_'+myCol);
+                var where_val = where.value;
+                var where_col = where.name;
+
+//                alert(action+': '+method+'        '+column+': '+value+'   '+where_col+' '+where_val);
+                $.ajax({
+                    url: action,
+                    type: method,
+                    data: {
+                        val: value,
+                        col: column,
+                        w_col: where_col,
+                        w_val: where_val
+                    },
+                    cache: false,
+                    timeout: 10000,
+                    success: function (data){
+                        if (data) {
+                            alert(data);
+                        }
+                        // Load output into a P
+                        else {
+
+
+                        }
+                    }
+                });
+                // Prevent normal submission of form
+                return false;
+            }
+            @endif
+        </script>
     @endforeach
 @endsection

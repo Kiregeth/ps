@@ -1,0 +1,64 @@
+* {
+    font-family:Consolas;
+}
+.modal-dialog {
+    width: 80% !important;
+}
+.modal-content input[type=text], .modal-content input[type=number], .modal-content select {
+    max-height: 20px;
+    padding: 0 0 0 10px;
+    margin:2px;
+}
+.modal-content input[readonly]
+{
+    background-color:grey;
+    max-height:20px;
+    color:white;
+}
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.fa{
+    color:#000;
+}
+th,td{
+    padding:0 !important;
+    padding-left:5px !important;
+    padding-right:5px !important;
+    min-width: 100px;
+}
+a.btn.btn-link{
+    padding:0;
+}
+.caret{
+    display:none;
+}
+.select
+{
+    color:blue !important;
+}
+.btn-info
+{
+    padding:5px;
+}
+.export{
+    padding-top:20px;
+    padding-bottom:20px;
+}
+.form-control
+{
+    max-height: 20px;
+}
+
+.container a{
+    color:black !important;
+}

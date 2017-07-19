@@ -1,66 +1,9 @@
 <?php $__env->startSection('content'); ?>
-    <style>
-        * {
-            font-family:Consolas;
-        }
-        .modal-dialog {
-            width: 80% !important;
-        }
-        .modal-content input[type=text], .modal-content input[type=number] {
-            max-height: 24px;
-        }
-        .modal-content input[readonly]
-        {
-            background-color:grey;
-            max-height:20px;
-            color:white;
-        }
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        th .center-block a{
-            padding:0 !important;
-            margin:0 !important;
-        }
-        .fa{
-            color: #000;
-        }
-        th,td{
-            padding:0 !important;
-            padding-left:5px !important;
-            padding-right:5px !important;
-        }
-        thead th{
-            padding:10px !important;
-        }
-        .caret{
-            display:none;
-        }
-        .select
-        {
-            color:blue !important;
-        }
-
-        .btn-info
-        {
-            padding:5px;
-        }
-    </style>
-
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <div class="row">
-                    <div class="col-xs-6 col-md-6"><h1>Visa Process</h1></div>
+                    <div class="col-xs-6 col-md-6"><h1>Old Visa Process</h1></div>
                     <div class="col-xs-6 col-md-6 center-blocks">
                         <form action="/visa" method="POST" name="search-form" id="search-form">
                             <?php echo e(csrf_field()); ?>
@@ -100,7 +43,7 @@
                             </thead>
 
                             <tbody>
-
+                            <?php  $i=0; $datas_array=array();  ?>
                             <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr
                                         <?php if($data->State_Vp== 'vf'): ?>
@@ -113,21 +56,25 @@
 
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->Ref_No); ?>"
                                                title="view"><i class="fa fa-eye"></i></a>
+                                            <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
                                             <a class="cancel btn btn-link" name="<?php echo e($data->Ref_No); ?>_cancel"
                                                title="Visa Cancel"><i style="color: #000;" class="fa fa-times"></i></a>
-                                            <?php if($data->State_Vp!='vf'): ?>
-                                            <a title="Deploy" class="deploy btn btn-link" name="<?php echo e($data->Ref_No); ?>_deploy">
-                                                <i class="fa fa-paper-plane" style="color: #000;" aria-hidden="true"></i>
-                                            </a>
+                                                <?php if($data->State_Vp!='vf'): ?>
+                                                    <a title="Deploy" class="deploy btn btn-link" name="<?php echo e($data->Ref_No); ?>_deploy">
+                                                        <i class="fa fa-paper-plane" style="color: #000;" aria-hidden="true"></i>
+                                                    </a>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         </div>
                                     </th>
                                     <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <?php if($col!='created_at' && $col!='updated_at' && $col!='State_Vp'): ?>
+                                            <?php  $datas_array[$i][$col]=$data->$col;  ?>
                                             <td> <?php echo e($data->$col); ?> </td>
                                         <?php endif; ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tr>
+                                <?php  $i++;  ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
@@ -136,6 +83,20 @@
             </div>
         </div>
         <br>
+        <div class="export">
+            <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                Export to Excel
+            </a>
+
+            <form id="excel-form" action="/export" method="POST" style="display: none;">
+                <?php echo e(csrf_field()); ?>
+
+                <input type="text" name="file" id="file" value="Visa Process" />
+                <input type="text" name="colsString" id="colsString" value="<?php echo e(serialize($cols)); ?>" />
+                <input type="text" name="discardString" id="discardString" value="<?php echo e(serialize(['State_Vp','created_at','updated_at'])); ?>" />
+                <input type="text" name="datasString" id="datasString" value="<?php echo e(serialize($datas_array)); ?>" />
+            </form>
+        </div>
         <?php if($sel!="" && $search!=""): ?>
             <div class="center-block"><?php echo e($datas->appends(['sel' => $sel,'search'=>$search])->render()); ?></div>
         <?php else: ?>
@@ -182,6 +143,7 @@
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <script type="text/javascript">
+        <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
 
         $.ajaxSetup({
             headers: {
@@ -341,6 +303,7 @@
 // Prevent normal submission of form
             return false;
         }
+        <?php endif; ?>
 
     </script>
 

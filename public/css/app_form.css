@@ -1,0 +1,48 @@
+.modal-dialog {
+    width: 80% !important;
+}
+label{
+    font-size: 10px;
+    font-weight: bold;
+}
+input[type=text],input[type=number],input[type=email],input[type=date]
+{
+    font-size: 12px;
+    max-height:30px;
+}
+input[type=submit]
+{
+    margin-right:60px;
+}
+.form-group{
+    margin-bottom:10px;
+}
+
+select{
+    width: 100%;
+    height:100%;
+    overflow:hidden;
+    margin-top:8px;
+    background-image:none;
+    margin-left:10px;
+}
+
+select option {
+    width:100%;
+    background: none repeat scroll 0 0 #E5E3E3;
+    border: 1px dotted #CCCCCC;
+    padding: 10px;
+    line-height: 15px;
+    text-indent: 3px;
+    text-transform: capitalize;
+    z-index: -9999;
+    cursor: pointer;
+}
+#cv_group{
+    margin-left:13px;
+    margin-right:auto;
+}
+.selected
+{
+    margin-left:13px;
+}

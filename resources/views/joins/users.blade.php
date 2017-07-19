@@ -1,65 +1,6 @@
 @extends('layouts.dash_app',['title'=>'users'])
 
 @section('content')
-    <style>
-        * {
-            font-family:Consolas;
-        }
-        .modal-dialog {
-            width: 80% !important;
-        }
-        .modal-content input[type=text], .modal-content input[type=number] {
-            max-height: 24px;
-        }
-        .modal-content input[readonly]
-        {
-            background-color:grey;
-            max-height:20px;
-            color:white;
-        }
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        th .center-block a{
-            padding:0 !important;
-            margin:0 !important;
-        }
-        .fa{
-            color: #000;
-        }
-        th,td{
-            padding:0 !important;
-            padding-left:5px !important;
-            padding-right:5px !important;
-            min-width: 50px !important;
-            max-width:200px !important;
-        }
-        thead th{
-            padding:10px !important;
-            max-width:200px !important;
-        }
-        .caret{
-            display:none;
-        }
-        .select
-        {
-            color:blue !important;
-        }
-
-        .btn-info
-        {
-            padding:5px;
-        }
-    </style>
     @php
         $discard=['created_at','updated_at','password','remember_token'];
         $opt_roles=[];

@@ -90,4 +90,27 @@ class FormController extends Controller
         $pasa->save();
         return back();
     }
+
+    public function export_to_excel(Request $request)
+    {
+        \Excel::create($request->file.' Export', function($excel) use ($request) {
+            $excel->sheet('Sheet1', function($sheet) use($request) {
+                $cols=unserialize($request->colsString);
+                $discard=unserialize($request->discardString);
+                $datas=unserialize($request->datasString);
+                $head=[];
+                foreach($cols as $col)
+                {
+                    if(!in_array($col,$discard))
+                    {
+                        $head[]=$col;
+                    }
+                }
+                $sheet->setOrientation('landscape');
+                $sheet->fromArray($datas, null, 'A1', false, false);
+                $sheet->prependRow(1, $head);
+            });
+        })->export('xls');
+        return back();
+    }
 }

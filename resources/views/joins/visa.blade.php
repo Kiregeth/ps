@@ -1,63 +1,6 @@
 @extends('layouts.dash_app',['title'=>'visa'])
 
 @section('content')
-    <style>
-        * {
-            font-family:Consolas;
-        }
-        .modal-dialog {
-            width: 80% !important;
-        }
-        .modal-content input[type=text], .modal-content input[type=number] {
-            max-height: 24px;
-        }
-        .modal-content input[readonly]
-        {
-            background-color:grey;
-            max-height:20px;
-            color:white;
-        }
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        th .center-block a{
-            padding:0 !important;
-            margin:0 !important;
-        }
-        .fa{
-            color: #000;
-        }
-        th,td{
-            padding:0 !important;
-            padding-left:5px !important;
-            padding-right:5px !important;
-        }
-        thead th{
-            padding:10px !important;
-        }
-        .caret{
-            display:none;
-        }
-        .select
-        {
-            color:blue !important;
-        }
-
-        .btn-info
-        {
-            padding:5px;
-        }
-    </style>
-
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
@@ -100,7 +43,7 @@
                             </thead>
 
                             <tbody>
-
+                            @php $i=0; $datas_array=array(); @endphp
                             @foreach ($datas as $data)
                                 <tr
                                         @if($data->State_Vp== 'vf')
@@ -113,21 +56,25 @@
 
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->Ref_No}}"
                                                title="view"><i class="fa fa-eye"></i></a>
+                                            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
                                             <a class="cancel btn btn-link" name="{{$data->Ref_No}}_cancel"
                                                title="Visa Cancel"><i style="color: #000;" class="fa fa-times"></i></a>
-                                            @if($data->State_Vp!='vf')
-                                            <a title="Deploy" class="deploy btn btn-link" name="{{$data->Ref_No}}_deploy">
-                                                <i class="fa fa-paper-plane" style="color: #000;" aria-hidden="true"></i>
-                                            </a>
+                                                @if($data->State_Vp!='vf')
+                                                    <a title="Deploy" class="deploy btn btn-link" name="{{$data->Ref_No}}_deploy">
+                                                        <i class="fa fa-paper-plane" style="color: #000;" aria-hidden="true"></i>
+                                                    </a>
+                                                @endif
                                             @endif
                                         </div>
                                     </th>
                                     @foreach ($cols as $col)
                                         @if($col!='created_at' && $col!='updated_at' && $col!='State_Vp')
+                                            @php $datas_array[$i][$col]=$data->$col; @endphp
                                             <td> {{$data->$col}} </td>
                                         @endif
                                     @endforeach
                                 </tr>
+                                @php $i++; @endphp
                             @endforeach
                             </tbody>
                         </table>
@@ -136,6 +83,19 @@
             </div>
         </div>
         <br>
+        <div class="export">
+            <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                Export to Excel
+            </a>
+
+            <form id="excel-form" action="/export" method="POST" style="display: none;">
+                {{ csrf_field() }}
+                <input type="text" name="file" id="file" value="Visa Process" />
+                <input type="text" name="colsString" id="colsString" value="{{serialize($cols)}}" />
+                <input type="text" name="discardString" id="discardString" value="{{serialize(['State_Vp','created_at','updated_at'])}}" />
+                <input type="text" name="datasString" id="datasString" value="{{serialize($datas_array)}}" />
+            </form>
+        </div>
         @if($sel!="" && $search!="")
             <div class="center-block">{{$datas->appends(['sel' => $sel,'search'=>$search])->render()}}</div>
         @else
@@ -182,6 +142,7 @@
     @endforeach
 
     <script type="text/javascript">
+        @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
 
         $.ajaxSetup({
             headers: {
@@ -341,6 +302,7 @@
 // Prevent normal submission of form
             return false;
         }
+        @endif
 
     </script>
 
