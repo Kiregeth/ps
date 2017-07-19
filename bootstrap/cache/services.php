@@ -25,11 +25,13 @@
     21 => 'Illuminate\\View\\ViewServiceProvider',
     22 => 'Intervention\\Image\\ImageServiceProvider',
     23 => 'Barryvdh\\DomPDF\\ServiceProvider',
-    24 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    25 => 'App\\Providers\\AppServiceProvider',
-    26 => 'App\\Providers\\AuthServiceProvider',
-    27 => 'App\\Providers\\EventServiceProvider',
-    28 => 'App\\Providers\\RouteServiceProvider',
+    24 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    25 => 'Collective\\Html\\HtmlServiceProvider',
+    26 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    27 => 'App\\Providers\\AppServiceProvider',
+    28 => 'App\\Providers\\AuthServiceProvider',
+    29 => 'App\\Providers\\EventServiceProvider',
+    30 => 'App\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -45,10 +47,11 @@
     9 => 'Illuminate\\View\\ViewServiceProvider',
     10 => 'Intervention\\Image\\ImageServiceProvider',
     11 => 'Barryvdh\\DomPDF\\ServiceProvider',
-    12 => 'App\\Providers\\AppServiceProvider',
-    13 => 'App\\Providers\\AuthServiceProvider',
-    14 => 'App\\Providers\\EventServiceProvider',
-    15 => 'App\\Providers\\RouteServiceProvider',
+    12 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    13 => 'App\\Providers\\AppServiceProvider',
+    14 => 'App\\Providers\\AuthServiceProvider',
+    15 => 'App\\Providers\\EventServiceProvider',
+    16 => 'App\\Providers\\RouteServiceProvider',
   ),
   'deferred' => 
   array (
@@ -141,6 +144,10 @@
     'translation.loader' => 'Illuminate\\Translation\\TranslationServiceProvider',
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
+    'html' => 'Collective\\Html\\HtmlServiceProvider',
+    'form' => 'Collective\\Html\\HtmlServiceProvider',
+    'Collective\\Html\\HtmlBuilder' => 'Collective\\Html\\HtmlServiceProvider',
+    'Collective\\Html\\FormBuilder' => 'Collective\\Html\\HtmlServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
   ),
   'when' => 
@@ -179,6 +186,9 @@
     array (
     ),
     'Illuminate\\Validation\\ValidationServiceProvider' => 
+    array (
+    ),
+    'Collective\\Html\\HtmlServiceProvider' => 
     array (
     ),
     'Laravel\\Tinker\\TinkerServiceProvider' => 
