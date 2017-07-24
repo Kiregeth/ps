@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6
+class ComposerStaticInit5761d56e1d03c61baed910d0458345c6
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -12,6 +12,7 @@ class ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
@@ -367,17 +368,11 @@ class ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\FormController' => __DIR__ . '/../..' . '/app/Http/Controllers/FormController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
-<<<<<<< HEAD
-        'App\\Http\\Controllers\\NewDbController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewDbController.php',
-        'App\\Http\\Controllers\\OldDbController' => __DIR__ . '/../..' . '/app/Http/Controllers/OldDbController.php',
-        'App\\Http\\Controllers\\OperationController' => __DIR__ . '/../..' . '/app/Http/Controllers/OperationController.php',
-=======
         'App\\Http\\Controllers\\ItemCRUD2Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/ItemCRUD2Controller.php',
         'App\\Http\\Controllers\\NewDbController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewDbController.php',
         'App\\Http\\Controllers\\OldDbController' => __DIR__ . '/../..' . '/app/Http/Controllers/OldDbController.php',
         'App\\Http\\Controllers\\OperationController' => __DIR__ . '/../..' . '/app/Http/Controllers/OperationController.php',
         'App\\Http\\Controllers\\RoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RoleController.php',
->>>>>>> swornim
         'App\\Http\\Controllers\\SysController' => __DIR__ . '/../..' . '/app/Http/Controllers/SysController.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -3910,7 +3905,6 @@ class ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
-        'User' => __DIR__ . '/../..' . '/database/migrations/2017_07_18_085800_user.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'XdgBaseDir\\Xdg' => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
         'Zizaco\\Entrust\\Contracts\\EntrustPermissionInterface' => __DIR__ . '/..' . '/zizaco/entrust/src/Entrust/Contracts/EntrustPermissionInterface.php',
@@ -3998,10 +3992,10 @@ class ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit751317a5ccd9594cf55fc28a35f51fc6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5761d56e1d03c61baed910d0458345c6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5761d56e1d03c61baed910d0458345c6::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit5761d56e1d03c61baed910d0458345c6::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit5761d56e1d03c61baed910d0458345c6::$classMap;
 
         }, null, ClassLoader::class);
     }

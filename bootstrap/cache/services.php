@@ -25,22 +25,14 @@
     21 => 'Illuminate\\View\\ViewServiceProvider',
     22 => 'Intervention\\Image\\ImageServiceProvider',
     23 => 'Barryvdh\\DomPDF\\ServiceProvider',
-
     24 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    25 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    26 => 'App\\Providers\\AppServiceProvider',
-    27 => 'App\\Providers\\AuthServiceProvider',
-    28 => 'App\\Providers\\EventServiceProvider',
-    29 => 'App\\Providers\\RouteServiceProvider',
-
-    24 => 'Zizaco\\Entrust\\EntrustServiceProvider',
-    25 => 'Collective\\Html\\HtmlServiceProvider',
-    26 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    27 => 'App\\Providers\\AppServiceProvider',
-    28 => 'App\\Providers\\AuthServiceProvider',
-    29 => 'App\\Providers\\EventServiceProvider',
-    30 => 'App\\Providers\\RouteServiceProvider',
-
+    25 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    26 => 'Collective\\Html\\HtmlServiceProvider',
+    27 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    28 => 'App\\Providers\\AppServiceProvider',
+    29 => 'App\\Providers\\AuthServiceProvider',
+    30 => 'App\\Providers\\EventServiceProvider',
+    31 => 'App\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -56,15 +48,12 @@
     9 => 'Illuminate\\View\\ViewServiceProvider',
     10 => 'Intervention\\Image\\ImageServiceProvider',
     11 => 'Barryvdh\\DomPDF\\ServiceProvider',
-<<<<<<< HEAD
     12 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-=======
-    12 => 'Zizaco\\Entrust\\EntrustServiceProvider',
->>>>>>> swornim
-    13 => 'App\\Providers\\AppServiceProvider',
-    14 => 'App\\Providers\\AuthServiceProvider',
-    15 => 'App\\Providers\\EventServiceProvider',
-    16 => 'App\\Providers\\RouteServiceProvider',
+    13 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    14 => 'App\\Providers\\AppServiceProvider',
+    15 => 'App\\Providers\\AuthServiceProvider',
+    16 => 'App\\Providers\\EventServiceProvider',
+    17 => 'App\\Providers\\RouteServiceProvider',
   ),
   'deferred' => 
   array (

@@ -1,55 +1,4 @@
 <?php $__env->startSection('content'); ?>
-    <style>
-        * {
-            font-family:Consolas;
-        }
-    .modal-dialog {
-    width: 80% !important;
-    }
-    .modal-content input[type=text], .modal-content input[type=number], .modal-content select {
-        max-height: 24px;
-        padding: 0 0 0 10px;
-        margin:2px;
-    }
-    .modal-content input[readonly]
-    {
-    background-color:grey;
-    max-height:20px;
-    color:white;
-    }
-    .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    }
-    .close:hover,
-    .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-    }
-    .fa{
-        color:#000;
-    }
-    th,td{
-        padding:0 !important;
-        padding-left:5px !important;
-        padding-right:5px !important;
-    }
-    .caret{
-        display:none;
-    }
-    .select
-    {
-        color:blue !important;
-    }
-
-    .btn-info
-    {
-        padding:5px;
-    }
-    </style>
     <?php  $required=['visitor_name','contact_no','type','visit_purpose'];  ?>
     <div class="container">
         <div class="row">
@@ -117,6 +66,7 @@
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <td>&nbsp</td>
                         </tr>
+                        <?php  $i=0; $datas_array=array();  ?>
                         <?php $__currentLoopData = $logs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <th style="min-width: 100px; text-align: center">
@@ -127,10 +77,12 @@
                                 </th>
                                 <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php if($col!='created_at' && $col!='updated_at'): ?>
+                                        <?php  $datas_array[$i][$col]=$log->$col;  ?>
                                     <td> <?php echo e($log->$col); ?> </td>
                                     <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tr>
+                            <?php  $i++;  ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
@@ -138,6 +90,20 @@
                 </form>
             </div>
             <br/>
+        </div>
+        <div class="export">
+            <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                Export to Excel
+            </a>
+
+            <form id="excel-form" action="/export" method="POST" style="display: none;">
+                <?php echo e(csrf_field()); ?>
+
+                <input type="text" name="file" id="file" value="Visitor Log" />
+                <input type="text" name="colsString" id="colsString" value="<?php echo e(serialize($cols)); ?>" />
+                <input type="text" name="discardString" id="discardString" value="<?php echo e(serialize(['created_at','updated_at'])); ?>" />
+                <input type="text" name="datasString" id="datasString" value="<?php echo e(serialize($datas_array)); ?>" />
+            </form>
         </div>
         <?php if($sel!="" && $search!=""): ?>
             <div class="center-block"><?php echo e($logs->appends(['sel' => $sel,'search'=>$search])->render()); ?></div>

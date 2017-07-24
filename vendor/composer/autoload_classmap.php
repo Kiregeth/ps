@@ -16,13 +16,11 @@ return array(
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\FormController' => $baseDir . '/app/Http/Controllers/FormController.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
-
+    'App\\Http\\Controllers\\ItemCRUD2Controller' => $baseDir . '/app/Http/Controllers/ItemCRUD2Controller.php',
     'App\\Http\\Controllers\\NewDbController' => $baseDir . '/app/Http/Controllers/NewDbController.php',
     'App\\Http\\Controllers\\OldDbController' => $baseDir . '/app/Http/Controllers/OldDbController.php',
     'App\\Http\\Controllers\\OperationController' => $baseDir . '/app/Http/Controllers/OperationController.php',
-    'App\\Http\\Controllers\\ItemCRUD2Controller' => $baseDir . '/app/Http/Controllers/ItemCRUD2Controller.php',
     'App\\Http\\Controllers\\RoleController' => $baseDir . '/app/Http/Controllers/RoleController.php',
-
     'App\\Http\\Controllers\\SysController' => $baseDir . '/app/Http/Controllers/SysController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
@@ -3555,7 +3553,6 @@ return array(
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
-    'User' => $baseDir . '/database/migrations/2017_07_18_085800_user.php',
     'Webmozart\\Assert\\Assert' => $vendorDir . '/webmozart/assert/src/Assert.php',
     'XdgBaseDir\\Xdg' => $vendorDir . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
     'Zizaco\\Entrust\\Contracts\\EntrustPermissionInterface' => $vendorDir . '/zizaco/entrust/src/Entrust/Contracts/EntrustPermissionInterface.php',
