@@ -164,7 +164,12 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+
         Maatwebsite\Excel\ExcelServiceProvider::class,
+
+
+        Zizaco\Entrust\EntrustServiceProvider::class,
+        'Collective\Html\HtmlServiceProvider',
 
 
         /*
@@ -231,7 +236,13 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'Form' => 'Collective\Html\FormFacade',
+        'Html' => 'Collective\Html\HtmlFacade',
+
 
     ],
 

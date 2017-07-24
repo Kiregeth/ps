@@ -97,46 +97,29 @@ Route::post('/quick_edit_new','AjaxController@quick_edit_new');
 
 
 
-
-
-////Route::get('get_logout', '\App\Http\Controllers\Auth\LoginController@get_logout');
-//
-//
-//// test routes
-//Route::get('/check', function()
-//{
-//    $img = Image::make(public_path('css/img/login-bg.jpg'));
-//    $img->text('foo', 500, 500, function($font) {
-//        $font->file(public_path('img_font/times.ttf'));
-//        $font->size('500');
-//        $font->color('#000');
-//        $font->align('center');
-//        $font->valign('top');
-//    });
-//    return $img->response('jpg');
-//});
-//
-//Route::get('/pdf', function()
-//{
-//    $pdf = App::make('dompdf.wrapper');
-//    $asd="<h1>asdasd</h1>";
-//    $pdf->loadHTML($asd)->save(public_path('/my_stored_file.pdf'));
-//    return "done";
-//});
-
 Route::post('/export','FormController@export_to_excel');
 
-Route::get('/check',function (){
 
-    Excel::create('Databank Export', function($excel) {
-        $excel->sheet('Sheet1', function($sheet) {
-            $headings = array('check1', 'check2');
-            $sheet->setOrientation('landscape');
-            $sheet->fromArray(array(
-                array('data1', 'data2'),
-                array('data3', 'data4')
-            ), null, 'A1', false, false);
-            $sheet->prependRow(1, $headings);
-        });
-    })->export('xls');
+Route::group(['middleware' => ['auth']], function() {
+
+	Route::get('/home', 'HomeController@index');
+
+	Route::resource('users','UserController');
+
+	Route::get('roles',['as'=>'roles.index','uses'=>'RoleController@index','middleware' => ['permission:role-list|role-create|role-edit|role-delete']]);
+	Route::get('roles/create',['as'=>'roles.create','uses'=>'RoleController@create','middleware' => ['permission:role-create']]);
+	Route::post('roles/create',['as'=>'roles.store','uses'=>'RoleController@store','middleware' => ['permission:role-create']]);
+	Route::get('roles/{id}',['as'=>'roles.show','uses'=>'RoleController@show']);
+	Route::get('roles/{id}/edit',['as'=>'roles.edit','uses'=>'RoleController@edit','middleware' => ['permission:role-edit']]);
+	Route::patch('roles/{id}',['as'=>'roles.update','uses'=>'RoleController@update','middleware' => ['permission:role-edit']]);
+	Route::delete('roles/{id}',['as'=>'roles.destroy','uses'=>'RoleController@destroy','middleware' => ['permission:role-delete']]);
+
+	Route::get('itemCRUD2',['as'=>'itemCRUD2.index','uses'=>'ItemCRUD2Controller@index','middleware' => ['permission:item-list|item-create|item-edit|item-delete']]);
+	Route::get('itemCRUD2/create',['as'=>'itemCRUD2.create','uses'=>'ItemCRUD2Controller@create','middleware' => ['permission:item-create']]);
+	Route::post('itemCRUD2/create',['as'=>'itemCRUD2.store','uses'=>'ItemCRUD2Controller@store','middleware' => ['permission:item-create']]);
+	Route::get('itemCRUD2/{id}',['as'=>'itemCRUD2.show','uses'=>'ItemCRUD2Controller@show']);
+	Route::get('itemCRUD2/{id}/edit',['as'=>'itemCRUD2.edit','uses'=>'ItemCRUD2Controller@edit','middleware' => ['permission:item-edit']]);
+	Route::patch('itemCRUD2/{id}',['as'=>'itemCRUD2.update','uses'=>'ItemCRUD2Controller@update','middleware' => ['permission:item-edit']]);
+	Route::delete('itemCRUD2/{id}',['as'=>'itemCRUD2.destroy','uses'=>'ItemCRUD2Controller@destroy','middleware' => ['permission:item-delete']]);
+
 });

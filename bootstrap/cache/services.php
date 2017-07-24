@@ -25,12 +25,22 @@
     21 => 'Illuminate\\View\\ViewServiceProvider',
     22 => 'Intervention\\Image\\ImageServiceProvider',
     23 => 'Barryvdh\\DomPDF\\ServiceProvider',
+
     24 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
     25 => 'Laravel\\Tinker\\TinkerServiceProvider',
     26 => 'App\\Providers\\AppServiceProvider',
     27 => 'App\\Providers\\AuthServiceProvider',
     28 => 'App\\Providers\\EventServiceProvider',
     29 => 'App\\Providers\\RouteServiceProvider',
+
+    24 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    25 => 'Collective\\Html\\HtmlServiceProvider',
+    26 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    27 => 'App\\Providers\\AppServiceProvider',
+    28 => 'App\\Providers\\AuthServiceProvider',
+    29 => 'App\\Providers\\EventServiceProvider',
+    30 => 'App\\Providers\\RouteServiceProvider',
+
   ),
   'eager' => 
   array (
@@ -46,7 +56,11 @@
     9 => 'Illuminate\\View\\ViewServiceProvider',
     10 => 'Intervention\\Image\\ImageServiceProvider',
     11 => 'Barryvdh\\DomPDF\\ServiceProvider',
+<<<<<<< HEAD
     12 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+=======
+    12 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+>>>>>>> swornim
     13 => 'App\\Providers\\AppServiceProvider',
     14 => 'App\\Providers\\AuthServiceProvider',
     15 => 'App\\Providers\\EventServiceProvider',
@@ -143,6 +157,10 @@
     'translation.loader' => 'Illuminate\\Translation\\TranslationServiceProvider',
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
+    'html' => 'Collective\\Html\\HtmlServiceProvider',
+    'form' => 'Collective\\Html\\HtmlServiceProvider',
+    'Collective\\Html\\HtmlBuilder' => 'Collective\\Html\\HtmlServiceProvider',
+    'Collective\\Html\\FormBuilder' => 'Collective\\Html\\HtmlServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
   ),
   'when' => 
@@ -181,6 +199,9 @@
     array (
     ),
     'Illuminate\\Validation\\ValidationServiceProvider' => 
+    array (
+    ),
+    'Collective\\Html\\HtmlServiceProvider' => 
     array (
     ),
     'Laravel\\Tinker\\TinkerServiceProvider' => 
