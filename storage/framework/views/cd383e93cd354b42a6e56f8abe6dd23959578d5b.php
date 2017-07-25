@@ -66,14 +66,17 @@
 
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-
+                                            <?php if(in_array('view',session('permission'))): ?>
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->ref_no); ?>"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
+                                            <?php endif; ?>
+                                            <?php if(in_array('transfer',session('permission'))): ?>
                                                 <?php if($data->db_status!='vp' && $data->db_status!='vf'): ?>
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_<?php echo e($data->ref_no); ?>"
                                                        title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
                                                 <?php endif; ?>
+                                            <?php endif; ?>
+                                            <?php if(in_array('delete',session('permission'))): ?>
                                                 <a title="delete" class="delete btn btn-link" name="<?php echo e($data->ref_no); ?>_delete">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
@@ -207,13 +210,12 @@
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <script type="text/javascript">
-    <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
+        <?php if(in_array('delete',session('permission'))): ?>
         $(function (){
             $(".delete").click(function(){
                 var name=$(this).attr("name");
@@ -247,7 +249,8 @@
                 }
             });
         });
-
+        <?php endif; ?>
+        <?php if(in_array('edit',session('permission'))): ?>
         $(function () {
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();

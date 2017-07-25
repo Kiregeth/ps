@@ -66,14 +66,17 @@
 
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-
+                                            @if(in_array('view',session('permission')))
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+                                            @endif
+                                            @if(in_array('transfer',session('permission')))
                                                 @if($data->db_status!='vp' && $data->db_status!='vf')
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_{{$data->ref_no}}"
                                                        title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
                                                 @endif
+                                            @endif
+                                            @if(in_array('delete',session('permission')))
                                                 <a title="delete" class="delete btn btn-link" name="{{$data->ref_no}}_delete">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
@@ -205,13 +208,12 @@
     @endforeach
 
     <script type="text/javascript">
-    @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
+        @if(in_array('delete',session('permission')))
         $(function (){
             $(".delete").click(function(){
                 var name=$(this).attr("name");
@@ -245,7 +247,8 @@
                 }
             });
         });
-
+        @endif
+        @if(in_array('edit',session('permission')))
         $(function () {
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();

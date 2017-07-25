@@ -57,10 +57,11 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
                         <th style="min-width: 100px; text-align: center">
                             <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-
+                                @if(in_array('view',session('permission')))
                                 <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                    title="view"><i class="fa fa-eye"></i></a>
-                                @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+                                @endif
+                                @if(in_array('edit',session('permission')))
                                 <a class="cancel btn btn-link" name="{{$data->ref_no}}_cancel"
                                    title="visa cancel"><i class="fa fa-times"></i></a>
                                     @if($data->vp_status!='vf' && $data->vp_status!='vc')
@@ -141,13 +142,13 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
 
 <script type="text/javascript">
-    @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
+    @if(in_array('transfer',session('permission')))
     $(function (){
         $(".cancel").click(function(){
             var name=$(this).attr("name");
@@ -183,6 +184,8 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
         });
     });
+    @endif
+    @if(in_array('edit',session('permission')))
     $(function () {
         $("td").dblclick(function () {
             var OriginalContent = $(this).text();

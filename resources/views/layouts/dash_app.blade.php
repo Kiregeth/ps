@@ -139,7 +139,7 @@
                             <li class="@if ($title === 'dashboard') active @endif">
                                 <a href="/" ><i class="fa fa-home"></i> Dashboard </a>
                             </li>
-                            {{--@if(in_array('view',Auth::user()->permission))--}}
+                            @if(in_array('view',session('permission')))
                             <li>
                                 <a class="li-head" href="#operation-nav" data-toggle="collapse">
                                     <span>Operation Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
@@ -195,7 +195,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            {{--@endif--}}
+                            @endif
                             {{--@if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')--}}
                             {{--<li>--}}
                                 {{--<a class="li-head" href="#user-mgmt-nav" data-toggle="collapse">--}}

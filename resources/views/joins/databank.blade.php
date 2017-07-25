@@ -33,7 +33,9 @@
                         <table class="table table-striped table-bordered editableTable" id="myTable" >
                             <thead>
                             <tr>
+                                @if(in_array('create',session('permission')))
                                 <th><a title="Add New" class="btn btn-default" data-toggle="modal" data-target="#modal_add">Add New</a></th>
+                                @endif
                                 @foreach($cols as $col)
                                     @if($col!='created_at' && $col!='updated_at' && $col!='State')
                                         <th>{{$col}}</th>
@@ -43,7 +45,7 @@
                             </thead>
 
                             <tbody>
-                            @php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin') $read=""; else $read="readonly"; @endphp
+                            @php if(in_array('create',session('permission'))) $read=""; else $read="readonly"; @endphp
                             <tr>
                                 <td align="center"><a class="btn btn-link" id="quick_add"><strong><i class="fa fa-plus-square"></i></strong></a></td>
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -67,17 +69,20 @@
 
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-
+                                            @if(in_array('transfer',session('permission')))
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->Ref_No}}"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+                                            @endif
+                                            @if(in_array('transfer',session('permission')))
                                                 @if($data->State!='vp' && $data->State!='vf')
                                                 <a title="visa processing" class="visa btn btn-link" name="{{$data->Ref_No}}_visa"><i
                                                             class="fa fa-cc-visa"></i></a>
                                                 @endif
-                                            <a title="delete" class="delete btn btn-link" name="{{$data->Ref_No}}_delete">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
+                                            @endif
+                                            @if(in_array('delete',session('permission')))
+                                                <a title="delete" class="delete btn btn-link" name="{{$data->Ref_No}}_delete">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
                                             @endif
                                         </div>
                                     </th>
@@ -202,13 +207,13 @@
 
 
     <script type="text/javascript">
-    @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
+        @if(in_array('create',session('permission')))
         $("#quick_add").click(function(){
             var colArray ={!! json_encode($cols) !!};
             var data_string='{{$db_table}},';
@@ -241,7 +246,8 @@
             });
             return false;
         });
-
+        @endif
+        @if(in_array('delete',session('permission')))
         $(function (){
             $(".delete").click(function(){
                 var name=$(this).attr("name");
@@ -275,7 +281,8 @@
 
             });
         });
-
+        @endif
+        @if(in_array('transfer',session('permission')))
         $(function (){
             $(".visa").click(function(){
                 var name=$(this).attr("name");
@@ -309,7 +316,8 @@
 
             });
         });
-
+        @endif
+        @if(in_array('edit',session('permission')))
         $(function () {
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();

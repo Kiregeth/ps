@@ -48,10 +48,11 @@
                                 <tr>
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-
+                                            @if(in_array('view',session('permission')))
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->Ref_No}}"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+                                            @endif
+                                            @if(in_array('edit',session('permission')))
                                             <a class="cancel btn btn-link" name="{{$data->Ref_No}}_cancel"
                                                title="Cancel"><i style="color: #000;" class="fa fa-times"></i></a>
                                             {{--<a class="cancel btn btn-link" name="{{$data->Ref_No}}_cancel"--}}
@@ -134,12 +135,12 @@
     @endforeach
 
     <script type="text/javascript">
-        @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        @if(in_array('transfer',session('permission')))
         $(function (){
             $(".cancel").click(function(){
                 var name=$(this).attr("name");
@@ -173,7 +174,8 @@
                 });
             });
         });
-
+        @endif
+        @if(in_array('edit',session('permission')))
         $(function () {
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();
@@ -260,6 +262,5 @@
         }
         @endif
     </script>
-
 
 @endsection
