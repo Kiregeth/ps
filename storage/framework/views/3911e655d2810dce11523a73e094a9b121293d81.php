@@ -139,6 +139,7 @@
                             <li class="<?php if($title === 'dashboard'): ?> active <?php endif; ?>">
                                 <a href="/" ><i class="fa fa-home"></i> Dashboard </a>
                             </li>
+
                             <li>
                                 <a class="li-head" href="#operation-nav" data-toggle="collapse">
                                     <span>Operation Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
@@ -157,6 +158,7 @@
                                     </ul>
                                 </div>
                             </li>
+                            
                             <li>
                                 <a class="li-head" href="#databank-nav" data-toggle="collapse">
                                     <span>Databank Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
@@ -193,23 +195,23 @@
                                     </ul>
                                 </div>
                             </li>
-                            <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
-                            <li>
-                                <a class="li-head" href="#user-mgmt-nav" data-toggle="collapse">
-                                    <span>User Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
-                                </a>
-                                <div class="navigation-wrapper collapse <?php if($title=='add_user' || $title=='users'): ?>in <?php endif; ?>" id="user-mgmt-nav">
-                                    <ul class="navigation">
-                                        <li class="<?php if($title === 'add_user'): ?> active <?php endif; ?>">
-                                            <a href="/add_user"><i class="fa fa-user-plus"></i> Add User</a>
-                                        </li>
-                                        <li class="<?php if($title === 'users'): ?> active <?php endif; ?>">
-                                            <a href="/users"><i class="fa fa-users"></i> Users </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <?php endif; ?>
+                            
+                            
+                                
+                                    
+                                
+                                
+                                    
+                                        
+                                            
+                                        
+                                        
+                                            
+                                        
+                                    
+                                
+                            
+                            
                         </ul>
                     </div>
                 </div>

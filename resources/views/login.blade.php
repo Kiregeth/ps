@@ -22,6 +22,7 @@
         <div class="col-md-4">
             <section class="login-form">
                 <form method="post" action="#" role="login">
+                    {{csrf_token()}}
                     <img src="{{asset('images/pasa-logo.png')}}" class="img-responsive" alt="Pasa International Pvt. Ltd" />
                     <input type="text" name="uname" placeholder="Username" required class="form-control input-lg" />
 
