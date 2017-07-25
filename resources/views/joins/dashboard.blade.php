@@ -8,11 +8,6 @@
                     <div class="panel-heading">Dashboard</div>
 
                     <div class="panel-body">
-                        <pre>
-                            @php print_r(Auth::user()->permission) @endphp
-                        </pre>
-
-
                         You are logged in!
                         <a href="{{ route('logout') }}"
                            onclick="event.preventDefault();

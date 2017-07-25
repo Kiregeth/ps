@@ -23,9 +23,8 @@ Auth::routes();
 Route::get('/','SysController@index');
 Route::get('/dashboard', 'SysController@dashboard')->name('dash');
 
-Route::get('/users', 'SysController@users');
-Route::get('/add_user', 'SysController@add_user');
-Route::get('/change_pwd', 'SysController@change_pwd');
+Route::get('/sess', 'SysController@add_sess');
+
 
 Route::post('/users', 'SysController@users');
 Route::post('/add_user', 'SysController@add_user');

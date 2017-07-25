@@ -1,3 +1,4 @@
+
 @extends('layouts.dash_app',['title'=>'app_forms'])
 
 @section('content')
@@ -267,7 +268,7 @@
         </div>
 
         <script>
-            @if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin')
+            @if(in_array('edit',session('permission')))
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

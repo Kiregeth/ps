@@ -12,6 +12,37 @@ use App\user_role;
 
 class SysController extends Controller
 {
+
+    public function add_sess()
+    {
+        $permission=[];
+        $user_id=\Auth::user()->id;
+        if(\DB::table('role_user')->where('user_id',$user_id)->count()>0)
+        {
+            $role_id=\DB::table('role_user')->where('user_id',$user_id)->first()->role_id;
+            if(\DB::table('permission_role')->where('role_id',$role_id)->orderBy('permission_id', 'asc')->count()>0)
+            {
+                $permission_ids=\DB::table('permission_role')->where('role_id',$role_id)->orderBy('permission_id', 'asc')->get();
+                $permissions=\DB::table('permissions')->get(['id','name']);
+
+                foreach($permission_ids as $per_id)
+                {
+                    foreach($permissions as $check)
+                    {
+                        if($check->id===$per_id->permission_id)
+                        {
+                            $permission[]=$check->name;
+                            break;
+                        }
+                    }
+
+                }
+            }
+        }
+        session(['permission' => $permission]);
+        return redirect('/');
+    }
+
     public function index()
     {
         if(\Auth::user())
@@ -33,31 +64,8 @@ class SysController extends Controller
     {
         if(\Auth::user())
         {
-            $permission=[];
-            $user_id=\Auth::user()->id;
-            if(\DB::table('role_user')->where('user_id',$user_id)->count()>0)
-            {
-                $role_id=\DB::table('role_user')->where('user_id',$user_id)->first()->role_id;
-                if(\DB::table('permission_role')->where('role_id',$role_id)->orderBy('permission_id', 'asc')->count()>0)
-                {
-                    $permission_ids=\DB::table('permission_role')->where('role_id',$role_id)->orderBy('permission_id', 'asc')->get();
-                    $permissions=\DB::table('permissions')->get(['id','name']);
-
-                    foreach($permission_ids as $per_id)
-                    {
-                        foreach($permissions as $check)
-                        {
-                            if($check->id===$per_id->permission_id)
-                            {
-                                $permission[]=$check->name;
-                                break;
-                            }
-                        }
-
-                    }
-                }
-            }
-            \Auth::user()->setAttribute('permission',$permission);
+            if($this->middleware(['permission:delete']))
+                //return 'maybe';
             return view('joins.dashboard');
         }else
         {

@@ -269,7 +269,7 @@
         </div>
 
         <script>
-            <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
+            <?php if(in_array('edit',session('permission'))): ?>
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
