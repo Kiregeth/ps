@@ -111,7 +111,9 @@ class AjaxController extends Controller
         $db_table=$request->db_table;
         $col=$request->w_col;
         $value=$request->w_id;
-        \DB::table($db_table)->where($col, $value)->delete();
+        \DB::table('databanks')->where($col, $value)->delete();
+        \DB::table('visaprocesses')->where($col, $value)->delete();
+        \DB::table('vrflowns')->where($col, $value)->delete();
     }
 
     public function visaprocess(Request $request)
@@ -192,25 +194,34 @@ class AjaxController extends Controller
 
         $temp_date="";
         $temp_status="";
-
-        $check=\DB::table($db_table1)->select('State_Vp')->where($w_col,$w_id)->first();
-        if($check->State_Vp=='vf')
+        if(\DB::table($db_table1)->select('State_Vp')->where($w_col,$w_id)->count()>0)
         {
-            $query=\DB::table($db_table2)->select('VP_Date','Status')->where($w_col,$w_id)->first();
-            $temp_date=$query->VP_Date;
-            $temp_status=$query->Status;
-            \DB::table($db_table2)->where($w_col, $w_id)->delete();
-            \DB::table($db_table1)->where($w_col, $w_id)->delete();
+            $check=\DB::table($db_table1)->select('State_Vp')->where($w_col,$w_id)->first();
+
+            if($check->State_Vp=='vf')
+            {
+                $query=\DB::table($db_table2)->select('VP_Date','Status')->where($w_col,$w_id)->first();
+                $temp_date=$query->VP_Date;
+                $temp_status=$query->Status;
+                \DB::table($db_table2)->where($w_col, $w_id)->delete();
+                \DB::table($db_table1)->where($w_col, $w_id)->delete();
+
+            }
+            else
+            {
+                $query=\DB::table($db_table1)->select('Process_Date','Status')->where($w_col,$w_id)->first();
+                $temp_date=$query->Process_Date;
+                $temp_status=$query->Status;
+                \DB::table($db_table1)->where($w_col, $w_id)->delete();
+            }
+
+            \DB::table($db_table3)->where($w_col, $w_id)->update(['State' => 'vc','Remarks'=>$temp_status,'Old_VP_Date'=>$temp_date]);
         }
         else
         {
-            $query=\DB::table($db_table1)->select('Process_Date','Status')->where($w_col,$w_id)->first();
-            $temp_date=$query->Process_Date;
-            $temp_status=$query->Status;
-            \DB::table($db_table1)->where($w_col, $w_id)->delete();
+            \DB::table('vrflowns')->where($w_col, $w_id)->delete();
         }
 
-        \DB::table($db_table3)->where($w_col, $w_id)->update(['State' => 'vc','Remarks'=>$temp_status,'Old_VP_Date'=>$temp_date]);
     }
 
     public function cv_save(Request $request)

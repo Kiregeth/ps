@@ -57,10 +57,11 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
                         <th style="min-width: 100px; text-align: center">
                             <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-
+                                <?php if(in_array('view',session('permission'))): ?>
                                 <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->ref_no); ?>"
                                    title="view"><i class="fa fa-eye"></i></a>
-                                <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
+                                <?php endif; ?>
+                                <?php if(in_array('edit',session('permission'))): ?>
                                 <a class="cancel btn btn-link" name="<?php echo e($data->ref_no); ?>_cancel"
                                    title="visa cancel"><i class="fa fa-times"></i></a>
                                     <?php if($data->vp_status!='vf' && $data->vp_status!='vc'): ?>
@@ -142,13 +143,13 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
 
 
 <script type="text/javascript">
-    <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
+    <?php if(in_array('transfer',session('permission'))): ?>
     $(function (){
         $(".cancel").click(function(){
             var name=$(this).attr("name");
@@ -156,34 +157,14 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
             var col='ref_no';
             var result = confirm("Want to cancel?");
             if (result) {
-                $.ajax({
-                    url: '/cancel_new',
-                    type: 'post',
-                    data: {
-                        db_table:'<?php echo e($db_table); ?>',
-                        w_val: val,
-                        w_col: col
-                    },
-                    cache: false,
-                    timeout: 10000,
-                    success: function (data){
-                        if (data) {
-                            alert(data);
-                        }
-// Load output into a P
-                        else {
-                            location.reload(true);
-//                        $('#notice').text('Deleted');
-//                        $('#notice').fadeOut().fadeIn();
-
-                        }
-                    }
-                });
+                $.post('/cancel_new', {'db_table':'<?php echo e($db_table); ?>','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             }
 
 
         });
     });
+    <?php endif; ?>
+    <?php if(in_array('edit',session('permission'))): ?>
     $(function () {
         $("td").dblclick(function () {
             var OriginalContent = $(this).text();
@@ -220,7 +201,6 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                 );
 
                 $(this).children().first().focus();
-
                 $(this).children().first().keypress(function (e) {
                     if (e.which == 13) {
                         var res=autosubmit(colArray,myCol,myRow);
@@ -229,9 +209,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                         $(this).parent().removeClass("cellEditing");
                     }
                 });
-
                 $(this).children().first().blur(function(){
-
                     var res=autosubmit(colArray,myCol,myRow);
                     var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                     $(this).parent().text(val);
@@ -251,36 +229,10 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
         var form = document.getElementById('ajax-form');
         var method = form.method;
         var action = form.action;
-
-
         var where=document.getElementById('where_'+myRow+'_'+myCol);
         var where_val = where.value;
         var where_col = where.name;
-
-        $.ajax({
-            url: action,
-            type: method,
-            data: {
-                db_table:'<?php echo e($db_table); ?>',
-                val: value,
-                col: column,
-                w_col: where_col,
-                w_val: where_val
-            },
-            cache: false,
-            timeout: 10000,
-            success: function (data){
-                if (data) {
-                    alert(data);
-                }
-// Load output into a P
-                else {
-
-
-                }
-            }
-        });
-// Prevent normal submission of form
+        $.post(action, {'db_table':'<?php echo e($db_table); ?>','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
         return false;
     }
     <?php endif; ?>

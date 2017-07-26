@@ -218,28 +218,7 @@
             }
             data_string=data_string.substr(0,data_string.length-1);
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                method: 'post',
-                url: '/quick_add',
-                data: {value:data_string},
-                cache: false,
-                timeout: 10000,
-                success: function (response){
-                    if (response) {
-                        alert(response);
-                    }
-                    // Load output into a P
-                    else {
-                        location.reload(true);
-                    }
-                }
-            });
+            $.post('/quick_add', {'value':data_string,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             return false;
         });
     </script>

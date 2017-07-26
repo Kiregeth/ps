@@ -208,11 +208,6 @@
     @endforeach
 
     <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         @if(in_array('delete',session('permission')))
         $(function (){
             $(".delete").click(function(){
@@ -221,29 +216,7 @@
                 var col='ref_no';
                 var result = confirm("Want to delete?");
                 if (result) {
-                    $.ajax({
-                        url: '/delete_new',
-                        type: 'post',
-                        data: {
-                            db_table:'{{$db_table}}',
-                            w_val: val,
-                            w_col: col
-                        },
-                        cache: false,
-                        timeout: 10000,
-                        success: function (data){
-                            if (data) {
-                                alert(data);
-                            }
-// Load output into a P
-                            else {
-                                location.reload(true);
-//                        $('#notice').text('Deleted');
-//                        $('#notice').fadeOut().fadeIn();
-
-                            }
-                        }
-                    });
+                    $.post('/delete_new', {'db_table':'{{$db_table}}','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
                 }
             });
         });
@@ -253,16 +226,12 @@
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();
                 OriginalContent = OriginalContent.trim();
-
                 $(this).addClass("cellEditing");
                 var myCol = $(this).index() - 1;
                 var $tr = $(this).closest('tr');
                 var myRow = $tr.index() + 1;
-
-
                 var colArray = {!! json_encode($fields) !!} ;
                 var dateArray= {!! json_encode($date) !!};
-
                 var id = document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
                 var type;
                 var x;
@@ -283,9 +252,7 @@
                         "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
                         "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
                     );
-
                     $(this).children().first().focus();
-
                     $(this).children().first().keypress(function (e) {
                         if (e.which == 13) {
                             var res=autosubmit(colArray,myCol,myRow);
@@ -294,9 +261,7 @@
                             $(this).parent().removeClass("cellEditing");
                         }
                     });
-
                     $(this).children().first().blur(function(){
-
                         var res=autosubmit(colArray,myCol,myRow);
                         var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                         $(this).parent().text(val);
@@ -309,43 +274,16 @@
         function autosubmit(colArray,myCol,myRow)
         {
             var input=document.getElementById(colArray[myCol]+'_'+myRow);
-
             var column = input.name;
             column=column.substr(0, column.lastIndexOf('_'));
             var value = input.value;
             var form = document.getElementById('ajax-form');
             var method = form.method;
             var action = form.action;
-
-
             var where=document.getElementById('where_'+myRow+'_'+myCol);
             var where_val = where.value;
             var where_col = where.name;
-
-            $.ajax({
-                url: action,
-                type: method,
-                data: {
-                    db_table:'{{$db_table}}',
-                    val: value,
-                    col: column,
-                    w_col: where_col,
-                    w_val: where_val
-                },
-                cache: false,
-                timeout: 10000,
-                success: function (data){
-                    if (data) {
-                        alert(data);
-                    }
-// Load output into a P
-                    else {
-
-
-                    }
-                }
-            });
-// Prevent normal submission of form
+            $.post(action, {'db_table':'{{$db_table}}','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
             return false;
         }
     @endif

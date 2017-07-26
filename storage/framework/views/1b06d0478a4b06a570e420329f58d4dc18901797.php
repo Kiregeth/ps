@@ -272,25 +272,16 @@
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     <script>
         <?php if(in_array('edit',session('permission'))): ?>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $(function () {
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();
                 OriginalContent = OriginalContent.trim();
-
                 $(this).addClass("cellEditing");
                 var myCol = $(this).index() - 1;
                 var $tr = $(this).closest('tr');
                 var myRow = $tr.index() + 1;
-
-
                 var colArray = <?php echo json_encode($cols); ?> ;
                 var dateArray= <?php echo json_encode($date); ?>;
-
                 var id = document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
                 var type;
                 var x;
@@ -305,14 +296,12 @@
                 }
                 if(count>0) type='date'; else type='text';
                 if(colArray[myCol]==='email') type='email';
-
                 if(colArray[myCol]!=='ref_no' && colArray[myCol]!=='date')
                 {
                     $(this).html(
                         "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
                         "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                     );
-
                     $(this).children().first().focus();
 
                     $(this).children().first().keypress(function (e) {
@@ -323,9 +312,7 @@
                             $(this).parent().removeClass("cellEditing");
                         }
                     });
-
                     $(this).children().first().blur(function(){
-
                         var res=autosubmit(colArray,myCol,myRow);
                         var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                         $(this).parent().text(val);
@@ -337,46 +324,17 @@
 
         function autosubmit(colArray,myCol,myRow)
         {
-
             var input=document.getElementById(colArray[myCol]+'_'+myRow);
-
             var column = input.name;
             column=column.substr(0, column.lastIndexOf('_'));
             var value = input.value;
             var form = document.getElementById('ajax-form');
             var method = form.method;
             var action = form.action;
-
-
-
             var where=document.getElementById('where_'+myRow+'_'+myCol);
             var where_val = where.value;
             var where_col = where.name;
-
-//                alert(action+': '+method+'        '+column+': '+value+'   '+where_col+' '+where_val);
-            $.ajax({
-                url: action,
-                type: method,
-                data: {
-                    val: value,
-                    col: column,
-                    w_col: where_col,
-                    w_val: where_val
-                },
-                cache: false,
-                timeout: 10000,
-                success: function (data){
-                    if (data) {
-                        alert(data);
-                    }
-                    // Load output into a P
-                    else {
-
-
-                    }
-                }
-            });
-            // Prevent normal submission of form
+            $.post(action, {'val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
             return false;
         }
         <?php endif; ?>

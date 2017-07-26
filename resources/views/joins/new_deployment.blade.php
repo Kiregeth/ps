@@ -156,29 +156,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
             var col='ref_no';
             var result = confirm("Want to cancel?");
             if (result) {
-                $.ajax({
-                    url: '/cancel_new',
-                    type: 'post',
-                    data: {
-                        db_table:'{{$db_table}}',
-                        w_val: val,
-                        w_col: col
-                    },
-                    cache: false,
-                    timeout: 10000,
-                    success: function (data){
-                        if (data) {
-                            alert(data);
-                        }
-// Load output into a P
-                        else {
-                            location.reload(true);
-//                        $('#notice').text('Deleted');
-//                        $('#notice').fadeOut().fadeIn();
-
-                        }
-                    }
-                });
+                $.post('/cancel_new', {'db_table':'{{$db_table}}','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             }
 
 
@@ -222,7 +200,6 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                 );
 
                 $(this).children().first().focus();
-
                 $(this).children().first().keypress(function (e) {
                     if (e.which == 13) {
                         var res=autosubmit(colArray,myCol,myRow);
@@ -231,9 +208,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                         $(this).parent().removeClass("cellEditing");
                     }
                 });
-
                 $(this).children().first().blur(function(){
-
                     var res=autosubmit(colArray,myCol,myRow);
                     var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                     $(this).parent().text(val);
@@ -253,36 +228,10 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
         var form = document.getElementById('ajax-form');
         var method = form.method;
         var action = form.action;
-
-
         var where=document.getElementById('where_'+myRow+'_'+myCol);
         var where_val = where.value;
         var where_col = where.name;
-
-        $.ajax({
-            url: action,
-            type: method,
-            data: {
-                db_table:'{{$db_table}}',
-                val: value,
-                col: column,
-                w_col: where_col,
-                w_val: where_val
-            },
-            cache: false,
-            timeout: 10000,
-            success: function (data){
-                if (data) {
-                    alert(data);
-                }
-// Load output into a P
-                else {
-
-
-                }
-            }
-        });
-// Prevent normal submission of form
+        $.post(action, {'db_table':'{{$db_table}}','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
         return false;
     }
     @endif

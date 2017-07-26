@@ -213,11 +213,6 @@
     @endforeach
 
     <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         @if(in_array('transfer',session('permission')))
         $(function (){
             $(".cancel").click(function(){
@@ -226,29 +221,7 @@
                 var col='ref_no';
                 var result = confirm("Want to cancel?");
                 if (result) {
-                    $.ajax({
-                        url: '/cancel_new',
-                        type: 'post',
-                        data: {
-                            db_table:'{{$db_table}}',
-                            w_val: val,
-                            w_col: col
-                        },
-                        cache: false,
-                        timeout: 10000,
-                        success: function (data){
-                            if (data) {
-                                alert(data);
-                            }
-// Load output into a P
-                            else {
-                                location.reload(true);
-//                        $('#notice').text('Deleted');
-//                        $('#notice').fadeOut().fadeIn();
-
-                            }
-                        }
-                    });
+                    $.post('/cancel_new', {'db_table':'{{$db_table}}','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
                 }
 
 
@@ -328,31 +301,7 @@
             var where=document.getElementById('where_'+myRow+'_'+myCol);
             var where_val = where.value;
             var where_col = where.name;
-
-            $.ajax({
-                url: action,
-                type: method,
-                data: {
-                    db_table:'{{$db_table}}',
-                    val: value,
-                    col: column,
-                    w_col: where_col,
-                    w_val: where_val
-                },
-                cache: false,
-                timeout: 10000,
-                success: function (data){
-                    if (data) {
-                        alert(data);
-                    }
-// Load output into a P
-                    else {
-
-
-                    }
-                }
-            });
-// Prevent normal submission of form
+            $.post(action, {'db_table':'{{$db_table}}','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
             return false;
         }
         @endif

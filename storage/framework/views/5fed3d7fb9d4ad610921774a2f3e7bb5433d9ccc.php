@@ -33,7 +33,9 @@
                         <table class="table table-striped table-bordered editableTable" id="myTable" >
                             <thead>
                             <tr>
+                                <?php if(in_array('create',session('permission'))): ?>
                                 <th><a title="Add New" class="btn btn-default" data-toggle="modal" data-target="#modal_add">Add New</a></th>
+                                <?php endif; ?>
                                 <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php if($col!='created_at' && $col!='updated_at' && $col!='State'): ?>
                                         <th><?php echo e($col); ?></th>
@@ -43,7 +45,7 @@
                             </thead>
 
                             <tbody>
-                            <?php  if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin') $read=""; else $read="readonly";  ?>
+                            <?php  if(in_array('create',session('permission'))) $read=""; else $read="readonly";  ?>
                             <tr>
                                 <td align="center"><a class="btn btn-link" id="quick_add"><strong><i class="fa fa-plus-square"></i></strong></a></td>
                                 <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
@@ -67,17 +69,20 @@
 
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-
+                                            <?php if(in_array('transfer',session('permission'))): ?>
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->Ref_No); ?>"
                                                title="view"><i class="fa fa-eye"></i></a>
-                                            <?php if(Auth::user()->role==='admin' || Auth::user()->role==='superadmin'): ?>
+                                            <?php endif; ?>
+                                            <?php if(in_array('transfer',session('permission'))): ?>
                                                 <?php if($data->State!='vp' && $data->State!='vf'): ?>
                                                 <a title="visa processing" class="visa btn btn-link" name="<?php echo e($data->Ref_No); ?>_visa"><i
                                                             class="fa fa-cc-visa"></i></a>
                                                 <?php endif; ?>
-                                            <a title="delete" class="delete btn btn-link" name="<?php echo e($data->Ref_No); ?>_delete">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
+                                            <?php endif; ?>
+                                            <?php if(in_array('delete',session('permission'))): ?>
+                                                <a title="delete" class="delete btn btn-link" name="<?php echo e($data->Ref_No); ?>_delete">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
                                             <?php endif; ?>
                                         </div>
                                     </th>
@@ -204,13 +209,7 @@
 
 
     <script type="text/javascript">
-        <?php if(in_array('edit',session('permission'))): ?>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
+        <?php if(in_array('create',session('permission'))): ?>
         $("#quick_add").click(function(){
             var colArray =<?php echo json_encode($cols); ?>;
             var data_string='<?php echo e($db_table); ?>,';
@@ -223,118 +222,46 @@
                 }
             }
             data_string=data_string+"State:none";
-
-
-            $.ajax({
-                method: 'post',
-                url: '/quick_add',
-                data: {value:data_string},
-                cache: false,
-                timeout: 10000,
-                success: function (response){
-                    if (response) {
-                        alert(response);
-                    }
-                    // Load output into a P
-                    else {
-                        location.reload(true);
-                    }
-                }
-            });
+            $.post('/quick_add', {'value':data_string,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             return false;
         });
-
+        <?php endif; ?>
+        <?php if(in_array('delete',session('permission'))): ?>
         $(function (){
             $(".delete").click(function(){
                 var name=$(this).attr("name");
                 var id=parseInt(name.substr(0,name.lastIndexOf('_')));
                 var col='Ref_No';
-
-
-                $.ajax({
-                    url: '/delete',
-                    type: 'post',
-                    data: {
-                        db_table:'<?php echo e($db_table); ?>',
-                        w_id: id,
-                        w_col: col
-                    },
-                    cache: false,
-                    timeout: 10000,
-                    success: function (data){
-                        if (data) {
-                            alert(data);
-                        }
-// Load output into a P
-                        else {
-                            location.reload(true);
-//                        $('#notice').text('Deleted');
-//                        $('#notice').fadeOut().fadeIn();
-
-                        }
-                    }
-                });
-
+                $.post('/delete', {'db_table':'<?php echo e($db_table); ?>','w_id': id,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             });
         });
-
+        <?php endif; ?>
+        <?php if(in_array('transfer',session('permission'))): ?>
         $(function (){
             $(".visa").click(function(){
                 var name=$(this).attr("name");
                 var id=parseInt(name.substr(0,name.lastIndexOf('_')));
                 var col='Ref_No';
-
-                $.ajax({
-                    url: '/visaprocess',
-                    type: 'post',
-                    data: {
-                        db_table1:'databanks',
-                        db_table2:'visaprocesses',
-                        w_id: id,
-                        w_col: col
-                    },
-                    cache: false,
-                    timeout: 10000,
-                    success: function (data){
-                        if (data) {
-                            alert(data);
-                        }
-// Load output into a P
-                        else {
-                            location.reload(true);
-//                        $('#notice').text('Deleted');
-//                        $('#notice').fadeOut().fadeIn();
-
-                        }
-                    }
-                });
-
+                $.post('/visaprocess', {'db_table1':'databanks','db_table2':'visaprocesses','w_id': id,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             });
         });
-
+        <?php endif; ?>
+        <?php if(in_array('edit',session('permission'))): ?>
         $(function () {
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();
                 OriginalContent=OriginalContent.trim();
-
                 $(this).addClass("cellEditing");
                 var myCol = $(this).index()-1;
                 var $tr = $(this).closest('tr');
                 var myRow = $tr.index()+1;
-
-
                 var colArray = <?php echo json_encode($cols); ?> ;
-
                 var id=document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
-
-
                 $(this).html(
                     "<input placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
                     "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
                 );
-
                 $(this).children().first().focus();
-
                 $(this).children().first().keypress(function (e) {
                     if (e.which == 13) {
                         var res=autosubmit(colArray,myCol,myRow);
@@ -343,7 +270,6 @@
                         $(this).parent().removeClass("cellEditing");
                     }
                 });
-
                 $(this).children().first().blur(function(){
 
                     var res=autosubmit(colArray,myCol,myRow);
@@ -357,43 +283,16 @@
         function autosubmit(colArray,myCol,myRow)
         {
             var input=document.getElementById(colArray[myCol]+'_'+myRow);
-
             var column = input.name;
             column=column.substr(0, column.lastIndexOf('_'));
             var value = input.value;
             var form = document.getElementById('ajax-form');
             var method = form.method;
             var action = form.action;
-
-
             var where=document.getElementById('where_'+myRow+'_'+myCol);
             var where_val = where.value;
             var where_col = where.name;
-
-            $.ajax({
-                url: action,
-                type: method,
-                data: {
-                    db_table:'databanks',
-                    val: value,
-                    col: column,
-                    w_col: where_col,
-                    w_val: where_val
-                },
-                cache: false,
-                timeout: 10000,
-                success: function (data){
-                    if (data) {
-                        alert(data);
-                    }
-// Load output into a P
-                    else {
-
-
-                    }
-                }
-            });
-// Prevent normal submission of form
+            $.post(action, {'db_table':'databanks','val':value,'col':column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
             return false;
         }
     <?php endif; ?>
