@@ -140,7 +140,7 @@
                             <li class="<?php if($title === 'dashboard'): ?> active <?php endif; ?>">
                                 <a href="/" ><i class="fa fa-home"></i> Dashboard </a>
                             </li>
-                            <?php if(in_array('view',session('permission'))): ?>
+                            <?php if(in_array('operation-view',session('permission'))): ?>
                             <li>
                                 <a class="li-head" href="#operation-nav" data-toggle="collapse">
                                     <span>Operation Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
@@ -159,7 +159,8 @@
                                     </ul>
                                 </div>
                             </li>
-
+                            <?php endif; ?>
+                            <?php if(in_array('view',session('permission'))): ?>
                             <li>
                                 <a class="li-head" href="#databank-nav" data-toggle="collapse">
                                     <span>Databank Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>

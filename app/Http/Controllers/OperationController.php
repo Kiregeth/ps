@@ -176,6 +176,7 @@ class OperationController extends Controller
             $cols=\Schema::getColumnListing('app_forms');
             $db_cols=\Schema::getColumnListing('new_databanks');
             $db_table='app_forms';
+            return $datas;
             return view('joins.app_forms',compact('cols','datas','sel','search','db_table','db_cols'));
         }
         else

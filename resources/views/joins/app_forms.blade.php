@@ -130,7 +130,7 @@
                                     @endif>
                                 <th style="min-width: 100px; text-align: center">
                                     <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-                                        @if(in_array('view',session('permission')))
+                                        @if(in_array('operation-view',session('permission')))
                                         <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                            title="view"><i class="fa fa-eye"></i></a>
                                         @endif
