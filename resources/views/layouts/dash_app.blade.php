@@ -158,7 +158,8 @@
                                     </ul>
                                 </div>
                             </li>
-
+                            @endif
+                            @if(in_array('view',session('permission')))
                             <li>
                                 <a class="li-head" href="#databank-nav" data-toggle="collapse">
                                     <span>Databank Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
