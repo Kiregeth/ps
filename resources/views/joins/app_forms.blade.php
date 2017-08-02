@@ -72,7 +72,7 @@
         $discard=['photo','app_status','created_at','updated_at','date','db_status'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
-        $db_required=['trade','company'];
+        $db_required=['trade'];
     @endphp
     <div class="container">
         @if(session()->has('message'))
@@ -251,7 +251,7 @@
                                                         id="{{$data->ref_no. '_' . $j}}"
                                                         name="{{$col}}"
                                                         placeholder="Enter {{ucfirst(preg_replace('/_+/', ' ', $col))}} here!@if(in_array($col,$db_required))*@endif"
-                                                        @if($col==='ref_no')value="{{$data->ref_no}}"  readonly @endif @if(in_array($col,$db_required)) required @endif/>
+                                                        @if($col==='ref_no')value="{{$data->ref_no}}"  readonly @elseif($col==='trade')value="{{$data->position}}"   @endif @if(in_array($col,$db_required)) required @endif/>
                                             </div>
                                         @endif
                                     </div>

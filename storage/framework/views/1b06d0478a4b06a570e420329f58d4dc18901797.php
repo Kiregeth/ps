@@ -69,7 +69,7 @@
         $discard=['photo','app_status','created_at','updated_at','date','db_status'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
-        $db_required=['trade','company'];
+        $db_required=['trade'];
      ?>
     <div class="container">
         <?php if(session()->has('message')): ?>
@@ -129,7 +129,7 @@
                                     <?php endif; ?>>
                                 <th style="min-width: 100px; text-align: center">
                                     <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
-                                        <?php if(in_array('view',session('permission'))): ?>
+                                        <?php if(in_array('operation-view',session('permission'))): ?>
                                         <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->ref_no); ?>"
                                            title="view"><i class="fa fa-eye"></i></a>
                                         <?php endif; ?>
@@ -252,7 +252,7 @@
                                                         id="<?php echo e($data->ref_no. '_' . $j); ?>"
                                                         name="<?php echo e($col); ?>"
                                                         placeholder="Enter <?php echo e(ucfirst(preg_replace('/_+/', ' ', $col))); ?> here!<?php if(in_array($col,$db_required)): ?>*<?php endif; ?>"
-                                                        <?php if($col==='ref_no'): ?>value="<?php echo e($data->ref_no); ?>"  readonly <?php endif; ?> <?php if(in_array($col,$db_required)): ?> required <?php endif; ?>/>
+                                                        <?php if($col==='ref_no'): ?>value="<?php echo e($data->ref_no); ?>"  readonly <?php elseif($col==='trade'): ?>value="<?php echo e($data->position); ?>"   <?php endif; ?> <?php if(in_array($col,$db_required)): ?> required <?php endif; ?>/>
                                             </div>
                                         <?php endif; ?>
                                     </div>

@@ -46,3 +46,8 @@ select option {
 {
     margin-left:13px;
 }
+
+#modal_cv td, #modal_cv th
+{
+    max-width:150px;
+}

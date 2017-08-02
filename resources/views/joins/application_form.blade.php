@@ -5,7 +5,7 @@
     @php
         $discard=['ref_no','name','position','telephone_no','mobile_no','document_list','photo','app_status','created_at','updated_at'];
         $required=['religion','address','contact_address','email','qualification',
-                   'dob','gender','marital_status','passport_no','place_of_issue',
+                   'date_of_birth','gender','marital_status','passport_no','place_of_issue',
                    'date_of_issue','date_of_expiry','height_feet','height_inch','weight',
                    'parent_name','prior_experience'];
         $numeric=['height_feet','height_inch','weight'];
@@ -51,9 +51,9 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <label class="control-label col-md-4" for="telephone_no">{{strtoupper(preg_replace('/_+/', ' ', 'telephone_no'))}} *</label>
+                                            <label class="control-label col-md-4" for="telephone_no">{{strtoupper(preg_replace('/_+/', ' ', 'telephone_no'))}}</label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="telephone_no" id="telephone_no" placeholder="Telephone Number *" required/>
+                                                <input type="text" class="form-control" name="telephone_no" id="telephone_no" placeholder="Telephone Number " />
                                             </div>
                                             <br /><br />
                                         </div>
@@ -250,7 +250,7 @@
                             </tbody>
                         </table>
                         <h6 style="text-decoration: underline"><strong>Experience Record:</strong></h6>
-                        <table width="100%" class="table-striped">
+                        <table width="80%" class="table-striped">
                             <thead>
                             <tr>
                                 <th>Sn.</th>
