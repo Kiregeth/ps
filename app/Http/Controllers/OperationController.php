@@ -165,18 +165,17 @@ class OperationController extends Controller
                 $sel=$request->sel;
                 $search=$request->search;
                 $datas=app_form::where($sel, 'LIKE', '%' . $search . '%')
-                    ->groupBy($gp_array)
+                    //->groupBy($gp_array)
                     ->paginate(20,$pg_array);
             }
             else{
                 $datas=app_form::orderBy('ref_no','desc')
-                    ->groupBy($gp_array)
+                    //->groupBy($gp_array)
                     ->paginate(20,$pg_array);
             }
             $cols=\Schema::getColumnListing('app_forms');
             $db_cols=\Schema::getColumnListing('new_databanks');
             $db_table='app_forms';
-            return $datas;
             return view('joins.app_forms',compact('cols','datas','sel','search','db_table','db_cols'));
         }
         else
