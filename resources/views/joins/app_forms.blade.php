@@ -72,7 +72,7 @@
         $discard=['photo','app_status','created_at','updated_at','date','db_status'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
-        $db_required=['trade'];
+        $db_required=['pp_status','trade'];
     @endphp
     <div class="container">
         @if(session()->has('message'))
@@ -235,7 +235,15 @@
                                         <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
                                                                               for="{{$data->ref_no. '_' . $j}}">{{ucfirst(preg_replace('/_+/', ' ', $col))}}@if(in_array($col,$db_required))*@endif:</label>
                                         </div>
-                                        @if(in_array($col,$db_date_field))
+                                        @if($col==='pp_status')
+                                            <div class="col-xs-7 col-md-7">
+                                                <select class="form-control" id="{{$data->ref_no. '_' . $j}}" name="{{$col}}" required>
+                                                    @foreach($pp_states as $pp_state)
+                                                        <option value="{{$pp_state->status}}">{{$pp_state->status}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        @elseif(in_array($col,$db_date_field))
                                             <div class="col-xs-7 col-md-7"><input
                                                         type="date"
                                                         class="form-control"

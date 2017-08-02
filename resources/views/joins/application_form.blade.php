@@ -111,6 +111,7 @@
                                                     <input type="{{$type}}" class="form-control"
                                                            name="{{$col}}" id="{{$col}}"
                                                            placeholder="{{ucfirst(preg_replace("/_+/", " ", "$col"))}} @if(in_array($col,$required))*@endif"
+                                                           @if(in_array($col,$required)) required @endif
                                                     />
                                                 @endif
                                             </div>
@@ -149,7 +150,7 @@
                                 {{--upload cv--}}
                                 <input type="file" name="cv_doc" id="cv_doc" style="display:none;"/>
                                 {{--upload pp copy--}}
-                                <input type="file" name="pp_doc" id="pp_doc" style="display:none;" required/>
+                                <input type="file" name="pp_doc" id="pp_doc" style="display:none;"/>
                                 {{--upload educational document--}}
                                 <input type="file" name="edu_doc" id="edu_doc" style="display:none;"/>
                                 {{--upload experience cirtificate--}}
@@ -345,6 +346,10 @@
             }
             if($('#cv_doc-selected').html()==="") {
                 alert("CV must be generated or uploaded");
+                return false;
+            }
+            if($('#pp_doc-selected').html()==="") {
+                alert("PP copy must be uploaded");
                 return false;
             }
 

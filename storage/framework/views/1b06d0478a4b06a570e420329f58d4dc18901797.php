@@ -69,7 +69,7 @@
         $discard=['photo','app_status','created_at','updated_at','date','db_status'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
-        $db_required=['trade'];
+        $db_required=['pp_status','trade'];
      ?>
     <div class="container">
         <?php if(session()->has('message')): ?>
@@ -236,7 +236,15 @@
                                         <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
                                                                               for="<?php echo e($data->ref_no. '_' . $j); ?>"><?php echo e(ucfirst(preg_replace('/_+/', ' ', $col))); ?><?php if(in_array($col,$db_required)): ?>*<?php endif; ?>:</label>
                                         </div>
-                                        <?php if(in_array($col,$db_date_field)): ?>
+                                        <?php if($col==='pp_status'): ?>
+                                            <div class="col-xs-7 col-md-7">
+                                                <select class="form-control" id="<?php echo e($data->ref_no. '_' . $j); ?>" name="<?php echo e($col); ?>" required>
+                                                    <?php $__currentLoopData = $pp_states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pp_state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($pp_state->status); ?>"><?php echo e($pp_state->status); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </select>
+                                            </div>
+                                        <?php elseif(in_array($col,$db_date_field)): ?>
                                             <div class="col-xs-7 col-md-7"><input
                                                         type="date"
                                                         class="form-control"
