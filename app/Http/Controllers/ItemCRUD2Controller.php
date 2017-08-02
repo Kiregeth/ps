@@ -105,9 +105,3 @@ class ItemCRUD2Controller extends Controller
             ->with('success','Item deleted successfully');
     }
 }
-/**
- * Created by PhpStorm.
- * User: minrows
- * Date: 7/17/17
- * Time: 12:53 PM
- */

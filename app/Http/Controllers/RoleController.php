@@ -135,9 +135,3 @@ class RoleController extends Controller
             ->with('success','Role deleted successfully');
     }
 }
-/**
- * Created by PhpStorm.
- * User: minrows
- * Date: 7/17/17
- * Time: 12:54 PM
- */
