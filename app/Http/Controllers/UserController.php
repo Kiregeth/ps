@@ -151,9 +151,3 @@ class UserController extends Controller
             ->with('success','User deleted successfully');
     }
 }
-/**
- * Created by PhpStorm.
- * User: minrows
- * Date: 7/17/17
- * Time: 12:52 PM
- */
