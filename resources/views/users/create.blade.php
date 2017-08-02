@@ -74,9 +74,3 @@
     </div>
     {!! Form::close() !!}
 @endsection
-/**
- * Created by PhpStorm.
- * User: minrows
- * Date: 7/17/17
- * Time: 12:57 PM
- */

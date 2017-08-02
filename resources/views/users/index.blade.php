@@ -49,9 +49,3 @@
     </table>
     {!! $data->render() !!}
 @endsection
-/**
- * Created by PhpStorm.
- * User: minrows
- * Date: 7/17/17
- * Time: 12:56 PM
- */

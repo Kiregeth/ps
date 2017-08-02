@@ -36,9 +36,3 @@
         </div>
     </div>
 @endsection
-/**
- * Created by PhpStorm.
- * User: minrows
- * Date: 7/17/17
- * Time: 12:58 PM
- */
