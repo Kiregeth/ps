@@ -3,10 +3,10 @@
     <?php 
         $discard=['ref_no','name','position','telephone_no','mobile_no','document_list','photo','app_status','created_at','updated_at'];
         $required=['religion','address','contact_address','email','qualification',
-                   'dob','gender','marital_status','passport_no','place_of_issue',
+                   'date_of_birth','gender','marital_status','passport_no','place_of_issue',
                    'date_of_issue','date_of_expiry','height_feet','height_inch','weight',
                    'parent_name','prior_experience'];
-        $numeric=['height_feet','height_inch','weight'];
+        $numeric=['height_feet','height_inch','weight','passport_no'];
         $date=['date_of_birth','date_of_issue','date_of_expiry']
      ?>
     <div class="container">
@@ -50,9 +50,9 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <label class="control-label col-md-4" for="telephone_no"><?php echo e(strtoupper(preg_replace('/_+/', ' ', 'telephone_no'))); ?> *</label>
+                                            <label class="control-label col-md-4" for="telephone_no"><?php echo e(strtoupper(preg_replace('/_+/', ' ', 'telephone_no'))); ?></label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" name="telephone_no" id="telephone_no" placeholder="Telephone Number *" required/>
+                                                <input type="text" class="form-control" name="telephone_no" id="telephone_no" placeholder="Telephone Number " />
                                             </div>
                                             <br /><br />
                                         </div>
@@ -111,6 +111,7 @@
                                                     <input type="<?php echo e($type); ?>" class="form-control"
                                                            name="<?php echo e($col); ?>" id="<?php echo e($col); ?>"
                                                            placeholder="<?php echo e(ucfirst(preg_replace("/_+/", " ", "$col"))); ?> <?php if(in_array($col,$required)): ?>*<?php endif; ?>"
+                                                           <?php if(in_array($col,$required)): ?> required <?php endif; ?>
                                                     />
                                                 <?php endif; ?>
                                             </div>
@@ -149,7 +150,7 @@
                                 
                                 <input type="file" name="cv_doc" id="cv_doc" style="display:none;"/>
                                 
-                                <input type="file" name="pp_doc" id="pp_doc" style="display:none;" required/>
+                                <input type="file" name="pp_doc" id="pp_doc" style="display:none;"/>
                                 
                                 <input type="file" name="edu_doc" id="edu_doc" style="display:none;"/>
                                 
@@ -251,7 +252,7 @@
                             </tbody>
                         </table>
                         <h6 style="text-decoration: underline"><strong>Experience Record:</strong></h6>
-                        <table width="100%" class="table-striped">
+                        <table width="80%" class="table-striped">
                             <thead>
                             <tr>
                                 <th>Sn.</th>
@@ -335,6 +336,14 @@
             var genf = document.getElementById("female");
             var mss=document.getElementById("single");
             var msm=document.getElementById("married");
+            var mob=document.getElementById("mobile_no");
+            var ppno=document.getElementById("ppno");
+
+            if(mob.value.length!=10){
+                alert("Invalid Number");
+                mob.focus();
+                return false;
+            }
 
             if(genm.checked===false && genf.checked===false){
                 alert("Select gender");
@@ -346,6 +355,10 @@
             }
             if($('#cv_doc-selected').html()==="") {
                 alert("CV must be generated or uploaded");
+                return false;
+            }
+            if($('#pp_doc-selected').html()==="") {
+                alert("PP copy must be uploaded");
                 return false;
             }
 

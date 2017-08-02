@@ -8,7 +8,7 @@
                    'date_of_birth','gender','marital_status','passport_no','place_of_issue',
                    'date_of_issue','date_of_expiry','height_feet','height_inch','weight',
                    'parent_name','prior_experience'];
-        $numeric=['height_feet','height_inch','weight'];
+        $numeric=['height_feet','height_inch','weight','passport_no'];
         $date=['date_of_birth','date_of_issue','date_of_expiry']
     @endphp
     <div class="container">
@@ -335,6 +335,14 @@
             var genf = document.getElementById("female");
             var mss=document.getElementById("single");
             var msm=document.getElementById("married");
+            var mob=document.getElementById("mobile_no");
+            var ppno=document.getElementById("ppno");
+
+            if(mob.value.length!=10){
+                alert("Invalid Number");
+                mob.focus();
+                return false;
+            }
 
             if(genm.checked===false && genf.checked===false){
                 alert("Select gender");
