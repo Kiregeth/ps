@@ -69,7 +69,7 @@
         $discard=['photo','app_status','created_at','updated_at','date','db_status'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
-        $db_required=['pp_status','trade'];
+        $db_required=['pp_status'];
      ?>
     <div class="container">
         <?php if(session()->has('message')): ?>

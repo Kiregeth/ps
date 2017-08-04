@@ -217,7 +217,6 @@
                 }
             }
             data_string=data_string.substr(0,data_string.length-1);
-
             $.post('/quick_add', {'value':data_string,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             return false;
         });

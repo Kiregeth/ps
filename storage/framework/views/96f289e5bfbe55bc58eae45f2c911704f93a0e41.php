@@ -2,7 +2,7 @@
     <?php 
         $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
                'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','visa_process_date',
-               'pp_returned_date','pp_resubmitted_date','remarks','db_status'];
+               'pp_returned_date','pp_resubmitted_date','remarks','app_status'];
         $date=['date_of_birth','offer_letter_received_date','visa_process_date','pp_returned_date','pp_resubmitted_date'];
         $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
         $vf_fields=['wp_expiry','visa_return_date','visa_issue_date','visa_expiry_date','supply_agent','flown_date','demand_no','visa_no'];
@@ -55,11 +55,15 @@
                         <tbody>
                         <?php  $i=0; $datas_array=array();  ?>
                         <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <tr
-                                    <?php if($data->vp_status== 'vf'): ?>
-                                    style='background-color: lightblue;'
-                                    <?php endif; ?>
-                            >
+                            <tr <?php if($data->app_status==='db'): ?>
+                                style="background-color: #BED661;color:white;"
+                                <?php elseif($data->app_status=='vp'): ?>
+                                style='background-color: lightgreen;'
+                                <?php elseif($data->app_status== 'vc'): ?>
+                                style='background-color: lightcoral;'
+                                <?php elseif($data->app_status== 'vf'): ?>
+                                style='background-color: lightblue;'
+                                    <?php endif; ?>>
 
                                 <th style="min-width: 100px; text-align: center">
                                     <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">

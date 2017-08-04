@@ -53,8 +53,15 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                     <tbody>
                     @php $i=0; $datas_array=array(); @endphp
                     @foreach ($datas as $data)
-                    <tr>
-
+                    <tr @if($data->app_status==='db')
+                        style="background-color: #BED661;color:white;"
+                        @elseif($data->app_status=='vp')
+                        style='background-color: lightgreen;'
+                        @elseif($data->app_status== 'vc')
+                        style='background-color: lightcoral;'
+                        @elseif($data->app_status== 'vf')
+                        style='background-color: lightblue;'
+                            @endif>
                         <th style="min-width: 100px; text-align: center">
                             <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                 @if(in_array('view',session('permission')))

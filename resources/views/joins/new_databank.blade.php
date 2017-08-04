@@ -4,7 +4,7 @@
     @php
             $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
                    'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date',
-                   'pp_returned_date','pp_resubmitted_date','remarks','db_status'];
+                   'pp_returned_date','pp_resubmitted_date','remarks','app_status'];
             $discard=['photo','db_status','created_at','updated_at','app_status'];
             $date=['date','date_of_birth','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
 
@@ -54,15 +54,17 @@
                             <tbody>
                             @php $i=0; $datas_array=array(); @endphp
                             @foreach ($datas as $data)
-                                <tr
-                                        @if($data->db_status=='vp')
-                                        style='background-color: lightgreen;'
-                                        @elseif($data->db_status== 'vc')
-                                        style='background-color: lightcoral;'
-                                        @elseif($data->db_status== 'vf')
-                                        style='background-color: lightblue;'
-                                        @endif
-                                >
+                                <tr @if($data->app_status==='db')
+                                    style="background-color: #BED661;color:white;"
+                                    @elseif($data->app_status=='vp')
+                                    style='background-color: lightgreen;'
+                                    @elseif($data->app_status=='vr')
+                                    style='background-color: yellow;'
+                                    @elseif($data->app_status== 'vc')
+                                    style='background-color: lightcoral;'
+                                    @elseif($data->app_status== 'vf')
+                                    style='background-color: lightblue;'
+                                        @endif>
 
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
@@ -71,9 +73,11 @@
                                                title="view"><i class="fa fa-eye"></i></a>
                                             @endif
                                             @if(in_array('transfer',session('permission')))
-                                                @if($data->db_status!='vp' && $data->db_status!='vf')
+                                                @if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf')
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_{{$data->ref_no}}"
                                                        title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
+                                                    <a class="btn btn-link" data-toggle="modal" data-target="#visa_return_{{$data->ref_no}}"
+                                                       title="add to visa return"><i class="fa fa-undo"></i></a>
                                                 @endif
                                             @endif
                                             @if(in_array('delete',session('permission')))
@@ -192,6 +196,144 @@
                                             id="{{$data->ref_no. '_' . 'visa_process_date'}}"
                                             name="visa_process_date"
                                             placeholder="Enter Visa Process Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'trade'}}">Trade*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'trade'}}"
+                                            name="trade"
+                                            placeholder="Enter trade here! *"
+                                            value="{{$data->trade}}"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'company'}}">Companye*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'company'}}"
+                                            name="company"
+                                            placeholder="Enter company here!"
+                                            value="{{$data->company}}"
+                                            required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Add"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    @endforeach
+
+    @foreach($datas as $data)
+        <div class="modal fade" id="visa_return_{{$data->ref_no}}" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add to Visa Return</h4>
+                    </div>
+                    <form action="/add_to_visa_return" method="post" id="data-form-{{$data->ref_no}}">
+                        {{csrf_field()}}
+                        <div class="modal-body">
+                            <input type="hidden" name="db_table" value="{{$db_table}}"/>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'ref_no'}}">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'ref_no'}}"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="{{$data->ref_no}}"  readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'vr_date'}}">Visa Return Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'vr_date'}}"
+                                            name="vr_date"
+                                            placeholder="Enter Visa Return Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'visa_issue_date'}}">Visa Issue Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'visa_issue_date'}}"
+                                            name="vr_date"
+                                            placeholder="Enter Visa Issue Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'visa_expiry_date'}}">Visa Expiry Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'visa_expiry_date'}}"
+                                            name="vr_date"
+                                            placeholder="Enter Visa Expiry Date here!"
+                                            required />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'trade'}}">Trade*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'trade'}}"
+                                            name="trade"
+                                            placeholder="Enter trade here! *"
+                                            value="{{$data->trade}}"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'company'}}">Company*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'company'}}"
+                                            name="company"
+                                            placeholder="Enter company here!"
+                                            value="{{$data->company}}"
                                             required />
                                 </div>
                             </div>

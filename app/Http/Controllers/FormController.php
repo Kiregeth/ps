@@ -9,6 +9,7 @@ use App\databank;
 use App\app_form;
 use App\new_databank;
 use App\new_visa_process;
+use App\new_visa_return;
 use App\new_vr_flown;
 
 
@@ -39,10 +40,36 @@ class FormController extends Controller
         $pasa->visa_process_date=$request->visa_process_date;
         $pasa->save();
         app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vp']);
-        new_databank::where('ref_no', $request->ref_no)->update(['db_status' => 'vp']);
+        new_databank::where('ref_no', $request->ref_no)->update(['db_status' => 'vp','trade'=>$request->trade,'company'=>$request->company]);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into visa process!');
         return back();
     }
+
+    public function add_to_visa_return(Request $request)
+    {
+        if($request->db_table==='new_databanks')
+        {
+            $pasa=new new_visa_process();
+            $pasa->ref_no=$request->ref_no;
+            $pasa->visa_process_date=null;
+            $pasa->save();
+            $pasa1=new new_visa_return();
+            $pasa1->ref_no=$request->ref_no;
+            $pasa1->vr_date=$request->vr_date;
+            $pasa1->visa_issue_date=$request->visa_issue_date;
+            $pasa1->visa_expiry_date=$request->visa_expiry_date;
+            $pasa1->save();
+
+            app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vr']);
+            session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into visa return!');
+        }
+        else
+        {
+
+        }
+        return back();
+    }
+
     public function add_to_deployment(Request $request)
     {
         $pasa=new new_vr_flown();

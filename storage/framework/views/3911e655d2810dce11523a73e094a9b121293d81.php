@@ -173,6 +173,9 @@
                                         <li class="<?php if($title === 'new_visa'): ?> active <?php endif; ?>">
                                             <a href="/new_visa"><i class="fa fa-cc-visa"></i>Visa Process </a>
                                         </li>
+                                        <li class="<?php if($title === 'new_visa'): ?> active <?php endif; ?>">
+                                            <a href="/new_visa_return"><i class="fa fa-cc-visa"></i>Visa Process </a>
+                                        </li>
                                         <li class="<?php if($title === 'new_deployment'): ?> active <?php endif; ?>">
                                             <a href="/new_deployment"><i class="fa  fa-share-square-o"></i>Deployment </a>
                                         </li>
