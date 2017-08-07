@@ -1,9 +1,9 @@
-@extends('layouts.dash_app',['title'=>'new_visa'])
+@extends('layouts.dash_app',['title'=>'new_visa_receive'])
 
 @section('content')
     @php
         $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
-               'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','visa_process_date',
+               'pp_status','local_agent','la_contact','trade','company','vr_date','visa_issue_date','visa_expiry_date','offer_letter_received_date',
                'pp_returned_date','pp_resubmitted_date','remarks','app_status'];
         $date=['date_of_birth','offer_letter_received_date','visa_process_date','pp_returned_date','pp_resubmitted_date'];
         $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
@@ -19,9 +19,9 @@
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <div class="row">
-                    <div class="col-xs-6 col-md-6"><h1>Visa Process</h1></div>
+                    <div class="col-xs-6 col-md-6"><h1>Visa Receive</h1></div>
                     <div class="col-xs-6 col-md-6 center-blocks">
-                        <form action="/new_visa" method="POST" name="search-form" id="search-form">
+                        <form action="/new_visa_receive" method="POST" name="search-form" id="search-form">
                             {{csrf_field()}}
                             <h5><label for="search">Search:</label></h5>
                             @php if(strpos($sel, '.') !== false){ $sel=substr($sel, strpos($sel, ".") + 1); }@endphp
@@ -72,12 +72,12 @@
                                 <th style="min-width: 100px; text-align: center">
                                     <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                         @if(in_array('view',session('permission')))
-                                        <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
-                                           title="view"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
+                                               title="view"><i class="fa fa-eye"></i></a>
                                         @endif
                                         @if(in_array('transfer',session('permission')))
-                                        <a class="cancel btn btn-link" name="{{$data->ref_no}}_cancel"
-                                           title="visa cancel"><i class="fa fa-times"></i></a>
+                                            <a class="cancel btn btn-link" name="{{$data->ref_no}}_cancel"
+                                               title="visa cancel"><i class="fa fa-times"></i></a>
                                             @if($data->app_status!='vf' && $data->app_status!='vc' && $data->app_status!='vr')
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_{{$data->ref_no}}"
                                                    title="add to visa receive"><i class="fa fa-life-ring"></i></a>
@@ -103,19 +103,19 @@
                 </form>
             </div>
         </div>
-            <div class="export">
-                <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
-                    Export to Excel
-                </a>
+        <div class="export">
+            <a target="_blank" class="btn btn-primary" href="/export" onclick="event.preventDefault(); document.getElementById('excel-form').submit();">
+                Export to Excel
+            </a>
 
-                <form id="excel-form" action="/export" method="POST" style="display: none;">
-                    {{ csrf_field() }}
-                    <input type="text" name="file" id="file" value="New Visa Process" />
-                    <input type="text" name="colsString" id="colsString" value="{{serialize($fields)}}" />
-                    <input type="text" name="discardString" id="discardString" value="{{serialize($discard)}}" />
-                    <input type="text" name="datasString" id="datasString" value="{{serialize($datas_array)}}" />
-                </form>
-            </div>
+            <form id="excel-form" action="/export" method="POST" style="display: none;">
+                {{ csrf_field() }}
+                <input type="text" name="file" id="file" value="New Visa Receive" />
+                <input type="text" name="colsString" id="colsString" value="{{serialize($fields)}}" />
+                <input type="text" name="discardString" id="discardString" value="{{serialize($discard)}}" />
+                <input type="text" name="datasString" id="datasString" value="{{serialize($datas_array)}}" />
+            </form>
+        </div>
         @if($sel!="" && $search!="")
             <div class="center-block">{{$datas->appends(['sel' => $sel,'search'=>$search])->render()}}</div>
         @else
@@ -204,121 +204,11 @@
                                                 name="{{$col}}"
                                                 placeholder="Enter {{ucwords(preg_replace('/_+/', ' ', $col))}} Date here! @if(in_array($col,$vf_required)) * @endif"
                                                 @if(in_array($col,$vf_required)) required @endif
-                                                />
+                                        />
                                     </div>
                                 </div>
                             @endforeach
 
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" class="btn btn-default" value="Add"/>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    @endforeach
-
-    @foreach($datas as $data)
-        <div class="modal fade" id="visa_receive_{{$data->ref_no}}" role="dialog">
-            <div class="modal-dialog" >
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add to Visa Receive</h4>
-                    </div>
-                    <form action="/add_to_visa_receive" method="post" id="data-form-{{$data->ref_no}}">
-                        {{csrf_field()}}
-                        <div class="modal-body">
-                            <input type="hidden" name="db_table" value="{{$db_table}}"/>
-                            <div class="row">
-                                <div class="col-xs-3 col-md-3">
-                                    <label class="control-label pull-right"
-                                           for="{{$data->ref_no. '_' . 'ref_no'}}">Ref No:</label>
-                                </div>
-                                <div class="col-xs-7 col-md-7"><input
-                                            type="text"
-                                            class="form-control"
-                                            id="{{$data->ref_no. '_' . 'ref_no'}}"
-                                            name="ref_no"
-                                            placeholder="Enter Ref No here!"
-                                            value="{{$data->ref_no}}"  readonly />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-3 col-md-3">
-                                    <label class="control-label pull-right"
-                                           for="{{$data->ref_no. '_' . 'vr_date'}}">Visa Receive Date*:</label>
-                                </div>
-                                <div class="col-xs-7 col-md-7"><input
-                                            type="date"
-                                            class="form-control"
-                                            id="{{$data->ref_no. '_' . 'vr_date'}}"
-                                            name="vr_date"
-                                            placeholder="Enter Visa Receive Date here!"
-                                            required />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-3 col-md-3">
-                                    <label class="control-label pull-right"
-                                           for="{{$data->ref_no. '_' . 'visa_issue_date'}}">Visa Issue Date*:</label>
-                                </div>
-                                <div class="col-xs-7 col-md-7"><input
-                                            type="date"
-                                            class="form-control"
-                                            id="{{$data->ref_no. '_' . 'visa_issue_date'}}"
-                                            name="visa_issue_date"
-                                            placeholder="Enter Visa Issue Date here!"
-                                            required />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-3 col-md-3">
-                                    <label class="control-label pull-right"
-                                           for="{{$data->ref_no. '_' . 'visa_expiry_date'}}">Visa Expiry Date*:</label>
-                                </div>
-                                <div class="col-xs-7 col-md-7"><input
-                                            type="date"
-                                            class="form-control"
-                                            id="{{$data->ref_no. '_' . 'visa_expiry_date'}}"
-                                            name="visa_expiry_date"
-                                            placeholder="Enter Visa Expiry Date here!"
-                                            required />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-3 col-md-3">
-                                    <label class="control-label pull-right"
-                                           for="{{$data->ref_no. '_' . 'trade'}}">Trade*:</label>
-                                </div>
-                                <div class="col-xs-7 col-md-7"><input
-                                            class="form-control"
-                                            id="{{$data->ref_no. '_' . 'trade'}}"
-                                            name="trade"
-                                            placeholder="Enter trade here! *"
-                                            value="{{$data->trade}}"
-                                            required />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-3 col-md-3">
-                                    <label class="control-label pull-right"
-                                           for="{{$data->ref_no. '_' . 'company'}}">Company*:</label>
-                                </div>
-                                <div class="col-xs-7 col-md-7"><input
-                                            class="form-control"
-                                            id="{{$data->ref_no. '_' . 'company'}}"
-                                            name="company"
-                                            placeholder="Enter company here!"
-                                            value="{{$data->company}}"
-                                            required />
-                                </div>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="submit" class="btn btn-default" value="Add"/>
@@ -343,11 +233,10 @@
                 if (result) {
                     $.post('/cancel_new', {'db_table':'{{$db_table}}','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
                 }
-
-
             });
         });
         @endif
+
         @if(in_array('edit',session('permission')))
         $(function () {
             $("td").dblclick(function () {
@@ -427,6 +316,4 @@
         @endif
 
     </script>
-
-
 @endsection

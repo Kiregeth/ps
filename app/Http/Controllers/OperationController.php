@@ -28,7 +28,7 @@ class OperationController extends Controller
             if (!empty($request->all()) && $request->sel!="" && $request->search!="") {
                 $sel=$request->sel;
                 $search=$request->search;
-                $logs=visitor_log::where($sel, 'LIKE', '%' . $search . '%')
+                $logs=visitor_log::where($sel, 'LIKE', '%' . $search . '%')->orderBy('sn','desc')
                     ->groupBy($gp_array)
                     ->paginate(20,$pg_array);
             }

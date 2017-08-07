@@ -73,11 +73,11 @@
                                                title="view"><i class="fa fa-eye"></i></a>
                                             <?php endif; ?>
                                             <?php if(in_array('transfer',session('permission'))): ?>
-                                                <?php if($data->db_status!='vp' && $data->db_status!='vr' && $data->db_status!='vf'): ?>
+                                                <?php if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf'): ?>
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_<?php echo e($data->ref_no); ?>"
                                                        title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
-                                                    <a class="btn btn-link" data-toggle="modal" data-target="#visa_return_<?php echo e($data->ref_no); ?>"
-                                                       title="add to visa return"><i class="fa fa-undo"></i></a>
+                                                    <a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_<?php echo e($data->ref_no); ?>"
+                                                       title="add to visa receive"><i class="fa fa-life-ring"></i></a>
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                             <?php if(in_array('delete',session('permission'))): ?>
@@ -242,15 +242,15 @@
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <div class="modal fade" id="visa_return_<?php echo e($data->ref_no); ?>" role="dialog">
+        <div class="modal fade" id="visa_receive_<?php echo e($data->ref_no); ?>" role="dialog">
             <div class="modal-dialog" >
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add to Visa Return</h4>
+                        <h4 class="modal-title">Add to Visa Receive</h4>
                     </div>
-                    <form action="/add_to_visa_return" method="post" id="data-form-<?php echo e($data->ref_no); ?>">
+                    <form action="/add_to_visa_receive" method="post" id="data-form-<?php echo e($data->ref_no); ?>">
                         <?php echo e(csrf_field()); ?>
 
                         <div class="modal-body">
@@ -272,14 +272,14 @@
                             <div class="row">
                                 <div class="col-xs-3 col-md-3">
                                     <label class="control-label pull-right"
-                                           for="<?php echo e($data->ref_no. '_' . 'vr_date'); ?>">Visa Return Date*:</label>
+                                           for="<?php echo e($data->ref_no. '_' . 'vr_date'); ?>">Visa Receive Date*:</label>
                                 </div>
                                 <div class="col-xs-7 col-md-7"><input
                                             type="date"
                                             class="form-control"
                                             id="<?php echo e($data->ref_no. '_' . 'vr_date'); ?>"
                                             name="vr_date"
-                                            placeholder="Enter Visa Return Date here!"
+                                            placeholder="Enter Visa Receive Date here!"
                                             required />
                                 </div>
                             </div>
@@ -292,7 +292,7 @@
                                             type="date"
                                             class="form-control"
                                             id="<?php echo e($data->ref_no. '_' . 'visa_issue_date'); ?>"
-                                            name="vr_date"
+                                            name="visa_issue_date"
                                             placeholder="Enter Visa Issue Date here!"
                                             required />
                                 </div>
@@ -306,7 +306,7 @@
                                             type="date"
                                             class="form-control"
                                             id="<?php echo e($data->ref_no. '_' . 'visa_expiry_date'); ?>"
-                                            name="vr_date"
+                                            name="visa_expiry_date"
                                             placeholder="Enter Visa Expiry Date here!"
                                             required />
                                 </div>

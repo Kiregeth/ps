@@ -85,7 +85,7 @@ class NewDbController extends Controller
         }
     }
 
-    function new_visa_return(Request $request)
+    function new_visa_receive(Request $request)
     {
         if (\Auth::user()) {
             $sel = "";
@@ -96,27 +96,29 @@ class NewDbController extends Controller
             if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
                 $sel = $request->sel;
                 if ($sel === 'ref_no' || $sel==='date') {
-                    $sel = 'new_visa_returns.' . $sel;
+                    $sel = 'new_visa_receives.' . $sel;
                 }
                 $search = $request->search;
                 $datas = \DB::table('app_forms')
                     ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
                     ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_visa_receives','app_forms.ref_no', '=', 'new_visa_receives.ref_no')
                     ->where($sel, 'LIKE', '%' . $search . '%')
-                    ->orderBy('new_visa_processes.ref_no', 'desc')
+                    ->orderBy('new_visa_receives.ref_no', 'desc')
                     ->paginate(20);
 
             } else {
                 $datas = \DB::table('app_forms')
                     ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
                     ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
-                    ->orderBy('new_visa_processes.ref_no', 'desc')
+                    ->join('new_visa_receives','app_forms.ref_no', '=', 'new_visa_receives.ref_no')
+                    ->orderBy('new_visa_receives.ref_no', 'desc')
                     ->paginate(20);
             }
 
-            $db_table = 'new_visa_returns';
+            $db_table = 'new_visa_receives';
 
-            return view("joins.new_visa", compact('db_table', 'sel', 'search', 'datas'));
+            return view("joins.new_visa_receive", compact('db_table', 'sel', 'search', 'datas'));
         }
         else
         {
@@ -148,9 +150,11 @@ class NewDbController extends Controller
                 $datas = \DB::table('app_forms')
                     ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
                     ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_visa_receives','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
                     ->join('new_vr_flowns','app_forms.ref_no', '=', 'new_vr_flowns.ref_no')
                     ->orderBy('new_vr_flowns.ref_no', 'desc')
                     ->paginate(20);
+//                return $datas;
             }
 
             $db_table = 'new_vr_flowns';

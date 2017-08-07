@@ -1,8 +1,8 @@
 <?php $__env->startSection('content'); ?>
 <?php 
 $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
-'pp_status','local_agent','la_contact','trade','company','wp_expiry','offer_letter_received_date','visa_process_date',
-'pp_returned_date','pp_resubmitted_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date','remarks','db_status'];
+'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','visa_process_date',
+'pp_returned_date','pp_resubmitted_date','vr_date','visa_issue_date','visa_expiry_date','flown_date','remarks'];
 $date=['date_of_birth','wp_expiry','offer_letter_received_date','pp_returned_date','pp_resubmitted_date','visa_process_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date'];
 $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
  ?>
@@ -71,7 +71,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                                 <?php if(in_array('edit',session('permission'))): ?>
                                 <a class="cancel btn btn-link" name="<?php echo e($data->ref_no); ?>_cancel"
                                    title="visa cancel"><i class="fa fa-times"></i></a>
-                                    <?php if($data->vp_status!='vf' && $data->vp_status!='vc'): ?>
+                                    <?php if($data->app_status!='vf' && $data->app_status!='vc'): ?>
                                     <a class="btn btn-link" data-toggle="modal" data-target="#deploy_<?php echo e($data->ref_no); ?>"
                                        title="add to deployment"><i class="fa fa-paper-plane"></i></a>
                                     <?php endif; ?>

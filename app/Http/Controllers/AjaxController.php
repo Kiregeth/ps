@@ -351,6 +351,7 @@ class AjaxController extends Controller
         $value=$request->w_val;
         \DB::table($db_table)->where($col, $value)->delete();
         \DB::table('new_visa_processes')->where($col, $value)->delete();
+        \DB::table('new_visa_receives')->where($col, $value)->delete();
         \DB::table('new_vr_flowns')->where($col, $value)->delete();
         \DB::table('app_forms')->where($col, $value)->update(['app_status' => null]);
 
@@ -362,15 +363,18 @@ class AjaxController extends Controller
         $col=$request->w_col;
         $value=$request->w_val;
 
+
         $visa_process_dates=\DB::table('new_visa_processes')->where($col, $value)->first(['visa_process_date']);
+
+
         $d=$visa_process_dates->visa_process_date;
         \DB::table('new_databanks')->where($col, $value)->update(['old_vp_date' => $d]);
 
         \DB::table('new_visa_processes')->where($col, $value)->delete();
+        \DB::table('new_visa_receives')->where($col, $value)->delete();
         \DB::table('new_vr_flowns')->where($col, $value)->delete();
 
         \DB::table('app_forms')->where($col, $value)->update(['app_status' => 'vc']);
-        \DB::table('new_databanks')->where($col, $value)->update(['db_status' => 'vc']);
     }
 
     public function quick_edit_new(Request $request)
@@ -398,6 +402,13 @@ class AjaxController extends Controller
             $cols = \Schema::getColumnListing('new_visa_processes');
             if (in_array($col, $cols)) {
                 \DB::table('new_visa_processes')->where($w_col, $w_val)->update([$col => $val]);
+            }
+        }
+        $check = \DB::table('new_visa_receives')->select()->where($w_col, $w_val)->first();
+        if (count($check) > 0) {
+            $cols = \Schema::getColumnListing('new_visa_receives');
+            if (in_array($col, $cols)) {
+                \DB::table('new_visa_receives')->where($w_col, $w_val)->update([$col => $val]);
             }
         }
         $check = \DB::table('new_deployments')->select()->where($w_col, $w_val)->first();

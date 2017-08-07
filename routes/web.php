@@ -59,7 +59,7 @@ Route::post('/deployment', 'OldDbController@deployment');
 Route::post('/add', 'FormController@add');
 Route::post('/add_to_db', 'FormController@add_to_db');
 Route::post('/add_to_visa', 'FormController@add_to_visa');
-Route::post('/add_to_visa_return', 'FormController@add_to_visa_return');
+Route::post('/add_to_visa_receive', 'FormController@add_to_visa_receive');
 Route::post('/add_to_deployment', 'FormController@add_to_deployment');
 
 /*
@@ -67,12 +67,12 @@ Route::post('/add_to_deployment', 'FormController@add_to_deployment');
  */
 Route::get('/new_databank', 'NewDbController@new_databank');
 Route::get('/new_visa', 'NewDbController@new_visa');
-Route::get('/new_visa_return', 'NewDbController@new_visa_return');
+Route::get('/new_visa_receive', 'NewDbController@new_visa_receive');
 Route::get('/new_deployment', 'NewDbController@new_deployment');
 
 Route::post('/new_databank', 'NewDbController@new_databank');
 Route::post('/new_visa', 'NewDbController@new_visa');
-Route::post('/new_visa_return', 'NewDbController@new_visa_return');
+Route::post('/new_visa_receive', 'NewDbController@new_visa_receive');
 Route::post('/new_deployment', 'NewDbController@new_deployment');
 
 

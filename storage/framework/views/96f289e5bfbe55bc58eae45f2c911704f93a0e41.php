@@ -5,8 +5,10 @@
                'pp_returned_date','pp_resubmitted_date','remarks','app_status'];
         $date=['date_of_birth','offer_letter_received_date','visa_process_date','pp_returned_date','pp_resubmitted_date'];
         $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
-        $vf_fields=['wp_expiry','visa_return_date','visa_issue_date','visa_expiry_date','supply_agent','flown_date','demand_no','visa_no'];
-        $vf_date=['wp_expiry','visa_return_date','visa_issue_date','visa_expiry_date','flown_date']
+        $vf_fields=['supply_agent','ticket_no','flown_date','demand_no','visa_no'];
+        $vf_required=['ticket_no'];
+        $vf_date=['wp_expiry','visa_return_date','visa_issue_date','visa_expiry_date','flown_date'];
+        $vf_numeric=['ticket_no'];
      ?>
     <div class="container">
         <?php if(session()->has('message')): ?>
@@ -59,6 +61,8 @@
                                 style="background-color: #BED661;color:white;"
                                 <?php elseif($data->app_status=='vp'): ?>
                                 style='background-color: lightgreen;'
+                                <?php elseif($data->app_status=='vr'): ?>
+                                style='background-color: yellow;'
                                 <?php elseif($data->app_status== 'vc'): ?>
                                 style='background-color: lightcoral;'
                                 <?php elseif($data->app_status== 'vf'): ?>
@@ -74,7 +78,11 @@
                                         <?php if(in_array('transfer',session('permission'))): ?>
                                         <a class="cancel btn btn-link" name="<?php echo e($data->ref_no); ?>_cancel"
                                            title="visa cancel"><i class="fa fa-times"></i></a>
-                                            <?php if($data->vp_status!='vf' && $data->vp_status!='vc'): ?>
+                                            <?php if($data->app_status!='vf' && $data->app_status!='vc' && $data->app_status!='vr'): ?>
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_<?php echo e($data->ref_no); ?>"
+                                                   title="add to visa receive"><i class="fa fa-life-ring"></i></a>
+                                            <?php endif; ?>
+                                            <?php if($data->app_status==='vr'): ?>
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#deploy_<?php echo e($data->ref_no); ?>"
                                                    title="add to deployment"><i class="fa fa-paper-plane"></i></a>
                                             <?php endif; ?>
@@ -182,27 +190,24 @@
                                 <div class="row">
                                     <div class="col-xs-3 col-md-3">
                                         <label class="control-label pull-right"
-                                               for="<?php echo e($data->ref_no. '_' . $col); ?>"><?php echo e(ucwords(preg_replace('/_+/', ' ', $col))); ?>:</label>
+                                               for="<?php echo e($data->ref_no. '_' . $col); ?>"><?php echo e(ucwords(preg_replace('/_+/', ' ', $col))); ?>:<?php if(in_array($col,$vf_required)): ?> *<?php endif; ?></label>
                                     </div>
                                     <?php if(in_array($col,$vf_date)): ?>
+                                        <?php  $type='date';  ?>
+                                    <?php elseif(in_array($col,$vf_numeric)): ?>
+                                        <?php  $type='number';  ?>
+                                    <?php else: ?>
+                                        <?php  $type='text';  ?>
+                                    <?php endif; ?>
                                     <div class="col-xs-7 col-md-7"><input
-                                                type="date"
+                                                type="<?php echo e($type); ?>"
                                                 class="form-control"
                                                 id="<?php echo e($data->ref_no. '_' . $col); ?>"
                                                 name="<?php echo e($col); ?>"
-                                                placeholder="Enter <?php echo e(ucwords(preg_replace('/_+/', ' ', $col))); ?> Date here!"
+                                                placeholder="Enter <?php echo e(ucwords(preg_replace('/_+/', ' ', $col))); ?> Date here! <?php if(in_array($col,$vf_required)): ?> * <?php endif; ?>"
+                                                <?php if(in_array($col,$vf_required)): ?> required <?php endif; ?>
                                                 />
                                     </div>
-                                    <?php else: ?>
-                                        <div class="col-xs-7 col-md-7"><input
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="<?php echo e($data->ref_no. '_' . $col); ?>"
-                                                    name="<?php echo e($col); ?>"
-                                                    placeholder="Enter <?php echo e(ucwords(preg_replace('/_+/', ' ', $col))); ?> Date here!"
-                                            />
-                                        </div>
-                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
@@ -217,6 +222,118 @@
             </div>
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="visa_receive_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add to Visa Receive</h4>
+                    </div>
+                    <form action="/add_to_visa_receive" method="post" id="data-form-<?php echo e($data->ref_no); ?>">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="db_table" value="<?php echo e($db_table); ?>"/>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="<?php echo e($data->ref_no); ?>"  readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'vr_date'); ?>">Visa Receive Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'vr_date'); ?>"
+                                            name="vr_date"
+                                            placeholder="Enter Visa Receive Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'visa_issue_date'); ?>">Visa Issue Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'visa_issue_date'); ?>"
+                                            name="visa_issue_date"
+                                            placeholder="Enter Visa Issue Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'visa_expiry_date'); ?>">Visa Expiry Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'visa_expiry_date'); ?>"
+                                            name="visa_expiry_date"
+                                            placeholder="Enter Visa Expiry Date here!"
+                                            required />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'trade'); ?>">Trade*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'trade'); ?>"
+                                            name="trade"
+                                            placeholder="Enter trade here! *"
+                                            value="<?php echo e($data->trade); ?>"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'company'); ?>">Company*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'company'); ?>"
+                                            name="company"
+                                            placeholder="Enter company here!"
+                                            value="<?php echo e($data->company); ?>"
+                                            required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Add"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
 
     <script type="text/javascript">
         <?php if(in_array('transfer',session('permission'))): ?>
