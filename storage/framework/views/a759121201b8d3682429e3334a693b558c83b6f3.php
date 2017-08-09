@@ -53,13 +53,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                     <tbody>
                     <?php  $i=0; $datas_array=array();  ?>
                     <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr <?php if($data->app_status==='db'): ?>
-                        style="background-color: #BED661;color:white;"
-                        <?php elseif($data->app_status=='vp'): ?>
-                        style='background-color: lightgreen;'
-                        <?php elseif($data->app_status== 'vc'): ?>
-                        style='background-color: lightcoral;'
-                        <?php elseif($data->app_status== 'vf'): ?>
+                    <tr <?php if($data->app_status== 'vf'): ?>
                         style='background-color: lightblue;'
                             <?php endif; ?>>
                         <th style="min-width: 100px; text-align: center">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\databank;
 use Illuminate\Http\Request;
 use App\app_form;
 use App\new_databank;
@@ -23,16 +24,12 @@ class NewDbController extends Controller
                     $sel = 'new_databanks.' . $sel;
                 }
                 $search = $request->search;
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->where($sel, 'LIKE', '%' . $search . '%')
+                $datas = new_databank::where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_databanks.ref_no', 'desc')
                     ->paginate(20);
 
             } else {
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->orderBy('new_databanks.ref_no', 'desc')
+                $datas = new_databank::orderBy('new_databanks.ref_no', 'desc')
                     ->paginate(20);
             }
 
@@ -60,17 +57,15 @@ class NewDbController extends Controller
                     $sel = 'new_visa_processes.' . $sel;
                 }
                 $search = $request->search;
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                $datas = \DB::table('new_databanks')
+                    ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
                     ->where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_visa_processes.ref_no', 'desc')
                     ->paginate(20);
 
             } else {
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
+                $datas = \DB::table('new_databanks')
+                    ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
                     ->orderBy('new_visa_processes.ref_no', 'desc')
                     ->paginate(20);
             }
@@ -99,19 +94,17 @@ class NewDbController extends Controller
                     $sel = 'new_visa_receives.' . $sel;
                 }
                 $search = $request->search;
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
-                    ->join('new_visa_receives','app_forms.ref_no', '=', 'new_visa_receives.ref_no')
+                $datas = \DB::table('new_databanks')
+                    ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_visa_receives','new_databanks.ref_no', '=', 'new_visa_receives.ref_no')
                     ->where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_visa_receives.ref_no', 'desc')
                     ->paginate(20);
 
             } else {
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
-                    ->join('new_visa_receives','app_forms.ref_no', '=', 'new_visa_receives.ref_no')
+                $datas = \DB::table('new_databanks')
+                    ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_visa_receives','new_databanks.ref_no', '=', 'new_visa_receives.ref_no')
                     ->orderBy('new_visa_receives.ref_no', 'desc')
                     ->paginate(20);
             }
@@ -138,20 +131,19 @@ class NewDbController extends Controller
                     $sel = 'new_vr_flowns.' . $sel;
                 }
                 $search = $request->search;
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
-                    ->join('new_vr_flowns','app_forms.ref_no', '=', 'new_vr_flowns.ref_no')
+                $datas = \DB::table('new_databanks')
+                    ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_visa_receives','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_vr_flowns','new_databanks.ref_no', '=', 'new_vr_flowns.ref_no')
                     ->where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_vr_flowns.ref_no', 'desc')
                     ->paginate(20);
 
             } else {
-                $datas = \DB::table('app_forms')
-                    ->join('new_databanks', 'app_forms.ref_no', '=', 'new_databanks.ref_no')
-                    ->join('new_visa_processes','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
-                    ->join('new_visa_receives','app_forms.ref_no', '=', 'new_visa_processes.ref_no')
-                    ->join('new_vr_flowns','app_forms.ref_no', '=', 'new_vr_flowns.ref_no')
+                $datas = \DB::table('new_databanks')
+                    ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_visa_receives','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
+                    ->join('new_vr_flowns','new_databanks.ref_no', '=', 'new_vr_flowns.ref_no')
                     ->orderBy('new_vr_flowns.ref_no', 'desc')
                     ->paginate(20);
 //                return $datas;

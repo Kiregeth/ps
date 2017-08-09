@@ -35,9 +35,13 @@ Route::get('/reception', 'OperationController@visitor_log');
 Route::get('/application_form', 'OperationController@application_form');
 Route::get('/app_forms', 'OperationController@app_forms');
 
+Route::get('/{ref_no}/app_form_regenerate', 'OperationController@app_form_regenerate');
+
 Route::post('/reception', 'OperationController@visitor_log');
 Route::post('/application_form', 'OperationController@application_form');
 Route::post('/app_forms', 'OperationController@app_forms');
+
+
 
 /*
  * OldDbController Routes
@@ -61,6 +65,9 @@ Route::post('/add_to_db', 'FormController@add_to_db');
 Route::post('/add_to_visa', 'FormController@add_to_visa');
 Route::post('/add_to_visa_receive', 'FormController@add_to_visa_receive');
 Route::post('/add_to_deployment', 'FormController@add_to_deployment');
+
+Route::post('/change_photo', 'FormController@change_photo');
+Route::post('/upload_doc', 'FormController@upload_doc');
 
 /*
  * NewDbController Routes

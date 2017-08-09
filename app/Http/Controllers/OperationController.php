@@ -76,7 +76,7 @@ class OperationController extends Controller
                 $pasa->photo=$photo_path;
                 $pasa->save();
 
-                $doc_list="Photo,   ";
+                $doc_list="photo, ";
                 //uploading files
                 if ($request->hasFile('cv_doc')) {
                     $request->file('cv_doc')->storeAs(
@@ -86,40 +86,40 @@ class OperationController extends Controller
                 else{
                     $this->cv_generate($insert_id);
                 }
-                $doc_list.="CV,   ";
+                $doc_list.="cv, ";
 
                 if ($request->hasFile('pp_doc')) {
                     $request->file('pp_doc')->storeAs(
                         "/app_forms/".$d, "pp_".$insert_id.".".$request->pp_doc->getClientOriginalExtension()
                     );
-                    $doc_list.="PP Copy,   ";
+                    $doc_list.="pp copy, ";
                 }
                 if ($request->hasFile('edu_doc')) {
                     $request->file('edu_doc')->storeAs(
                         "/app_forms/".$d, "edu_".$insert_id.".".$request->edu_doc->getClientOriginalExtension()
                     );
-                    $doc_list.="Educational Document,   ";
+                    $doc_list.="edu doc, ";
                 }
                 if ($request->hasFile('exp_doc')) {
                     $request->file('exp_doc')->storeAs(
                         "/app_forms/".$d, "exp_".$insert_id.".".$request->exp_doc->getClientOriginalExtension()
                     );
-                    $doc_list.="Experience Certificate,   ";
+                    $doc_list.="exp doc, ";
                 }
                 if ($request->hasFile('training_doc')) {
                     $request->file('training_doc')->storeAs(
                         "/app_forms/".$d, "training_".$insert_id.".".$request->training_doc->getClientOriginalExtension()
                     );
-                    $doc_list.="Training Document,   ";
+                    $doc_list.="training doc, ";
                 }
                 if ($request->hasFile('driving_doc')) {
                     $request->file('driving_doc')->storeAs(
                         "/app_forms/".$d, "driving_".$insert_id.".".$request->driving_doc->getClientOriginalExtension()
                     );
-                    $doc_list.="Driving Licence,   ";
+                    $doc_list.="driving doc, ";
                 }
 
-                $doc_list=substr($doc_list,0,strlen($doc_list)-4);
+                $doc_list=substr($doc_list,0,strlen($doc_list)-2);
                 $pasa=app_form::where('ref_no',$insert_id)->first();
                 $pasa->document_list=$doc_list;
                 $pasa->save();
@@ -147,17 +147,11 @@ class OperationController extends Controller
             $sel="";
             $search="";
 
-            $gp_array=['ref_no','name','position','telephone_no','mobile_no',
-                'religion','address','contact_address','email','qualification',
-                'date_of_birth','gender','marital_status','spouse_name','passport_no',
-                'place_of_issue','date_of_issue','date_of_expiry','height_feet','height_inch',
-                'weight','parent_name','prior_experience','document_list','photo',
-                'app_status','created_at','updated_at'];
             $pg_array=['ref_no','name','position','telephone_no','mobile_no',
                 'religion','address','contact_address','email','qualification',
                 'date_of_birth','gender','marital_status','spouse_name','passport_no',
                 'place_of_issue','date_of_issue','date_of_expiry','height_feet','height_inch',
-                'weight','parent_name','prior_experience','document_list','photo','app_status'];
+                'weight','parent_name','prior_experience','document_list','photo'];
 
 
 
@@ -317,6 +311,140 @@ class OperationController extends Controller
 
 
         return;
+    }
+
+    public function app_form_regenerate($ref_no)
+    {
+        $data=App\new_databank::where('ref_no',$ref_no)->first();
+        $img = Image::make(public_path('images/temp.jpg'));
+        $font_style=function($font) {
+            $font->file(public_path('img_font/times.ttf'));
+            $font->size('24');
+            $font->color('#000');
+        };
+        $img->text($data->ref_no, 175, 290,$font_style);
+        $img->text($data->name, 265, 357,$font_style);
+        $img->text($data->position, 950, 357,$font_style);
+        $img->text($data->telephone_no, 265, 410,$font_style);
+        $img->text($data->mobile_no, 570, 410,$font_style);
+        $img->text($data->religion, 950, 410,$font_style);
+        $img->text($data->address, 265, 465,$font_style);
+        $img->text($data->contact_address, 265, 520,$font_style);
+        $img->text($data->email, 265, 575,$font_style);
+        $img->text($data->qualification, 825, 575,$font_style);
+
+        //inserting dob date
+        $time_dob = strtotime($data->date_of_birth);
+        $dob_y= date('Y', $time_dob);
+        $dob_m= date('m', $time_dob);
+        $dob_d= date('d', $time_dob);
+
+        $img->text($dob_d[0], 235, 630,$font_style);
+        $img->text($dob_d[1], 275, 630,$font_style);
+        $img->text($dob_m[0], 330, 630,$font_style);
+        $img->text($dob_m[1], 370, 630,$font_style);
+        $img->text($dob_y[0], 430, 630,$font_style);
+        $img->text($dob_y[1], 470, 630,$font_style);
+        $img->text($dob_y[2], 510, 630,$font_style);
+        $img->text($dob_y[3], 550, 630,$font_style);
+
+        //checkboxes
+        if($data->gender=='male')
+        {
+            $img->text("■", 796, 630,$font_style);
+        }
+        else
+        {
+            $img->text("■", 923, 630,$font_style);
+        }
+
+        if($data->marital_status=='single')
+        {
+            $img->text("■", 224, 681,$font_style);
+        }
+        else
+        {
+            $img->text("■", 322, 681,$font_style);
+        }
+
+        if($data->spouse_name!=null && $data->spouse_name!="")
+        {
+            $img->text($data->spouse_name, 650, 683,$font_style);
+        }
+
+        $img->text($data->passport_no, 265, 735,$font_style);
+
+        //inserting doi date
+        $time_doi = strtotime($data->date_of_issue);
+        $doi_y= date('Y', $time_doi);
+        $doi_m= date('m', $time_doi);
+        $doi_d= date('d', $time_doi);
+
+        $img->text($doi_d[0], 572, 737,$font_style);
+        $img->text($doi_d[1], 600, 737,$font_style);
+        $img->text($doi_m[0], 642, 737,$font_style);
+        $img->text($doi_m[1], 672, 737,$font_style);
+        $img->text($doi_y[0], 714, 737,$font_style);
+        $img->text($doi_y[1], 743, 737,$font_style);
+        $img->text($doi_y[2], 770, 737,$font_style);
+        $img->text($doi_y[3], 798, 737,$font_style);
+
+        $img->text($data->place_of_issue, 1005, 735,$font_style);
+
+        //inserting doi date
+        $time_doe = strtotime($data->date_of_expiry);
+        $doe_y= date('Y', $time_doe);
+        $doe_m= date('m', $time_doe);
+        $doe_d= date('d', $time_doe);
+
+        $img->text($doe_d[0], 233, 797,$font_style);
+        $img->text($doe_d[1], 263, 797,$font_style);
+        $img->text($doe_m[0], 313, 797,$font_style);
+        $img->text($doe_m[1], 347, 797,$font_style);
+        $img->text($doe_y[0], 397, 797,$font_style);
+        $img->text($doe_y[1], 433, 797,$font_style);
+        $img->text($doe_y[2], 465, 797,$font_style);
+        $img->text($doe_y[3], 497, 797,$font_style);
+
+        $img->text($data->height_feet, 645, 790,$font_style);
+        $img->text($data->height_inch, 750, 790,$font_style);
+        $img->text($data->weight, 975, 790,$font_style);
+        $img->text("kg.", 1030, 790,$font_style);
+
+        $img->text($data->parent_name, 265, 845,$font_style);
+
+        if(strlen($data->prior_experience)<85)
+        {
+            $img->text($data->prior_experience, 265, 895,$font_style);
+        }
+        else
+        {
+            $part1=substr($data->prior_experience,0,85)."-";
+            $part2=substr($data->prior_experience,85,85);
+            $img->text($part1, 265, 895,$font_style);
+            $img->text($part2, 265, 945,$font_style);
+        }
+
+        if(strlen($data->document_list)<85)
+        {
+            $img->text($data->document_list, 265, 995,$font_style);
+        }
+        else
+        {
+            $part1=substr($data->document_list,0,85)."-";
+            $part2=substr($data->document_list,85,85);
+            $img->text($part1, 265, 995,$font_style);
+            $img->text($part2, 265, 1045,$font_style);
+        }
+
+        $photo=Image::make(public_path('/images/'.$data->photo))->resize(170, 220);
+        $img->insert($photo,"",1010,85);
+
+        $path=public_path('/images/app_forms/L'.$data->ref_no.'/app_form_'.$data->ref_no.".jpg");
+        $img->save($path,50);
+
+        session()->flash('message', 'Application Form with Ref_No '.$data->ref_no.' was Regenerated Successfully!');
+        return back();
     }
 
     public function font_style($font)

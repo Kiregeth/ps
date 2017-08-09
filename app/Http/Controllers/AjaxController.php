@@ -350,11 +350,7 @@ class AjaxController extends Controller
         $col=$request->w_col;
         $value=$request->w_val;
         \DB::table($db_table)->where($col, $value)->delete();
-        \DB::table('new_visa_processes')->where($col, $value)->delete();
-        \DB::table('new_visa_receives')->where($col, $value)->delete();
-        \DB::table('new_vr_flowns')->where($col, $value)->delete();
-        \DB::table('app_forms')->where($col, $value)->update(['app_status' => null]);
-
+        \File::deleteDirectory(public_path("images/app_forms/")."L".$value);
     }
 
     public function cancel_new(Request $request)
@@ -374,7 +370,7 @@ class AjaxController extends Controller
         \DB::table('new_visa_receives')->where($col, $value)->delete();
         \DB::table('new_vr_flowns')->where($col, $value)->delete();
 
-        \DB::table('app_forms')->where($col, $value)->update(['app_status' => 'vc']);
+        \DB::table('new_databanks')->where($col, $value)->update(['app_status' => 'vc']);
     }
 
     public function quick_edit_new(Request $request)
@@ -411,11 +407,11 @@ class AjaxController extends Controller
                 \DB::table('new_visa_receives')->where($w_col, $w_val)->update([$col => $val]);
             }
         }
-        $check = \DB::table('new_deployments')->select()->where($w_col, $w_val)->first();
+        $check = \DB::table('new_vr_flowns')->select()->where($w_col, $w_val)->first();
         if (count($check) > 0) {
-            $cols = \Schema::getColumnListing('new_deployments');
+            $cols = \Schema::getColumnListing('new_vr_flowns');
             if (in_array($col, $cols)) {
-                \DB::table('new_deployments')->where($w_col, $w_val)->update([$col => $val]);
+                \DB::table('new_vr_flowns')->where($w_col, $w_val)->update([$col => $val]);
             }
         }
     }

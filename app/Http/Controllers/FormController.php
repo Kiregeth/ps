@@ -17,19 +17,29 @@ class FormController extends Controller
 {
     public function add_to_db(Request $request)
     {
+        $fields=['pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date','remarks'];
+        $app=app_form::find($request->ref_no);
         $pasa=new new_databank();
-        $cols=\Schema::getColumnListing('new_databanks');
-        $discard=['created_at','updated_at','date','db_status'];
+        $cols=\Schema::getColumnListing('app_forms');
+        $discard=['created_at','updated_at'];
 
         foreach($cols as $col)
         {
             if(!in_array($col,$discard))
             {
-                $pasa->$col=$request->$col;
+                $pasa->$col=$app->$col;
             }
         }
+
+        foreach($fields as $field)
+        {
+            $pasa->$field=$request->$field;
+        }
+
         $pasa->save();
-        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'db']);
+
+        app_form::where('ref_no', $app->ref_no)->delete();
+        new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'db']);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
         return back();
     }
@@ -39,7 +49,7 @@ class FormController extends Controller
         $pasa->ref_no=$request->ref_no;
         $pasa->visa_process_date=$request->visa_process_date;
         $pasa->save();
-        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vp']);
+        new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'vp','trade'=>$request->trade,'company'=>$request->company]);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into visa process!');
         return back();
     }
@@ -61,8 +71,7 @@ class FormController extends Controller
         $pasa1->visa_expiry_date=$request->visa_expiry_date;
         $pasa1->save();
 
-        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vr']);
-        new_databank::where('ref_no', $request->ref_no)->update(['trade'=>$request->trade,'company'=>$request->company]);
+        new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'vr','trade'=>$request->trade,'company'=>$request->company]);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into visa return!');
         return back();
     }
@@ -78,7 +87,7 @@ class FormController extends Controller
             }
         }
         $pasa->save();
-        app_form::where('ref_no', $request->ref_no)->update(['app_status' => 'vf']);
+        new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'vf']);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into deployment!');
         return back();
     }
@@ -135,4 +144,34 @@ class FormController extends Controller
         })->export('xls');
         return back();
     }
+
+    public function change_photo(Request $request)
+    {
+        if ($request->hasFile('photo')) {
+            $request->file('photo')->storeAs(
+                "/app_forms/" . "L" . $request->ref_no, "photo_" . $request->ref_no . ".jpg"
+            );
+        }
+        return back();
+    }
+
+    public function upload_doc(Request $request)
+    {
+        $data=new_databank::where('ref_no',$request->ref_no)->first(['document_list']);
+//        echo strpos($data->document_list, $request->title)+1;
+//        exit;
+        if(!strpos($data->document_list, $request->title))
+        {
+            new_databank::where('ref_no',$request->ref_no)->update(['document_list'=>$data->document_list.', '.$request->title]);
+        }
+        $title=strstr( $request->title . ' ', ' ', true );
+        if ($request->hasFile('upload_doc')) {
+            $request->file('upload_doc')->storeAs(
+                "/app_forms/" . "L" . $request->ref_no, $title."_" . $request->ref_no .'.'. $request->upload_doc->getClientOriginalExtension()
+            );
+        }
+        return back();
+    }
+
+
 }

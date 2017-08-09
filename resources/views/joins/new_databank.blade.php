@@ -44,6 +44,7 @@
                             <thead>
                             <tr>
                                 <th>&nbsp;</th>
+                                <th>&nbsp;</th>
                                 @foreach($fields as $col)
                                     @if(!in_array($col,$discard))
                                         <th>{{strtoupper(preg_replace('/_+/', ' ', $col))}}</th>
@@ -54,9 +55,7 @@
                             <tbody>
                             @php $i=0; $datas_array=array(); @endphp
                             @foreach ($datas as $data)
-                                <tr @if($data->app_status==='db')
-                                    style="background-color: #BED661;color:white;"
-                                    @elseif($data->app_status=='vp')
+                                <tr @if($data->app_status=='vp')
                                     style='background-color: lightgreen;'
                                     @elseif($data->app_status=='vr')
                                     style='background-color: yellow;'
@@ -80,10 +79,17 @@
                                                        title="add to visa receive"><i class="fa fa-life-ring"></i></a>
                                                 @endif
                                             @endif
-                                            @if(in_array('delete',session('permission')))
-                                                <a title="delete" class="delete btn btn-link" name="{{$data->ref_no}}_delete">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </a>
+                                        </div>
+                                    </th>
+                                    <th style="background-color: lightgrey">
+                                        <div class="center-block" style="margin-top: auto;margin-bottom: auto; text-align: center;">
+                                            @if(in_array('edit',session('permission')))
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#change_photo_{{$data->ref_no}}"
+                                                   title="Change Photo"><i class="fa fa-camera"></i></a>
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#upload_doc_{{$data->ref_no}}"
+                                                   title="Upload Document"><i class="fa fa-upload"></i></a>
+                                                <a class="btn btn-link" data-toggle="modal" href="/{{$data->ref_no}}/app_form_regenerate"
+                                                   title="Regenerate Application Form"><i class="fa fa-address-card-o"></i></a>
                                             @endif
                                         </div>
                                     </th>
@@ -349,7 +355,123 @@
         </div>
     @endforeach
 
+    @foreach($datas as $data)
+        <div class="modal fade" id="change_photo_{{$data->ref_no}}" role="dialog">
+            <div class="modal-dialog" style="width: 60% !important;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Photo</h4>
+                    </div>
+
+                    <form method="post" action="/change_photo" enctype="multipart/form-data">
+                        {{csrf_field()}}
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'ref_no'}}">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'ref_no'}}"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="{{$data->ref_no}}"  readonly />
+                                </div>
+                            </div>
+                            <br />
+                            <div id="img" class="img center-block" style="height:144px;width:116px;">
+                                <img src="{{asset('/images/'.$data->photo)}}" alt="preview" id="preview" height="144px" width="116px"/>
+                            </div>
+                            <br />
+                            <input class="center-block" type="file" name="photo" id="photo" onchange="readURL(this,'#preview')" required />
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Change"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach($datas as $data)
+        <div class="modal fade" id="upload_doc_{{$data->ref_no}}" role="dialog">
+            <div class="modal-dialog" style="width: 60% !important;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Upload File</h4>
+                    </div>
+
+                    <form method="post" action="/upload_doc" enctype="multipart/form-data">
+                        {{csrf_field()}}
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'ref_no'}}">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'ref_no'}}"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="{{$data->ref_no}}"  readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'title'}}">Title:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'title'}}"
+                                            name="title"
+                                            placeholder="Enter Title here!"
+                                            required/>
+                                </div>
+                            </div>
+                            <br />
+                            <input class="center-block" type="file" name="upload_doc" id="upload_doc" required />
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Upload"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+
     <script type="text/javascript">
+        function readURL(input, temp) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(temp)
+                        .attr('src', e.target.result)
+                        .width(116)
+                        .height(144);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
         @if(in_array('delete',session('permission')))
         $(function (){
             $(".delete").click(function(){
@@ -369,12 +491,12 @@
                 var OriginalContent = $(this).text();
                 OriginalContent = OriginalContent.trim();
                 $(this).addClass("cellEditing");
-                var myCol = $(this).index() - 1;
+                var myCol = $(this).index()-2;
                 var $tr = $(this).closest('tr');
                 var myRow = $tr.index() + 1;
                 var colArray = {!! json_encode($fields) !!} ;
                 var dateArray= {!! json_encode($date) !!};
-                var id = document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
+                var id = document.getElementById("myTable").rows[myRow].cells[2].innerHTML;
                 var type;
                 var x;
                 var count=0;
@@ -392,7 +514,7 @@
                 {
                     $(this).html(
                         "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
-                        "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
+                        "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                     );
                     $(this).children().first().focus();
                     $(this).children().first().keypress(function (e) {

@@ -57,14 +57,9 @@
                         <tbody>
                         @php $i=0; $datas_array=array(); @endphp
                         @foreach ($datas as $data)
-                            <tr @if($data->app_status==='db')
-                                style="background-color: #BED661;color:white;"
-                                @elseif($data->app_status=='vp')
-                                style='background-color: lightgreen;'
-                                @elseif($data->app_status=='vr')
+                            <tr
+                                @if($data->app_status=='vr')
                                 style='background-color: yellow;'
-                                @elseif($data->app_status== 'vc')
-                                style='background-color: lightcoral;'
                                 @elseif($data->app_status== 'vf')
                                 style='background-color: lightblue;'
                                     @endif>
@@ -270,7 +265,7 @@
                 {
                     $(this).html(
                         "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
-                        "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
+                        "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                     );
 
                     $(this).children().first().focus();

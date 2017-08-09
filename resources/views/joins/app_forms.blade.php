@@ -69,9 +69,11 @@
 
     </style>
     @php
-        $discard=['photo','app_status','created_at','updated_at','date','db_status'];
+
+        $discard=['photo','created_at','updated_at','date'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
+        $db_fields=['ref_no','pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date','remarks'];
         $db_required=['pp_status'];
     @endphp
     <div class="container">
@@ -119,15 +121,7 @@
                         <tbody>
                         @php $i=0; $datas_array=array(); @endphp
                         @foreach ($datas as $data)
-                            <tr @if($data->app_status==='db')
-                                style="background-color: #BED661;color:white;"
-                                @elseif($data->app_status=='vp')
-                                style='background-color: lightgreen;'
-                                @elseif($data->app_status== 'vc')
-                                style='background-color: lightcoral;'
-                                @elseif($data->app_status== 'vf')
-                                style='background-color: lightblue;'
-                                    @endif>
+                            <tr>
                                 <th style="min-width: 100px; text-align: center">
                                     <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                         @if(in_array('operation-view',session('permission')))
@@ -135,10 +129,13 @@
                                            title="view"><i class="fa fa-eye"></i></a>
                                         @endif
                                         @if(in_array('transfer',session('permission')))
-                                            @if($data->app_status!=='db' && $data->app_status!=='vc' && $data->app_status!=='vp' && $data->app_status!=='vf')
-                                                <a class="btn btn-link" data-toggle="modal" data-target="#db_{{$data->ref_no}}"
-                                                   title="add to databank"><i class="fa fa-database"></i></a>
-                                            @endif
+                                            <a class="btn btn-link" data-toggle="modal" data-target="#db_{{$data->ref_no}}"
+                                               title="add to databank"><i class="fa fa-database"></i></a>
+                                        @endif
+                                        @if(in_array('delete',session('permission')))
+                                            <a title="delete" class="delete btn btn-link" name="{{$data->ref_no}}_delete">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
                                         @endif
                                     </div>
                                 </th>
@@ -230,7 +227,7 @@
                         <div class="modal-body">
                             @php $j=0;@endphp
                             @foreach($db_cols as $col)
-                                @if(!in_array($col,$discard))
+                                @if(in_array($col,$db_fields) && !in_array($col,$discard))
                                     <div class="row">
                                         <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
                                                                               for="{{$data->ref_no. '_' . $j}}">{{ucfirst(preg_replace('/_+/', ' ', $col))}}@if(in_array($col,$db_required))*@endif:</label>
@@ -278,6 +275,17 @@
         </div>
     @endforeach
     <script>
+        $(function (){
+            $(".delete").click(function(){
+                var name=$(this).attr("name");
+                var val=parseInt(name.substr(0,name.lastIndexOf('_')));
+                var col='ref_no';
+                var result = confirm("Want to delete?");
+                if (result) {
+                    $.post('/delete_new', {'db_table':'{{$db_table}}','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                }
+            });
+        });
         @if(in_array('edit',session('permission')))
         $(function () {
             $("td").dblclick(function () {

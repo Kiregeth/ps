@@ -53,13 +53,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                     <tbody>
                     @php $i=0; $datas_array=array(); @endphp
                     @foreach ($datas as $data)
-                    <tr @if($data->app_status==='db')
-                        style="background-color: #BED661;color:white;"
-                        @elseif($data->app_status=='vp')
-                        style='background-color: lightgreen;'
-                        @elseif($data->app_status== 'vc')
-                        style='background-color: lightcoral;'
-                        @elseif($data->app_status== 'vf')
+                    <tr @if($data->app_status== 'vf')
                         style='background-color: lightblue;'
                             @endif>
                         <th style="min-width: 100px; text-align: center">
@@ -203,7 +197,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
             {
                 $(this).html(
                     "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
-                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
+                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                 );
 
                 $(this).children().first().focus();
