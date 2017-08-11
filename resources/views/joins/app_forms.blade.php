@@ -263,6 +263,18 @@
                                     @php $j++; @endphp
                                 @endif
                             @endforeach
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
+                                                                      for="{{$data->ref_no. '_' . 'remark'}}">{{ucfirst(preg_replace('/_+/', ' ', "remarks"))}}:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            type="text"
+                                            id="{{$data->ref_no. '_' . 'remark'}}"
+                                            name="remarks"
+                                            placeholder="Enter {{ucfirst(preg_replace('/_+/', ' ', 'remarks'))}} here!">
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="submit" class="btn btn-default" value="Add"/>

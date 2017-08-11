@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\databank;
 use Illuminate\Http\Request;
-use App\app_form;
+use App\db_remark;
 use App\new_databank;
 
 
@@ -34,8 +34,9 @@ class NewDbController extends Controller
             }
 
             $db_table = 'new_databanks';
+            $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','time']);
 
-            return view("joins.new_databank", compact('db_table', 'sel', 'search', 'datas'));
+            return view("joins.new_databank", compact('db_table', 'sel', 'search', 'datas','remarks'));
         }
         else
         {

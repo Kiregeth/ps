@@ -4,7 +4,7 @@
     @php
         $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
                'pp_status','local_agent','la_contact','trade','company','vr_date','visa_issue_date','visa_expiry_date','offer_letter_received_date',
-               'pp_returned_date','pp_resubmitted_date','remarks','app_status'];
+               'pp_returned_date','pp_resubmitted_date','app_status'];
         $date=['date_of_birth','offer_letter_received_date','visa_process_date','pp_returned_date','pp_resubmitted_date'];
         $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
         $vf_fields=['supply_agent','ticket_no','flown_date','demand_no','visa_no'];
@@ -69,6 +69,8 @@
                                         @if(in_array('view',session('permission')))
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                                title="view"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-link" data-toggle="modal" data-target="#remarks_{{$data->ref_no}}"
+                                               title="Remarks"><i class="fa fa-comment"></i></a>
                                         @endif
                                         @if(in_array('transfer',session('permission')))
                                             <a class="cancel btn btn-link" name="{{$data->ref_no}}_cancel"

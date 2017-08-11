@@ -2,7 +2,7 @@
     <?php 
             $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
                    'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date',
-                   'pp_returned_date','pp_resubmitted_date','remarks','app_status'];
+                   'pp_returned_date','pp_resubmitted_date','app_status'];
             $discard=['photo','db_status','created_at','updated_at','app_status'];
             $date=['date','date_of_birth','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
 
@@ -70,6 +70,8 @@
                                             <?php if(in_array('view',session('permission'))): ?>
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->ref_no); ?>"
                                                title="view"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-link" data-toggle="modal" data-target="#remarks_<?php echo e($data->ref_no); ?>"
+                                               title="Remarks"><i class="fa fa-comment"></i></a>
                                             <?php endif; ?>
                                             <?php if(in_array('transfer',session('permission'))): ?>
                                                 <?php if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf'): ?>
@@ -155,6 +157,38 @@
                                 </div>
                                 <?php  $j++;  ?>
                             <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="remarks_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" >
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Remarks [Ref.No - <?php echo e($data->ref_no); ?>]</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php  $i=1;  ?>
+                        <?php $__currentLoopData = $remarks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $remark): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($remark->ref_no===$data->ref_no): ?>
+                                <h5 class="bg-primary row dbt">
+                                        <div class="col-md-1"><?php echo e($i); ?>.</div>
+                                        <div class="col-md-9"><?php echo e($remark->remark); ?></div>
+                                        <div class="col-md-2"><?php echo e($remark->time); ?></div>
+                                </h5>
+                            <?php endif; ?>
+                            <?php  $i++;  ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                     <div class="modal-footer">

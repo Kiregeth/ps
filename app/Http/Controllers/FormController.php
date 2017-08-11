@@ -11,13 +11,14 @@ use App\new_databank;
 use App\new_visa_process;
 use App\new_visa_receive;
 use App\new_vr_flown;
+use App\db_remark;
 
 
 class FormController extends Controller
 {
     public function add_to_db(Request $request)
     {
-        $fields=['pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date','remarks'];
+        $fields=['pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
         $app=app_form::find($request->ref_no);
         $pasa=new new_databank();
         $cols=\Schema::getColumnListing('app_forms');
@@ -40,6 +41,16 @@ class FormController extends Controller
 
         app_form::where('ref_no', $app->ref_no)->delete();
         new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'db']);
+
+        if($request->remarks!==null && $request->remarks!=="")
+        {
+            $pasa1=new db_remark();
+            $pasa1->ref_no=$request->ref_no;
+            $pasa1->remark_id=1;
+            $pasa1->remark=$request->remarks;
+            $pasa1->save();
+        }
+
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
         return back();
     }

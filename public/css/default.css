@@ -22,3 +22,7 @@ a, a:focus, a:hover {
 .bootstrap-select a{
     color:deepskyblue !important;
 }
+.dbt{
+    font-size: 12px;
+    line-height: 2em;
+}

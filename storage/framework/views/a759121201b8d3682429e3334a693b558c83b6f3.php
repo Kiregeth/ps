@@ -2,7 +2,7 @@
 <?php 
 $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
 'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','visa_process_date',
-'pp_returned_date','pp_resubmitted_date','vr_date','visa_issue_date','visa_expiry_date','flown_date','remarks'];
+'pp_returned_date','pp_resubmitted_date','vr_date','visa_issue_date','visa_expiry_date','flown_date'];
 $date=['date_of_birth','wp_expiry','offer_letter_received_date','pp_returned_date','pp_resubmitted_date','visa_process_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date'];
 $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
  ?>
@@ -61,6 +61,8 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                                 <?php if(in_array('view',session('permission'))): ?>
                                 <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->ref_no); ?>"
                                    title="view"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-link" data-toggle="modal" data-target="#remarks_<?php echo e($data->ref_no); ?>"
+                                   title="Remarks"><i class="fa fa-comment"></i></a>
                                 <?php endif; ?>
                                 <?php if(in_array('edit',session('permission'))): ?>
                                 <a class="cancel btn btn-link" name="<?php echo e($data->ref_no); ?>_cancel"
@@ -198,7 +200,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
             {
                 $(this).html(
                     "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
-                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
+                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                 );
 
                 $(this).children().first().focus();

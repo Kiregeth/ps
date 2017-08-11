@@ -4,7 +4,7 @@
     @php
             $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
                    'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date',
-                   'pp_returned_date','pp_resubmitted_date','remarks','app_status'];
+                   'pp_returned_date','pp_resubmitted_date','app_status'];
             $discard=['photo','db_status','created_at','updated_at','app_status'];
             $date=['date','date_of_birth','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
 
@@ -70,6 +70,8 @@
                                             @if(in_array('view',session('permission')))
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_{{$data->ref_no}}"
                                                title="view"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-link" data-toggle="modal" data-target="#remarks_{{$data->ref_no}}"
+                                               title="Remarks"><i class="fa fa-comment"></i></a>
                                             @endif
                                             @if(in_array('transfer',session('permission')))
                                                 @if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf')
@@ -154,6 +156,38 @@
                                 </div>
                                 @php $j++; @endphp
                             @endif
+                        @endforeach
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    @endforeach
+
+    @foreach($datas as $data)
+        <div class="modal fade" id="remarks_{{$data->ref_no}}" role="dialog">
+            <div class="modal-dialog" >
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Remarks [Ref.No - {{$data->ref_no}}]</h4>
+                    </div>
+                    <div class="modal-body">
+                        @php $i=1; @endphp
+                        @foreach($remarks as $remark)
+                            @if($remark->ref_no===$data->ref_no)
+                                <h5 class="bg-primary row dbt">
+                                        <div class="col-md-1">{{$i}}.</div>
+                                        <div class="col-md-9">{{$remark->remark}}</div>
+                                        <div class="col-md-2">{{$remark->time}}</div>
+                                </h5>
+                            @endif
+                            @php $i++; @endphp
                         @endforeach
                     </div>
                     <div class="modal-footer">
