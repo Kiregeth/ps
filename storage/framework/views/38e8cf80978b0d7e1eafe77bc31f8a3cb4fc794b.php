@@ -165,13 +165,16 @@
                                 <a class="li-head" href="#databank-nav" data-toggle="collapse">
                                     <span>Databank Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                                 </a>
-                                <div class="navigation-wrapper collapse <?php if($title=='new_databank' || $title=='new_visa' || $title=='new_deployment'): ?>in <?php endif; ?>" id="databank-nav">
+                                <div class="navigation-wrapper collapse <?php if($title=='new_databank' || $title=='new_visa' || $title=='new_deployment' || $title=='new_visa_receive'): ?>in <?php endif; ?>" id="databank-nav">
                                     <ul class="navigation">
                                         <li class="<?php if($title === 'new_databank'): ?> active <?php endif; ?>">
                                             <a href="/new_databank"><i class="fa fa-database"></i>Databank </a>
                                         </li>
                                         <li class="<?php if($title === 'new_visa'): ?> active <?php endif; ?>">
                                             <a href="/new_visa"><i class="fa fa-cc-visa"></i>Visa Process </a>
+                                        </li>
+                                        <li class="<?php if($title === 'new_visa_receive'): ?> active <?php endif; ?>">
+                                            <a href="/new_visa_receive"><i class="fa fa-life-ring"></i>Visa Receive </a>
                                         </li>
                                         <li class="<?php if($title === 'new_deployment'): ?> active <?php endif; ?>">
                                             <a href="/new_deployment"><i class="fa  fa-share-square-o"></i>Deployment </a>

@@ -1,8 +1,8 @@
 <?php $__env->startSection('content'); ?>
 <?php 
 $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
-'pp_status','local_agent','la_contact','trade','company','wp_expiry','offer_letter_received_date','visa_process_date',
-'pp_returned_date','pp_resubmitted_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date','remarks','db_status'];
+'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','visa_process_date',
+'pp_returned_date','pp_resubmitted_date','vr_date','visa_issue_date','visa_expiry_date','flown_date'];
 $date=['date_of_birth','wp_expiry','offer_letter_received_date','pp_returned_date','pp_resubmitted_date','visa_process_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date'];
 $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
  ?>
@@ -53,18 +53,21 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                     <tbody>
                     <?php  $i=0; $datas_array=array();  ?>
                     <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-
+                    <tr <?php if($data->app_status== 'vf'): ?>
+                        style='background-color: lightblue;'
+                            <?php endif; ?>>
                         <th style="min-width: 100px; text-align: center">
                             <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                 <?php if(in_array('view',session('permission'))): ?>
                                 <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->ref_no); ?>"
                                    title="view"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-link" data-toggle="modal" data-target="#remarks_<?php echo e($data->ref_no); ?>"
+                                   title="Remarks"><i class="fa fa-comment"></i></a>
                                 <?php endif; ?>
                                 <?php if(in_array('edit',session('permission'))): ?>
                                 <a class="cancel btn btn-link" name="<?php echo e($data->ref_no); ?>_cancel"
                                    title="visa cancel"><i class="fa fa-times"></i></a>
-                                    <?php if($data->vp_status!='vf' && $data->vp_status!='vc'): ?>
+                                    <?php if($data->app_status!='vf' && $data->app_status!='vc'): ?>
                                     <a class="btn btn-link" data-toggle="modal" data-target="#deploy_<?php echo e($data->ref_no); ?>"
                                        title="add to deployment"><i class="fa fa-paper-plane"></i></a>
                                     <?php endif; ?>
@@ -157,29 +160,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
             var col='ref_no';
             var result = confirm("Want to cancel?");
             if (result) {
-                $.ajax({
-                    url: '/cancel_new',
-                    type: 'post',
-                    data: {
-                        db_table:'<?php echo e($db_table); ?>',
-                        w_val: val,
-                        w_col: col
-                    },
-                    cache: false,
-                    timeout: 10000,
-                    success: function (data){
-                        if (data) {
-                            alert(data);
-                        }
-// Load output into a P
-                        else {
-                            location.reload(true);
-//                        $('#notice').text('Deleted');
-//                        $('#notice').fadeOut().fadeIn();
-
-                        }
-                    }
-                });
+                $.post('/cancel_new', {'db_table':'<?php echo e($db_table); ?>','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             }
 
 
@@ -219,11 +200,10 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
             {
                 $(this).html(
                     "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
-                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
+                    "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                 );
 
                 $(this).children().first().focus();
-
                 $(this).children().first().keypress(function (e) {
                     if (e.which == 13) {
                         var res=autosubmit(colArray,myCol,myRow);
@@ -232,9 +212,7 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
                         $(this).parent().removeClass("cellEditing");
                     }
                 });
-
                 $(this).children().first().blur(function(){
-
                     var res=autosubmit(colArray,myCol,myRow);
                     var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                     $(this).parent().text(val);
@@ -254,36 +232,10 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
         var form = document.getElementById('ajax-form');
         var method = form.method;
         var action = form.action;
-
-
         var where=document.getElementById('where_'+myRow+'_'+myCol);
         var where_val = where.value;
         var where_col = where.name;
-
-        $.ajax({
-            url: action,
-            type: method,
-            data: {
-                db_table:'<?php echo e($db_table); ?>',
-                val: value,
-                col: column,
-                w_col: where_col,
-                w_val: where_val
-            },
-            cache: false,
-            timeout: 10000,
-            success: function (data){
-                if (data) {
-                    alert(data);
-                }
-// Load output into a P
-                else {
-
-
-                }
-            }
-        });
-// Prevent normal submission of form
+        $.post(action, {'db_table':'<?php echo e($db_table); ?>','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
         return false;
     }
     <?php endif; ?>

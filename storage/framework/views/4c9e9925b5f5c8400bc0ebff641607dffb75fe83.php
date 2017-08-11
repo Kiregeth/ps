@@ -2,7 +2,7 @@
     <?php 
             $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
                    'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date',
-                   'pp_returned_date','pp_resubmitted_date','remarks','db_status'];
+                   'pp_returned_date','pp_resubmitted_date','app_status'];
             $discard=['photo','db_status','created_at','updated_at','app_status'];
             $date=['date','date_of_birth','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
 
@@ -44,6 +44,7 @@
                             <thead>
                             <tr>
                                 <th>&nbsp;</th>
+                                <th>&nbsp;</th>
                                 <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php if(!in_array($col,$discard)): ?>
                                         <th><?php echo e(strtoupper(preg_replace('/_+/', ' ', $col))); ?></th>
@@ -54,32 +55,43 @@
                             <tbody>
                             <?php  $i=0; $datas_array=array();  ?>
                             <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr
-                                        <?php if($data->db_status=='vp'): ?>
-                                        style='background-color: lightgreen;'
-                                        <?php elseif($data->db_status== 'vc'): ?>
-                                        style='background-color: lightcoral;'
-                                        <?php elseif($data->db_status== 'vf'): ?>
-                                        style='background-color: lightblue;'
-                                        <?php endif; ?>
-                                >
+                                <tr <?php if($data->app_status=='vp'): ?>
+                                    style='background-color: lightgreen;'
+                                    <?php elseif($data->app_status=='vr'): ?>
+                                    style='background-color: yellow;'
+                                    <?php elseif($data->app_status== 'vc'): ?>
+                                    style='background-color: lightcoral;'
+                                    <?php elseif($data->app_status== 'vf'): ?>
+                                    style='background-color: lightblue;'
+                                        <?php endif; ?>>
 
                                     <th style="min-width: 100px; text-align: center">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                             <?php if(in_array('view',session('permission'))): ?>
                                             <a class="btn btn-link" data-toggle="modal" data-target="#modal_<?php echo e($data->ref_no); ?>"
                                                title="view"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-link" data-toggle="modal" data-target="#remarks_<?php echo e($data->ref_no); ?>"
+                                               title="Remarks"><i class="fa fa-comment"></i></a>
                                             <?php endif; ?>
                                             <?php if(in_array('transfer',session('permission'))): ?>
-                                                <?php if($data->db_status!='vp' && $data->db_status!='vf'): ?>
+                                                <?php if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf'): ?>
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_<?php echo e($data->ref_no); ?>"
                                                        title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
+                                                    <a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_<?php echo e($data->ref_no); ?>"
+                                                       title="add to visa receive"><i class="fa fa-life-ring"></i></a>
                                                 <?php endif; ?>
                                             <?php endif; ?>
-                                            <?php if(in_array('delete',session('permission'))): ?>
-                                                <a title="delete" class="delete btn btn-link" name="<?php echo e($data->ref_no); ?>_delete">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </a>
+                                        </div>
+                                    </th>
+                                    <th style="background-color: lightgrey">
+                                        <div class="center-block" style="margin-top: auto;margin-bottom: auto; text-align: center;">
+                                            <?php if(in_array('edit',session('permission'))): ?>
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#change_photo_<?php echo e($data->ref_no); ?>"
+                                                   title="Change Photo"><i class="fa fa-camera"></i></a>
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#upload_doc_<?php echo e($data->ref_no); ?>"
+                                                   title="Upload Document"><i class="fa fa-upload"></i></a>
+                                                <a class="btn btn-link" data-toggle="modal" href="/<?php echo e($data->ref_no); ?>/app_form_regenerate"
+                                                   title="Regenerate Application Form"><i class="fa fa-address-card-o"></i></a>
                                             <?php endif; ?>
                                         </div>
                                     </th>
@@ -157,6 +169,38 @@
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="remarks_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" >
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Remarks [Ref.No - <?php echo e($data->ref_no); ?>]</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php  $i=1;  ?>
+                        <?php $__currentLoopData = $remarks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $remark): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($remark->ref_no===$data->ref_no): ?>
+                                <h5 class="bg-primary row dbt">
+                                        <div class="col-md-1"><?php echo e($i); ?>.</div>
+                                        <div class="col-md-9"><?php echo e($remark->remark); ?></div>
+                                        <div class="col-md-2"><?php echo e($remark->time); ?></div>
+                                </h5>
+                            <?php endif; ?>
+                            <?php  $i++;  ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="modal fade" id="visa_<?php echo e($data->ref_no); ?>" role="dialog">
             <div class="modal-dialog" >
                 <!-- Modal content-->
@@ -197,6 +241,34 @@
                                             required />
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'trade'); ?>">Trade*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'trade'); ?>"
+                                            name="trade"
+                                            placeholder="Enter trade here! *"
+                                            value="<?php echo e($data->trade); ?>"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'company'); ?>">Companye*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'company'); ?>"
+                                            name="company"
+                                            placeholder="Enter company here!"
+                                            value="<?php echo e($data->company); ?>"
+                                            required />
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="submit" class="btn btn-default" value="Add"/>
@@ -209,7 +281,236 @@
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="visa_receive_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add to Visa Receive</h4>
+                    </div>
+                    <form action="/add_to_visa_receive" method="post" id="data-form-<?php echo e($data->ref_no); ?>">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="db_table" value="<?php echo e($db_table); ?>"/>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="<?php echo e($data->ref_no); ?>"  readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'vr_date'); ?>">Visa Receive Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'vr_date'); ?>"
+                                            name="vr_date"
+                                            placeholder="Enter Visa Receive Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'visa_issue_date'); ?>">Visa Issue Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'visa_issue_date'); ?>"
+                                            name="visa_issue_date"
+                                            placeholder="Enter Visa Issue Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'visa_expiry_date'); ?>">Visa Expiry Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'visa_expiry_date'); ?>"
+                                            name="visa_expiry_date"
+                                            placeholder="Enter Visa Expiry Date here!"
+                                            required />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'trade'); ?>">Trade*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'trade'); ?>"
+                                            name="trade"
+                                            placeholder="Enter trade here! *"
+                                            value="<?php echo e($data->trade); ?>"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'company'); ?>">Company*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'company'); ?>"
+                                            name="company"
+                                            placeholder="Enter company here!"
+                                            value="<?php echo e($data->company); ?>"
+                                            required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Add"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="change_photo_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" style="width: 60% !important;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Photo</h4>
+                    </div>
+
+                    <form method="post" action="/change_photo" enctype="multipart/form-data">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="<?php echo e($data->ref_no); ?>"  readonly />
+                                </div>
+                            </div>
+                            <br />
+                            <div id="img" class="img center-block" style="height:144px;width:116px;">
+                                <img src="<?php echo e(asset('/images/'.$data->photo)); ?>" alt="preview" id="preview" height="144px" width="116px"/>
+                            </div>
+                            <br />
+                            <input class="center-block" type="file" name="photo" id="photo" onchange="readURL(this,'#preview')" required />
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Change"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="upload_doc_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" style="width: 60% !important;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Upload File</h4>
+                    </div>
+
+                    <form method="post" action="/upload_doc" enctype="multipart/form-data">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="<?php echo e($data->ref_no); ?>"  readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'title'); ?>">Title:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'title'); ?>"
+                                            name="title"
+                                            placeholder="Enter Title here!"
+                                            required/>
+                                </div>
+                            </div>
+                            <br />
+                            <input class="center-block" type="file" name="upload_doc" id="upload_doc" required />
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Upload"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
     <script type="text/javascript">
+        function readURL(input, temp) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(temp)
+                        .attr('src', e.target.result)
+                        .width(116)
+                        .height(144);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
         <?php if(in_array('delete',session('permission'))): ?>
         $(function (){
             $(".delete").click(function(){
@@ -229,12 +530,12 @@
                 var OriginalContent = $(this).text();
                 OriginalContent = OriginalContent.trim();
                 $(this).addClass("cellEditing");
-                var myCol = $(this).index() - 1;
+                var myCol = $(this).index()-2;
                 var $tr = $(this).closest('tr');
                 var myRow = $tr.index() + 1;
                 var colArray = <?php echo json_encode($fields); ?> ;
                 var dateArray= <?php echo json_encode($date); ?>;
-                var id = document.getElementById("myTable").rows[myRow].cells[1].innerHTML;
+                var id = document.getElementById("myTable").rows[myRow].cells[2].innerHTML;
                 var type;
                 var x;
                 var count=0;
@@ -252,7 +553,7 @@
                 {
                     $(this).html(
                         "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
-                        "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='Ref_No' value='"+id+"' />"
+                        "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                     );
                     $(this).children().first().focus();
                     $(this).children().first().keypress(function (e) {

@@ -66,10 +66,12 @@
 
     </style>
     <?php 
-        $discard=['photo','app_status','created_at','updated_at','date','db_status'];
+
+        $discard=['photo','created_at','updated_at','date'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
-        $db_required=['trade','company'];
+        $db_fields=['ref_no','pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date','remarks'];
+        $db_required=['pp_status'];
      ?>
     <div class="container">
         <?php if(session()->has('message')): ?>
@@ -118,15 +120,7 @@
                         <tbody>
                         <?php  $i=0; $datas_array=array();  ?>
                         <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <tr <?php if($data->app_status==='db'): ?>
-                                style="background-color: #BED661;color:white;"
-                                <?php elseif($data->app_status=='vp'): ?>
-                                style='background-color: lightgreen;'
-                                <?php elseif($data->app_status== 'vc'): ?>
-                                style='background-color: lightcoral;'
-                                <?php elseif($data->app_status== 'vf'): ?>
-                                style='background-color: lightblue;'
-                                    <?php endif; ?>>
+                            <tr>
                                 <th style="min-width: 100px; text-align: center">
                                     <div class="center-block" style="margin-top: auto;margin-bottom: auto; ">
                                         <?php if(in_array('operation-view',session('permission'))): ?>
@@ -134,10 +128,13 @@
                                            title="view"><i class="fa fa-eye"></i></a>
                                         <?php endif; ?>
                                         <?php if(in_array('transfer',session('permission'))): ?>
-                                            <?php if($data->app_status!=='db' && $data->app_status!=='vc' && $data->app_status!=='vp' && $data->app_status!=='vf'): ?>
-                                                <a class="btn btn-link" data-toggle="modal" data-target="#db_<?php echo e($data->ref_no); ?>"
-                                                   title="add to databank"><i class="fa fa-database"></i></a>
-                                            <?php endif; ?>
+                                            <a class="btn btn-link" data-toggle="modal" data-target="#db_<?php echo e($data->ref_no); ?>"
+                                               title="add to databank"><i class="fa fa-database"></i></a>
+                                        <?php endif; ?>
+                                        <?php if(in_array('delete',session('permission'))): ?>
+                                            <a title="delete" class="delete btn btn-link" name="<?php echo e($data->ref_no); ?>_delete">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
                                         <?php endif; ?>
                                     </div>
                                 </th>
@@ -231,12 +228,20 @@
                         <div class="modal-body">
                             <?php  $j=0; ?>
                             <?php $__currentLoopData = $db_cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if(!in_array($col,$discard)): ?>
+                                <?php if(in_array($col,$db_fields) && !in_array($col,$discard)): ?>
                                     <div class="row">
                                         <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
                                                                               for="<?php echo e($data->ref_no. '_' . $j); ?>"><?php echo e(ucfirst(preg_replace('/_+/', ' ', $col))); ?><?php if(in_array($col,$db_required)): ?>*<?php endif; ?>:</label>
                                         </div>
-                                        <?php if(in_array($col,$db_date_field)): ?>
+                                        <?php if($col==='pp_status'): ?>
+                                            <div class="col-xs-7 col-md-7">
+                                                <select class="form-control" id="<?php echo e($data->ref_no. '_' . $j); ?>" name="<?php echo e($col); ?>" required>
+                                                    <?php $__currentLoopData = $pp_states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pp_state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($pp_state->status); ?>"><?php echo e($pp_state->status); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </select>
+                                            </div>
+                                        <?php elseif(in_array($col,$db_date_field)): ?>
                                             <div class="col-xs-7 col-md-7"><input
                                                         type="date"
                                                         class="form-control"
@@ -252,13 +257,25 @@
                                                         id="<?php echo e($data->ref_no. '_' . $j); ?>"
                                                         name="<?php echo e($col); ?>"
                                                         placeholder="Enter <?php echo e(ucfirst(preg_replace('/_+/', ' ', $col))); ?> here!<?php if(in_array($col,$db_required)): ?>*<?php endif; ?>"
-                                                        <?php if($col==='ref_no'): ?>value="<?php echo e($data->ref_no); ?>"  readonly <?php endif; ?> <?php if(in_array($col,$db_required)): ?> required <?php endif; ?>/>
+                                                        <?php if($col==='ref_no'): ?>value="<?php echo e($data->ref_no); ?>"  readonly <?php elseif($col==='trade'): ?>value="<?php echo e($data->position); ?>"   <?php endif; ?> <?php if(in_array($col,$db_required)): ?> required <?php endif; ?>/>
                                             </div>
                                         <?php endif; ?>
                                     </div>
                                     <?php  $j++;  ?>
                                 <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3"><label class="control-label pull-right"
+                                                                      for="<?php echo e($data->ref_no. '_' . 'remark'); ?>"><?php echo e(ucfirst(preg_replace('/_+/', ' ', "remarks"))); ?>:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            type="text"
+                                            id="<?php echo e($data->ref_no. '_' . 'remark'); ?>"
+                                            name="remarks"
+                                            placeholder="Enter <?php echo e(ucfirst(preg_replace('/_+/', ' ', 'remarks'))); ?> here!">
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="submit" class="btn btn-default" value="Add"/>
@@ -271,6 +288,17 @@
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     <script>
+        $(function (){
+            $(".delete").click(function(){
+                var name=$(this).attr("name");
+                var val=parseInt(name.substr(0,name.lastIndexOf('_')));
+                var col='ref_no';
+                var result = confirm("Want to delete?");
+                if (result) {
+                    $.post('/delete_new', {'db_table':'<?php echo e($db_table); ?>','w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                }
+            });
+        });
         <?php if(in_array('edit',session('permission'))): ?>
         $(function () {
             $("td").dblclick(function () {
