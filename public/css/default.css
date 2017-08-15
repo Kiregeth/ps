@@ -26,3 +26,15 @@ a, a:focus, a:hover {
     font-size: 12px;
     line-height: 2em;
 }
+.mb-class{
+    margin-left:0;
+    margin-right:0;
+    max-height: 250px;
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+.mb-class>div{
+    margin-top:1px;
+    padding-left:10px;
+    margin-bottom:1px;
+}

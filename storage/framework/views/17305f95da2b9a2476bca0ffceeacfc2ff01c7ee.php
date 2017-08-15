@@ -1,5 +1,10 @@
 <?php $__env->startSection('content'); ?>
-    <?php  $required=['visitor_name','contact_no','type','visit_purpose'];  ?>
+    <?php 
+        $date=['time'];
+        $fields=['sn','visitor_name','contact_no','type','pp_no','visit_purpose','remarks','time'];
+        $required=['visitor_name','contact_no','type','visit_purpose'];
+
+     ?>
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
@@ -30,7 +35,7 @@
                     <?php echo e(csrf_field()); ?>
 
                 <div class="">
-                    <table class="table table-striped table-bordered editableTable" >
+                    <table class="table table-striped table-bordered editableTable" id="myTable">
                         <thead>
                         <tr>
                             <th><a title="Add New" class="btn btn-default" data-toggle="modal" data-target="#modal_add">Add New</a></th>
@@ -205,6 +210,7 @@
     </div>
 
     <script type="text/javascript">
+        <?php if(in_array('operation-view',session('permission')) ): ?>
         $("#quick_add").click(function(){
             var colArray =<?php echo json_encode($cols); ?>;
             var data_string='<?php echo e($db_table); ?>,';
@@ -220,6 +226,75 @@
             $.post('/quick_add', {'value':data_string,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             return false;
         });
+        <?php endif; ?>
+
+        
+        
+            
+                
+                
+
+                
+                
+                
+                
+
+
+                
+                
+
+                
+
+                
+                
+                    
+                
+                    
+                
+
+                
+                
+                    
+                        
+                        
+                    
+
+                    
+                    
+                        
+
+                            
+                            
+                            
+                        
+                    
+                    
+
+                        
+                        
+                        
+                    
+                
+            
+        
+
+        
+        
+            
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+        
     </script>
 <?php $__env->stopSection(); ?>
 

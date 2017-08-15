@@ -1,7 +1,12 @@
 @extends('layouts.dash_app',['title'=>'visitor_log'])
 
 @section('content')
-    @php $required=['visitor_name','contact_no','type','visit_purpose']; @endphp
+    @php
+        $date=['time'];
+        $fields=['sn','visitor_name','contact_no','type','pp_no','visit_purpose','remarks','time'];
+        $required=['visitor_name','contact_no','type','visit_purpose'];
+
+    @endphp
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12">
@@ -30,7 +35,7 @@
                 <form id='ajax-form' method='post' action='/'>
                     {{ csrf_field() }}
                 <div class="">
-                    <table class="table table-striped table-bordered editableTable" >
+                    <table class="table table-striped table-bordered editableTable" id="myTable">
                         <thead>
                         <tr>
                             <th><a title="Add New" class="btn btn-default" data-toggle="modal" data-target="#modal_add">Add New</a></th>
@@ -203,6 +208,7 @@
     </div>
 
     <script type="text/javascript">
+        @if(in_array('operation-view',session('permission')) )
         $("#quick_add").click(function(){
             var colArray ={!! json_encode($cols) !!};
             var data_string='{{$db_table}},';
@@ -218,6 +224,75 @@
             $.post('/quick_add', {'value':data_string,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
             return false;
         });
+        @endif
+
+        {{--@if(in_array('operation-edit',session('permission')) )--}}
+        {{--$(function () {--}}
+            {{--$("td").dblclick(function () {--}}
+                {{--var OriginalContent = $(this).text();--}}
+                {{--OriginalContent = OriginalContent.trim();--}}
+
+                {{--$(this).addClass("cellEditing");--}}
+                {{--var myCol = $(this).index() - 2;--}}
+                {{--var $tr = $(this).closest('tr');--}}
+                {{--var myRow = $tr.index() + 1;--}}
+
+
+                {{--var colArray = {!! json_encode($fields) !!} ;--}}
+                {{--var dateArray= {!! json_encode($date) !!};--}}
+
+                {{--var id = document.getElementById("myTable").rows[myRow].cells[1].innerHTML;--}}
+{{--//                alert(id);--}}
+                {{--var type;--}}
+                {{--if(colArray[myCol]!=='time') {--}}
+                    {{--type = 'datetime-local';--}}
+                {{--} else {--}}
+                    {{--type = 'text';--}}
+                {{--}--}}
+
+                {{--if(colArray[myCol]!='sn' && colArray[myCol]!='time')--}}
+                {{--{--}}
+                    {{--$(this).html(--}}
+                        {{--"<input type='text' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+--}}
+                        {{--"<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"--}}
+                    {{--);--}}
+
+                    {{--$(this).children().first().focus();--}}
+                    {{--$(this).children().first().keypress(function (e) {--}}
+                        {{--if (e.which == 13) {--}}
+{{--//                            var res=autosubmit(colArray,myCol,myRow);--}}
+                            {{--var val=document.getElementById(colArray[myCol]+'_'+myRow).value;--}}
+                            {{--$(this).parent().text(val);--}}
+                            {{--$(this).parent().removeClass("cellEditing");--}}
+                        {{--}--}}
+                    {{--});--}}
+                    {{--$(this).children().first().blur(function(){--}}
+{{--//                        var res=autosubmit(colArray,myCol,myRow);--}}
+                        {{--var val=document.getElementById(colArray[myCol]+'_'+myRow).value;--}}
+                        {{--$(this).parent().text(val);--}}
+                        {{--$(this).parent().removeClass("cellEditing");--}}
+                    {{--});--}}
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
+
+        {{--function autosubmit(colArray,myCol,myRow)--}}
+        {{--{--}}
+            {{--var input=document.getElementById(colArray[myCol]+'_'+myRow);--}}
+
+            {{--var column = input.name;--}}
+            {{--column=column.substr(0, column.lastIndexOf('_'));--}}
+            {{--var value = input.value;--}}
+            {{--var form = document.getElementById('ajax-form');--}}
+            {{--var method = form.method;--}}
+            {{--var action = form.action;--}}
+            {{--var where=document.getElementById('where_'+myRow+'_'+myCol);--}}
+            {{--var where_val = where.value;--}}
+            {{--var where_col = where.name;--}}
+            {{--$.post(action, {'db_table':'{{$db_table}}','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});--}}
+            {{--return false;--}}
+        {{--}--}}
+        {{--@endif--}}
     </script>
 @endsection
 

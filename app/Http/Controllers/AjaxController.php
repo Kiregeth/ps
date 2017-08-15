@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\cv;
 use App\cv_edu;
 use App\cv_exp;
+use App\db_remark;
 
 class AjaxController extends Controller
 {
@@ -414,6 +415,29 @@ class AjaxController extends Controller
                 \DB::table('new_vr_flowns')->where($w_col, $w_val)->update([$col => $val]);
             }
         }
+    }
+
+    public function add_remark(Request $request)
+    {
+        $ref_no=$request->id;
+        if(db_remark::where('ref_no',$ref_no)->count()>0)
+        {
+            $remark_id=db_remark::where('ref_no',$ref_no)->orderBy('remark_id','desc')->first()->remark_id+1;
+        }
+        else
+        {
+            $remark_id=1;
+        }
+
+
+        $pasa=new db_remark();
+
+        $pasa->ref_no=$ref_no;
+        $pasa->remark_id=$remark_id;
+        $pasa->remark=$request->remark;
+        $pasa->user=\Auth::user()->uname;
+        $pasa->save();
+        return;
     }
 
 }

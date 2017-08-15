@@ -69,6 +69,7 @@ Route::post('/add_to_deployment', 'FormController@add_to_deployment');
 Route::post('/change_photo', 'FormController@change_photo');
 Route::post('/upload_doc', 'FormController@upload_doc');
 
+
 /*
  * NewDbController Routes
  */
@@ -99,6 +100,7 @@ Route::post('/cv_save','AjaxController@cv_save');
 Route::post('/delete_new','AjaxController@delete_new');
 Route::post('/cancel_new','AjaxController@cancel_new');
 Route::post('/quick_edit_new','AjaxController@quick_edit_new');
+Route::post('/add_remark', 'AjaxController@add_remark');
 
 
 

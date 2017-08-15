@@ -2,7 +2,7 @@
 
 @section('content')
     @php
-            $fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
+            $fields=['ref_no','date','name','mobile_no','address','email','date_of_birth', 'passport_no',
                    'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date',
                    'pp_returned_date','pp_resubmitted_date','app_status'];
             $discard=['photo','db_status','created_at','updated_at','app_status'];
@@ -177,19 +177,25 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Remarks [Ref.No - {{$data->ref_no}}]</h4>
                     </div>
-                    <div class="modal-body">
-                        @php $i=1; @endphp
-                        @foreach($remarks as $remark)
-                            @if($remark->ref_no===$data->ref_no)
-                                <h5 class="bg-primary row dbt">
-                                        <div class="col-md-1">{{$i}}.</div>
-                                        <div class="col-md-9">{{$remark->remark}}</div>
+                    <form class="frm_remark" method="post">
+                        {{csrf_field()}}
+                    <div class="modal-body" >
+                        <div id="mb_{{$data->ref_no}}" class="mb-class">
+                            @foreach($remarks as $remark)
+                                @if($remark->ref_no===$data->ref_no)
+                                    <div class="bg-primary row dbt">
+                                        <div class="col-md-8" style="word-wrap: break-word;">{{$remark->remark}}</div>
+                                        <div class="col-md-2" style="font-weight:bold;">[{{$remark->user}}]</div>
                                         <div class="col-md-2">{{$remark->time}}</div>
-                                </h5>
-                            @endif
-                            @php $i++; @endphp
-                        @endforeach
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        <div class="row dbt">
+                            <div class="col-md-12"><input style="margin-top:10px !important;" autofocus class="form-control" placeholder="Add Remark" id="in_{{$data->ref_no}}"></div>
+                        </div>
                     </div>
+                    </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
@@ -492,6 +498,10 @@
     @endforeach
 
     <script type="text/javascript">
+        var className=$(".mb-class");
+        className.scrollTop(className.scrollHeight);
+//        var className=document.getElementsByClassName('mb-class')[0];
+//        className.scrollTop = className.scrollHeight;
         function readURL(input, temp) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -585,6 +595,46 @@
             return false;
         }
     @endif
+
+    $('.frm_remark').bind('keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            e.preventDefault();
+            var id=e.target.id.substring( e.target.id.indexOf('_') + 1 );
+            var now= (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() - ((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
+            var val=$("#in_"+id).val();
+//            var now=new Date();
+//            var mnth;
+//            if((now.getDate()+1)<10)
+//                mnth='0'+now.getDate()+1;
+//            else
+//                mnth=now.getDate()+1;
+//            var nowString=now.getFullYear()+"-"+mnth+"-"+now.getDate()+" "+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
+
+            $.post('/add_remark', {'id':id,'remark': val,'_token':$('input[name=_token]').val()}, function(response) {
+                if(response)
+                {
+                    alert(response)
+                }
+                else
+                {
+                    $("#mb_"+id).prepend(
+                        "<div class='bg-primary row dbt'>"+
+                        "<div class='col-md-8' style='word-wrap: break-word;'>"+val+"</div>"+
+                        "<div class='col-md-2' style='font-weight: bold;'>"+"[{{Auth::user()->uname}}]"+"</div>"+
+                        "<div class='col-md-2'>"+now+"</div>"+
+                        "</div>"
+                    );
+                }
+            });
+            document.getElementById("in_"+id).value="";
+//            var modal_div = document.getElementById("my_modal");
+//            var new_element = document.createElement("div");
+//            modal_div.appendChild(new_element);
+            return false;
+        }
+    });
+
     </script>
 
 

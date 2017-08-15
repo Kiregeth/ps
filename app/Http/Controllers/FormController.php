@@ -48,6 +48,7 @@ class FormController extends Controller
             $pasa1->ref_no=$request->ref_no;
             $pasa1->remark_id=1;
             $pasa1->remark=$request->remarks;
+            $pasa1->user=\Auth::user()->uname;
             $pasa1->save();
         }
 
@@ -183,6 +184,8 @@ class FormController extends Controller
         }
         return back();
     }
+
+
 
 
 }

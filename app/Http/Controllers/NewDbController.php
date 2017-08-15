@@ -34,7 +34,7 @@ class NewDbController extends Controller
             }
 
             $db_table = 'new_databanks';
-            $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','time']);
+            $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
 
             return view("joins.new_databank", compact('db_table', 'sel', 'search', 'datas','remarks'));
         }
@@ -70,10 +70,10 @@ class NewDbController extends Controller
                     ->orderBy('new_visa_processes.ref_no', 'desc')
                     ->paginate(20);
             }
-
+            $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
             $db_table = 'new_visa_processes';
 
-            return view("joins.new_visa", compact('db_table', 'sel', 'search', 'datas'));
+            return view("joins.new_visa", compact('db_table', 'sel', 'search', 'datas','remarks'));
         }
         else
         {
@@ -110,9 +110,10 @@ class NewDbController extends Controller
                     ->paginate(20);
             }
 
+            $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
             $db_table = 'new_visa_receives';
 
-            return view("joins.new_visa_receive", compact('db_table', 'sel', 'search', 'datas'));
+            return view("joins.new_visa_receive", compact('db_table', 'sel', 'search', 'datas','remarks'));
         }
         else
         {
@@ -150,8 +151,9 @@ class NewDbController extends Controller
 //                return $datas;
             }
 
+            $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
             $db_table = 'new_vr_flowns';
-            return view("joins.new_deployment", compact('db_table', 'sel', 'search', 'datas'));
+            return view("joins.new_deployment", compact('db_table', 'sel', 'search', 'datas','remarks'));
         }
         else
         {
