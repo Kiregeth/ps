@@ -163,6 +163,7 @@ class FormController extends Controller
             $request->file('photo')->storeAs(
                 "/app_forms/" . "L" . $request->ref_no, "photo_" . $request->ref_no . ".jpg"
             );
+            new_databank::where('ref_no',$request->ref_no)->update(['photo'=>'app_forms/'.'L'.$request->ref_no.'/photo_'.$request->ref_no.'.jpg']);
         }
         return back();
     }

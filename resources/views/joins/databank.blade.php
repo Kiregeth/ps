@@ -78,6 +78,8 @@
                                                 <a title="visa processing" class="visa btn btn-link" name="{{$data->Ref_No}}_visa"><i
                                                             class="fa fa-cc-visa"></i></a>
                                                 @endif
+                                                <a title="transfer to new databank" class="databank btn btn-link" name="{{$data->Ref_No}}_databank"><i
+                                                                class="fa fa-exchange"></i></a>
                                             @endif
                                             @if(in_array('delete',session('permission')))
                                                 <a title="delete" class="delete btn btn-link" name="{{$data->Ref_No}}_delete">
@@ -241,6 +243,18 @@
                 var id=parseInt(name.substr(0,name.lastIndexOf('_')));
                 var col='Ref_No';
                 $.post('/visaprocess', {'db_table1':'databanks','db_table2':'visaprocesses','w_id': id,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+            });
+        });
+
+        $(function (){
+            $(".databank").click(function(){
+                var name=$(this).attr("name");
+                var val=parseInt(name.substr(0,name.lastIndexOf('_')));
+                var col='Ref_No';
+                var result = confirm("Want to transfer to new databank?");
+                if (result) {
+                    $.post('/transfer_new', {'w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                }
             });
         });
         @endif

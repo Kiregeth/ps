@@ -102,6 +102,8 @@ Route::post('/cancel_new','AjaxController@cancel_new');
 Route::post('/quick_edit_new','AjaxController@quick_edit_new');
 Route::post('/add_remark', 'AjaxController@add_remark');
 
+Route::post('/transfer_new','AjaxController@transfer_new');
+
 
 
 Route::post('/export','FormController@export_to_excel');

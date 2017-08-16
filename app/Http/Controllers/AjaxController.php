@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\databank;
+use App\new_databank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\cv;
@@ -439,5 +441,57 @@ class AjaxController extends Controller
         $pasa->save();
         return;
     }
+
+    public function transfer_new(Request $request)
+    {
+        $old = databank::where($request->w_col, $request->w_val)->first();
+        $new = new new_databank();
+        $new->ref_no = $old->Ref_No;
+        $new->name = $old->Candidates_Name;
+        $new->position = $old->Trade;
+        $new->mobile_no = $old->Contact_No;
+        if($old->DOB!=null && $old->DOB!="")
+            $new->date_of_birth = date("Y/m/d", strtotime($old->DOB));
+        $new->passport_no = $old->PP_NO;
+        $new->pp_status = $old->PP_Status;
+        $new->local_agent = $old->LA;
+        $new->la_contact = $old->LA_Contact;
+        $new->trade = $old->Trade;
+        $new->company = $old->Company;
+        if($old->Offer_Letter_Received_Date!=null && $old->Offer_Letter_Received_Date!="")
+            $new->offer_letter_received_date = date("Y/m/d", strtotime($old->Offer_Letter_Received_Date));
+        if($old->Old_VP_Date!=null && $old->Old_VP_Date!="")
+            $new->old_vp_date = date("Y/m/d", strtotime($old->Old_VP_Date));
+        if ($old->PP_Returned_Date != null && $old->PP_Returned_Date != "")
+            $new->pp_returned_date = date("Y/m/d", strtotime($old->PP_Returned_Date));
+        if($old->PP_Resubmitted_Date!=null && $old->PP_Resubmitted_Date!="")
+            $new->pp_resubmitted_date=date("Y/m/d", strtotime($old->PP_Resubmitted_Date));
+        if($old->PP_Resubmitted_Date!=null && $old->PP_Resubmitted_Date!="")
+            $new->pp_resubmitted_date=date("Y/m/d", strtotime($old->PP_Resubmitted_Date));
+        $new->app_status="db";
+        $new->save();
+
+        if($old->Remarks!=null && $old->Remarks!="")
+        {
+            $remark=new db_remark();
+            $remark->ref_no=$old->Ref_No;
+            $remark->remark_id=1;
+            $remark->remark=$old->Remarks;
+            $remark->user=\Auth::user()->uname;
+            $remark->save();
+        }
+
+        $dir=\File::makeDirectory(public_path("images/app_forms/")."L".$old->Ref_No);
+        $col=$request->w_col;
+        $value=$request->w_id;
+        \DB::table('databanks')->where($col, $value)->delete();
+        \DB::table('visaprocesses')->where($col, $value)->delete();
+        \DB::table('vrflowns')->where($col, $value)->delete();
+
+        session()->flash('message', 'Application Form with Ref_No '.$old->ref_no.' was transfered to new databank successfully!');
+
+        return;
+    }
+
 
 }

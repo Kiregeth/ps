@@ -182,9 +182,10 @@ class OperationController extends Controller
     public function app_form_generate($ref_no,$doc_list)
     {
         $data=app_form::where('ref_no',$ref_no)->first();
-        $img = Image::make(public_path('images/temp.jpg'));
+        $img = Image::make(public_path('/images/temp.jpg'));
+
         $font_style=function($font) {
-            $font->file(public_path('img_font/times.ttf'));
+            $font->file(public_path('/img_font/times.ttf'));
             $font->size('24');
             $font->color('#000');
         };
@@ -303,8 +304,8 @@ class OperationController extends Controller
             $img->text($part2, 265, 1045,$font_style);
         }
 
-        $photo=Image::make(public_path('images/'.$data->photo))->resize(170, 220);
-        $img->insert($photo,"",1010,85);
+            $photo = Image::make(public_path('images/' . $data->photo))->resize(170, 220);
+            $img->insert($photo, "", 1010, 85);
 
         $path=public_path('/images/app_forms/L'.$data->ref_no.'/app_form_'.$data->ref_no.".jpg");
         $img->save($path,50);
@@ -437,10 +438,12 @@ class OperationController extends Controller
             $img->text($part2, 265, 1045,$font_style);
         }
 
-        $photo=Image::make(public_path('/images/'.$data->photo))->resize(170, 220);
-        $img->insert($photo,"",1010,85);
+        if($data->photo!==null && $data->photo!=="") {
+            $photo = Image::make(public_path('/images/' . $data->photo))->resize(170, 220);
+            $img->insert($photo, "", 1010, 85);
+        }
 
-        $path=public_path('/images/app_forms/L'.$data->ref_no.'/app_form_'.$data->ref_no.".jpg");
+        $path=str_replace('\\','/',public_path('images/app_forms/L'.$data->ref_no.'/app_form_'.$data->ref_no.".jpg"));
         $img->save($path,50);
 
         session()->flash('message', 'Application Form with Ref_No '.$data->ref_no.' was Regenerated Successfully!');
