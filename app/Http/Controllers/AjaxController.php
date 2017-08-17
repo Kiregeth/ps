@@ -481,12 +481,12 @@ class AjaxController extends Controller
             $remark->save();
         }
 
+        \DB::table('databanks')->where("Ref_No", $old->Ref_No)->delete();
+        \DB::table('visaprocesses')->where("Ref_No", $old->Ref_No)->delete();
+        \DB::table('vrflowns')->where("Ref_No", $old->Ref_No)->delete();
+
         $dir=\File::makeDirectory(public_path("images/app_forms/")."L".$old->Ref_No);
-        $col=$request->w_col;
-        $value=$request->w_id;
-        \DB::table('databanks')->where($col, $value)->delete();
-        \DB::table('visaprocesses')->where($col, $value)->delete();
-        \DB::table('vrflowns')->where($col, $value)->delete();
+
 
         session()->flash('message', 'Application Form with Ref_No '.$old->ref_no.' was transfered to new databank successfully!');
 
