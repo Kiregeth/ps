@@ -13,27 +13,36 @@ $discard=['photo','db_status','created_at','updated_at','app_status','vp_status'
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="row">
-                <div class="col-xs-6 col-md-6"><h1>Deployment</h1></div>
-                <div class="col-xs-6 col-md-6 center-blocks">
-                    <form action="/new_deployment" method="POST" name="search-form" id="search-form">
-                        <?php echo e(csrf_field()); ?>
+                <div class="col-xs-4 col-md-4"><h1>Deployment</h1></div>
+                <form action="/new_deployment" method="POST" name="search-form" id="search-form">
+                    <?php echo e(csrf_field()); ?>
 
-                        <h5><label for="search">Search:</label></h5>
-                        <?php  if(strpos($sel, '.') !== false){ $sel=substr($sel, strpos($sel, ".") + 1); } ?>
+                    <div class="col-xs-4 col-md-4 ">
+                        <h5 align="center"><label for="search">Search:</label></h5>
+                        <?php  if(strpos($sel, '.') !== false) $sel=substr($sel, strpos($sel, ".") + 1)  ?>
                         <select class="selectpicker" name="sel" id="sel" data-style="btn-info">
                             <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php if(!in_array($col,$discard)): ?>
-                            <option value="<?php echo e($col); ?>" <?php if($sel===$col): ?><?php echo e('selected'); ?><?php endif; ?>><?php echo e(ucwords($col)); ?></option>
-                            <?php endif; ?>
+                                <?php if(!in_array($col,$discard)): ?>
+                                    <option value="<?php echo e($col); ?>" <?php if($sel===$col): ?><?php echo e('selected'); ?><?php endif; ?>><?php echo e(ucwords($col)); ?></option>
+                                <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
 
                         <input name="search" id="search" type="text" value="<?php echo e($search); ?>" placeholder="Search"/>
 
-                        <input type="submit" style="display:none" />
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                        <h5><label for="page_size">Page Size:</label></h5>
+                        <select name="page_size" class="selectpicker" data-style="btn-info">
+                            <option value="20" <?php if($limit==20): ?> selected <?php endif; ?>>20</option>
+                            <option value="40" <?php if($limit==40): ?> selected <?php endif; ?>>40</option>
+                            <option value="60" <?php if($limit==60): ?> selected <?php endif; ?>>60</option>
+                            <option value="80" <?php if($limit==80): ?> selected <?php endif; ?>>80</option>
+                        </select>
+                        <input type="submit" value="Go" />
+                    </div>
 
-                    </form>
-                </div>
+                </form>
             </div>
             <br/>
             <form id='ajax-form' method='post' action='/quick_edit_new'>

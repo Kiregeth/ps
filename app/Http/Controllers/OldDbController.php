@@ -15,6 +15,14 @@ class OldDbController extends Controller
         if (\Auth::user()) {
             $sel="";
             $search="";
+            if($request->page_size !=null && $request->page_size !="")
+            {
+                $limit=intval($request->page_size);
+            }
+            else
+            {
+                $limit=20;
+            }
 
             $gp_array=['Ref_No', 'Date', 'Candidates_Name', 'Contact_No', 'DOB', 'PP_NO', 'PP_Status', 'LA_Contact', 'LA',
                 'Trade', 'Company', 'Status', 'Offer_Letter_Received_Date', 'Old_VP_Date', 'Remarks', 'PP_Returned_Date',
@@ -23,21 +31,22 @@ class OldDbController extends Controller
                 'Trade', 'Company', 'Status', 'Offer_Letter_Received_Date', 'Old_VP_Date', 'Remarks', 'PP_Returned_Date',
                 'PP_Resubmitted_Date', 'State'];
 
-            if (!empty($request->all()) && $request->sel!="" && $request->search!="") {
+            if (!empty($request->all()) && $request->sel!="" && $request->search!="" && $request->page_size !="") {
                 $sel=$request->sel;
                 $search=$request->search;
+
                 $datas = databank::where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('Ref_No', 'desc')
                     ->groupBy($gp_array)
-                    ->paginate(20,$pg_array);
+                    ->paginate($limit,$pg_array);
             } else {
                 $datas = databank::orderBy('Ref_No', 'desc')
                     ->groupBy($gp_array)
-                    ->paginate(20,$pg_array);
+                    ->paginate($limit,$pg_array);
             }
             $cols = \Schema::getColumnListing('databanks');
             $db_table = "databanks";
-            return view('joins.databank', compact('cols', 'datas', 'db_table','sel','search'));
+            return view('joins.databank', compact('cols', 'datas', 'db_table','sel','search','limit'));
         }
         else
         {
@@ -51,6 +60,14 @@ class OldDbController extends Controller
         {
             $sel="";
             $search="";
+            if($request->page_size !=null && $request->page_size !="")
+            {
+                $limit=intval($request->page_size);
+            }
+            else
+            {
+                $limit=20;
+            }
 
             $gp_array=['Ref_No','Date','Candidates_Name','Contact_No','DOB','PP_NO','PP_Status','LA_Contact','LA',
                 'Trade','Company','Status','Offer_Letter_Received_Date','Process_Date','Status','PP_Returned_Date',
@@ -65,19 +82,19 @@ class OldDbController extends Controller
                 $datas=visaprocess::where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('Ref_No','desc')
                     ->groupBy($gp_array)
-                    ->paginate(20,$pg_array);
+                    ->paginate($limit,$pg_array);
             }
             else{
                 $datas=visaprocess::orderBy('Ref_No','desc')
                     ->groupBy($gp_array)
-                    ->paginate(20,$pg_array);
+                    ->paginate($limit,$pg_array);
             }
             $cols=\Schema::getColumnListing('visaprocesses');
 
 //
             $db_table="visaprocesses";
 
-            return view('joins.visa',compact('cols','datas','db_table','sel','search'));
+            return view('joins.visa',compact('cols','datas','db_table','sel','search','limit'));
         }else
         {
             return redirect('/');
@@ -91,6 +108,14 @@ class OldDbController extends Controller
         {
             $sel="";
             $search="";
+            if($request->page_size !=null && $request->page_size !="")
+            {
+                $limit=intval($request->page_size);
+            }
+            else
+            {
+                $limit=20;
+            }
 
             $gp_array=['Ref_No','Date','Candidates_Name','Contact_No','DOB','PP_NO','PP_Status','LA_Contact','LA',
                 'Trade','Company','Status','WP_Expiry','Offer_Letter_Received_Date','VP_Date','VR_Date','Visa_Issue_Date','Visa_Exp','SA','Flown_Date','PP_Returned_Date',
@@ -105,17 +130,17 @@ class OldDbController extends Controller
                 $datas = vrflown::where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('Ref_No','desc')
                     ->groupBy($gp_array)
-                    ->paginate(20, $pg_array);
+                    ->paginate($limit, $pg_array);
             }
             else{
                 $datas=vrflown::orderBy('Ref_No','desc')
                     ->groupBy($gp_array)
-                    ->paginate(20,$pg_array);
+                    ->paginate($limit,$pg_array);
             }
             $cols=\Schema::getColumnListing('vrflowns');
             $db_table="visaprocesses";
 
-            return view('joins.deployment',compact('cols','datas','db_table','sel','search'));
+            return view('joins.deployment',compact('cols','datas','db_table','sel','search','limit'));
         }else
         {
             return redirect('/');

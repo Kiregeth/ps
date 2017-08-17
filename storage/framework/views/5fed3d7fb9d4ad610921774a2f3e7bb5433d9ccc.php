@@ -3,26 +3,32 @@
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <div class="row">
-                    <div class="col-xs-6 col-md-6"><h1>Old Databank</h1></div>
-                    <div class="col-xs-6 col-md-6 center-blocks">
+                    <div class="col-xs-4 col-md-4"><h1>Old Databank</h1></div>
                         <form action="/databank" method="POST" name="search-form" id="search-form">
                             <?php echo e(csrf_field()); ?>
 
-                            <h5><label for="search">Search:</label></h5>
-                            <select class="selectpicker" name="sel" id="sel" data-style="btn-info">
-                                <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <?php if($col!='State' && $col!='created_at' && $col!='updated_at'): ?>)
-                                        <option value="<?php echo e($col); ?>" <?php if($sel===$col): ?><?php echo e('selected'); ?><?php endif; ?>><?php echo e($col); ?></option>
-                                    <?php endif; ?>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <div class="col-xs-4 col-md-4">
+                                <h5 align="center"><label for="search">Search:</label></h5>
+                                <select class="selectpicker" name="sel" id="sel" data-style="btn-info">
+                                    <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php if($col!='State' && $col!='created_at' && $col!='updated_at'): ?>)
+                                            <option value="<?php echo e($col); ?>" <?php if($sel===$col): ?><?php echo e('selected'); ?><?php endif; ?>><?php echo e($col); ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                                <input name="search" id="search" type="text" value="<?php echo e($search); ?>" placeholder="Search"/>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            <h5><label for="page_size">Page Size:</label></h5>
+                            <select name="page_size" class="selectpicker" data-style="btn-info">
+                                <option value="20" <?php if($limit==20): ?> selected <?php endif; ?>>20</option>
+                                <option value="40" <?php if($limit==40): ?> selected <?php endif; ?>>40</option>
+                                <option value="60" <?php if($limit==60): ?> selected <?php endif; ?>>60</option>
+                                <option value="80" <?php if($limit==80): ?> selected <?php endif; ?>>80</option>
                             </select>
-
-                            <input name="search" id="search" type="text" value="<?php echo e($search); ?>" placeholder="Search"/>
-
-                            <input type="submit" style="display:none" />
-
-                        </form>
-                    </div>
+                            <input type="submit" value="Go" />
+                        </div>
+                    </form>
                 </div>
                 <br/>
                 <form id='ajax-form' method='post' action='/quick_edit'>

@@ -3,12 +3,12 @@
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <div class="row">
-                    <div class="col-xs-6 col-md-6"><h1>Old Deployment</h1></div>
-                    <div class="col-xs-6 col-md-6 center-blocks">
-                        <form action="/deployment" method="POST" name="search-form" id="search-form">
-                            <?php echo e(csrf_field()); ?>
+                    <div class="col-xs-4 col-md-4"><h1>Old Deployment</h1></div>
+                    <<form action="/deployment" method="POST" name="search-form" id="search-form">
+                        <?php echo e(csrf_field()); ?>
 
-                            <h5><label for="search">Search:</label></h5>
+                        <div class="col-xs-4 col-md-4">
+                            <h5 align="center"><label for="search">Search:</label></h5>
                             <select class="selectpicker" name="sel" id="sel" data-style="btn-info">
                                 <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php if($col!='created_at' && $col!='updated_at'): ?>)
@@ -16,13 +16,19 @@
                                     <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
-
                             <input name="search" id="search" type="text" value="<?php echo e($search); ?>" placeholder="Search"/>
-
-                            <input type="submit" style="display:none" />
-
-                        </form>
-                    </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            <h5><label for="page_size">Page Size:</label></h5>
+                            <select name="page_size" class="selectpicker" data-style="btn-info">
+                                <option value="20" <?php if($limit==20): ?> selected <?php endif; ?>>20</option>
+                                <option value="40" <?php if($limit==40): ?> selected <?php endif; ?>>40</option>
+                                <option value="60" <?php if($limit==60): ?> selected <?php endif; ?>>60</option>
+                                <option value="80" <?php if($limit==80): ?> selected <?php endif; ?>>80</option>
+                            </select>
+                            <input type="submit" value="Go" />
+                        </div>
+                    </form>
                 </div>
                 <br/>
                 <form id='ajax-form' method='post' action='/quick_edit'>
@@ -136,11 +142,6 @@
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         <?php if(in_array('transfer',session('permission'))): ?>
         $(function (){
             $(".cancel").click(function(){
@@ -196,7 +197,7 @@
             var where=document.getElementById('where_'+myRow+'_'+myCol);
             var where_val = where.value;
             var where_col = where.name;
-            $.post(action, {'db_table':'vrflowns','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+            $.post(action, {'db_table':'vrflowns','val': value,'col': column,'w_col': where_col,'w_val': where_val,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):null});
             return false;
         }
         <?php endif; ?>

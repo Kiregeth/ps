@@ -15,10 +15,19 @@ class NewDbController extends Controller
         if (\Auth::user()) {
             $sel = "";
             $search = "";
-
+            if($request->page_size !=null && $request->page_size !="")
+            {
+                $limit=intval($request->page_size);
+            }
+            else
+            {
+                $limit=20;
+            }
 //        $app_cols=\Schema::getColumnListing('app_forms');
 //        $db_cols=\Schema::getColumnListing('new_databanks');
+
             if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
+
                 $sel = $request->sel;
                 if ($sel === 'ref_no') {
                     $sel = 'new_databanks.' . $sel;
@@ -26,17 +35,17 @@ class NewDbController extends Controller
                 $search = $request->search;
                 $datas = new_databank::where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_databanks.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
 
             } else {
                 $datas = new_databank::orderBy('new_databanks.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
             }
 
             $db_table = 'new_databanks';
             $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
 
-            return view("joins.new_databank", compact('db_table', 'sel', 'search', 'datas','remarks'));
+            return view("joins.new_databank", compact('db_table', 'sel', 'search','limit', 'datas','remarks'));
         }
         else
         {
@@ -49,6 +58,14 @@ class NewDbController extends Controller
         if (\Auth::user()) {
             $sel = "";
             $search = "";
+            if($request->page_size !=null && $request->page_size !="")
+            {
+                $limit=intval($request->page_size);
+            }
+            else
+            {
+                $limit=20;
+            }
 
 //        $app_cols=\Schema::getColumnListing('app_forms');
 //        $db_cols=\Schema::getColumnListing('new_databanks');
@@ -62,18 +79,18 @@ class NewDbController extends Controller
                     ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
                     ->where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_visa_processes.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
 
             } else {
                 $datas = \DB::table('new_databanks')
                     ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
                     ->orderBy('new_visa_processes.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
             }
             $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
             $db_table = 'new_visa_processes';
 
-            return view("joins.new_visa", compact('db_table', 'sel', 'search', 'datas','remarks'));
+            return view("joins.new_visa", compact('db_table', 'sel', 'search', 'limit', 'datas','remarks'));
         }
         else
         {
@@ -86,7 +103,14 @@ class NewDbController extends Controller
         if (\Auth::user()) {
             $sel = "";
             $search = "";
-
+            if($request->page_size !=null && $request->page_size !="")
+            {
+                $limit=intval($request->page_size);
+            }
+            else
+            {
+                $limit=20;
+            }
 //        $app_cols=\Schema::getColumnListing('app_forms');
 //        $db_cols=\Schema::getColumnListing('new_databanks');
             if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
@@ -100,20 +124,20 @@ class NewDbController extends Controller
                     ->join('new_visa_receives','new_databanks.ref_no', '=', 'new_visa_receives.ref_no')
                     ->where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_visa_receives.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
 
             } else {
                 $datas = \DB::table('new_databanks')
                     ->join('new_visa_processes','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
                     ->join('new_visa_receives','new_databanks.ref_no', '=', 'new_visa_receives.ref_no')
                     ->orderBy('new_visa_receives.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
             }
 
             $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
             $db_table = 'new_visa_receives';
 
-            return view("joins.new_visa_receive", compact('db_table', 'sel', 'search', 'datas','remarks'));
+            return view("joins.new_visa_receive", compact('db_table', 'sel', 'search', 'limit', 'datas','remarks'));
         }
         else
         {
@@ -126,7 +150,14 @@ class NewDbController extends Controller
         if (\Auth::user()) {
             $sel = "";
             $search = "";
-
+            if($request->page_size !=null && $request->page_size !="")
+            {
+                $limit=intval($request->page_size);
+            }
+            else
+            {
+                $limit=20;
+            }
             if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
                 $sel = $request->sel;
                 if ($sel === 'ref_no' || $sel==='date') {
@@ -139,7 +170,7 @@ class NewDbController extends Controller
                     ->join('new_vr_flowns','new_databanks.ref_no', '=', 'new_vr_flowns.ref_no')
                     ->where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_vr_flowns.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
 
             } else {
                 $datas = \DB::table('new_databanks')
@@ -147,13 +178,13 @@ class NewDbController extends Controller
                     ->join('new_visa_receives','new_databanks.ref_no', '=', 'new_visa_processes.ref_no')
                     ->join('new_vr_flowns','new_databanks.ref_no', '=', 'new_vr_flowns.ref_no')
                     ->orderBy('new_vr_flowns.ref_no', 'desc')
-                    ->paginate(20);
+                    ->paginate($limit);
 //                return $datas;
             }
 
             $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
             $db_table = 'new_vr_flowns';
-            return view("joins.new_deployment", compact('db_table', 'sel', 'search', 'datas','remarks'));
+            return view("joins.new_deployment", compact('db_table', 'sel', 'search', 'limit', 'datas','remarks'));
         }
         else
         {
