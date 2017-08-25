@@ -2,9 +2,6 @@
 
 @section('content')
     @php
-            $fields=['ref_no','date','name','mobile_no','address','email','date_of_birth', 'passport_no',
-                   'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date',
-                   'pp_returned_date','pp_resubmitted_date','app_status'];
             $discard=['photo','db_status','created_at','updated_at','app_status'];
             $date=['date','date_of_birth','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
 
@@ -43,7 +40,6 @@
                                 </select>
                                 <input type="submit" value="Go" />
                             </div>
-
                         </form>
                     </div>
                     <br/>
@@ -434,7 +430,7 @@
                             </div>
                             <br />
                             <div id="img" class="img center-block" style="height:144px;width:116px;">
-                                <img src="@if($data->photo)!='') {{asset('/images/'.$data->photo)}} @else {{asset('/images/default.jpg')}} @endif" alt="preview" id="preview" height="144px" width="116px"/>
+                                <img src="@if($data->photo!='') {{asset('/images/'.$data->photo)}} @else {{asset('/images/default.jpg')}} @endif" alt="preview" id="preview" height="144px" width="116px"/>
                             </div>
                             <br />
                             <input class="center-block" type="file" name="photo" id="photo" onchange="readURL(this,'#preview')" required />
@@ -543,7 +539,8 @@
             $("td").dblclick(function () {
                 var OriginalContent = $(this).text();
                 OriginalContent = OriginalContent.trim();
-                $(this).addClass("cellEditing");
+//                $(this).removeClass("td");
+//                $(this).addClass("cellEditing");
                 var myCol = $(this).index()-2;
                 var $tr = $(this).closest('tr');
                 var myRow = $tr.index() + 1;
@@ -566,26 +563,34 @@
                 if(colArray[myCol]!=='ref_no' && colArray[myCol]!=='date')
                 {
                     $(this).html(
-                        "<input type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
+                        "<input ondblclick='this.disabled=true;' type='"+type+"' placeholder='"+OriginalContent+"' id='"+colArray[myCol]+'_'+myRow+"' name='"+colArray[myCol]+'_'+myRow+"' value='" + OriginalContent + "'/>"+
                         "<input type='hidden' id='where_"+myRow+"_"+myCol+"' name='ref_no' value='"+id+"' />"
                     );
-                    $(this).children().first().focus();
-                    $(this).children().first().keypress(function (e) {
+                    $(this).find('input').focus();
+                    $(this).find('input').keypress(function (e) {
                         if (e.which == 13) {
                             var res=autosubmit(colArray,myCol,myRow);
                             var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                             $(this).parent().text(val);
-                            $(this).parent().removeClass("cellEditing");
                         }
                     });
-                    $(this).children().first().blur(function(){
+
+//                    $(this).children().first().blur(function(){
+//                        var res=autosubmit(colArray,myCol,myRow);
+//                        var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
+//                        $(this).parent().text(val);
+//                        $(this).parent().removeClass("cellEditing");
+//                        $(this).addClass("td");
+//                    });
+
+                    $(this).find('input').blur(function(){
                         var res=autosubmit(colArray,myCol,myRow);
                         var val=document.getElementById(colArray[myCol]+'_'+myRow).value;
                         $(this).parent().text(val);
-                        $(this).parent().removeClass("cellEditing");
                     });
                 }
             });
+
         });
 
         function autosubmit(colArray,myCol,myRow)

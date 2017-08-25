@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\active_field;
 use App\databank;
+use App\field_preset;
 use App\new_databank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -491,6 +493,91 @@ class AjaxController extends Controller
         session()->flash('message', 'Application Form with Ref_No '.$old->ref_no.' was transfered to new databank successfully!');
 
         return;
+    }
+
+    public function add_preset(Request $request)
+    {
+        if($request->preset_name==null || $request_name="")
+        {
+            echo "Preset name is required";
+            return;
+        }
+        $view_name=$request->view_name;
+        $view_id=active_field::where('view',$view_name)->first(['id'])->id;
+
+        if(field_preset::where('view_id',$view_id)->count()<1)
+        {
+            $preset_id=1;
+        }
+        else
+        {
+            $preset_id=field_preset::where('view_id',$view_id)->orderBy('preset_id','desc')->first(['preset_id'])->preset_id+1;
+        }
+        $pasa=new field_preset();
+        $pasa->view_id=$view_id;
+        $pasa->preset_id=$preset_id;
+        $pasa->preset_name=$request->preset_name;
+        $pasa->preset_field=$request->val;
+        $pasa->save();
+        session()->flash('message', 'Preset with name '.$request->preset_name.' was added for '.preg_replace('/_+/', ' ', $view_name).'!');
+    }
+
+    public function edit_preset(Request $request)
+    {
+        if($request->preset_name==null || $request_name="")
+        {
+            echo "Preset name is required";
+            return;
+        }
+
+        $view_name=$request->view_name;
+        $view_id=active_field::where('view',$view_name)->first(['id'])->id;
+
+        $preset_id=$request->preset_id;
+
+        $state=field_preset::where(['view_id'=>$view_id,'preset_id'=>$preset_id])->first(['state'])->state;
+
+        \DB::table('field_presets')->where(['view_id'=>$view_id,'preset_id'=>$preset_id])->update(['preset_name'=>$request->preset_name,'preset_field'=>$request->val]);
+
+        if($state==='active')
+        {
+            \DB::table('active_fields')->where('id',$view_id)->update(['field'=>$request->val]);
+        }
+        session()->flash('message', 'Preset with name '.$request->preset_name.' was edited for '.preg_replace('/_+/', ' ', $view_name).'!');
+    }
+
+    public function delete_preset(Request $request)
+    {
+        $view_name=$request->view_name;
+        $view_id=active_field::where('view',$view_name)->first(['id'])->id;
+        $preset_id=$request->preset_id;
+        \DB::table('field_presets')->where(['view_id'=>$view_id,'preset_id'=>$preset_id])->delete();
+
+        session()->flash('message', 'Preset with preset id '.$request->preset_id.' was deleted for '.preg_replace('/_+/', ' ', $view_name).'!');
+    }
+
+    public function activate_preset(Request $request)
+    {
+        $view_id=$request->view_id;
+        $preset_id=$request->preset_id;
+
+        $active_field=field_preset::where(['view_id'=>$view_id,'preset_id'=>$preset_id])->first(['preset_field'])->preset_field;
+        \DB::table('active_fields')->where('id',$view_id)->update(['field'=>$active_field]);
+
+        $presets=field_preset::where('view_id',$view_id)->get();
+        foreach($presets as $preset)
+        {
+            if($preset->preset_id==$preset_id)
+            {
+                \DB::table('field_presets')->where(['view_id'=>$view_id,'preset_id'=>$preset->preset_id])->update(['state'=>'active']);
+
+            }
+            else
+            {
+                \DB::table('field_presets')->where(['view_id'=>$view_id,'preset_id'=>$preset->preset_id])->update(['state'=>null]);
+            }
+        }
+        session()->flash('message', 'Preset with name '.$request->preset_name.' was activated for '.preg_replace('/_+/', ' ', active_field::where('id',$view_id)->first(['view'])->view).'!');
     }
 
 

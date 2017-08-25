@@ -164,7 +164,7 @@
                                 <a class="li-head" href="#databank-nav" data-toggle="collapse">
                                     <span>Databank Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                                 </a>
-                                <div class="navigation-wrapper collapse @if($title=='new_databank' || $title=='new_visa' || $title=='new_deployment' || $title=='new_visa_receive')in @endif" id="databank-nav">
+                                <div class="navigation-wrapper collapse @if($title=='new_databank' || $title=='new_visa' || $title=='new_deployment' || $title=='new_visa_receive' || $title=='new_preset')in @endif" id="databank-nav">
                                     <ul class="navigation">
                                         <li class="@if ($title === 'new_databank') active @endif">
                                             <a href="/new_databank"><i class="fa fa-database"></i>Databank </a>
@@ -177,6 +177,9 @@
                                         </li>
                                         <li class="@if ($title === 'new_deployment') active @endif">
                                             <a href="/new_deployment"><i class="fa  fa-share-square-o"></i>Deployment </a>
+                                        </li>
+                                        <li class="@if ($title === 'new_preset') active @endif">
+                                            <a href="/new_preset"><i class="fa fa-cog"></i>Field Preset</a>
                                         </li>
                                     </ul>
                                 </div>

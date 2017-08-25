@@ -46,7 +46,19 @@
                             <?php echo e(Auth::user()->name); ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="<?php echo e(url('/logout')); ?>"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                            <li>
+                                <a href="<?php echo e(route('logout')); ?>"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+
+                                    <i class="icon-switch2"></i> <span>Logout</span>
+                                </a>
+
+                                <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                                    <?php echo e(csrf_field()); ?>
+
+                                </form>
+                            </li>
                         </ul>
                     </li>
                 <?php endif; ?>

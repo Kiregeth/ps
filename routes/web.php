@@ -78,11 +78,14 @@ Route::get('/new_visa', 'NewDbController@new_visa');
 Route::get('/new_visa_receive', 'NewDbController@new_visa_receive');
 Route::get('/new_deployment', 'NewDbController@new_deployment');
 
+Route::get('/new_preset', 'NewDbController@new_preset');
+
 Route::post('/new_databank', 'NewDbController@new_databank');
 Route::post('/new_visa', 'NewDbController@new_visa');
 Route::post('/new_visa_receive', 'NewDbController@new_visa_receive');
 Route::post('/new_deployment', 'NewDbController@new_deployment');
 
+Route::post('/new_preset', 'NewDbController@new_preset');
 
 
 /*
@@ -103,6 +106,11 @@ Route::post('/quick_edit_new','AjaxController@quick_edit_new');
 Route::post('/add_remark', 'AjaxController@add_remark');
 
 Route::post('/transfer_new','AjaxController@transfer_new');
+
+Route::post('/add_preset','AjaxController@add_preset');
+Route::post('/edit_preset','AjaxController@edit_preset');
+Route::post('/delete_preset','AjaxController@delete_preset');
+Route::post('/activate_preset','AjaxController@activate_preset');
 
 
 

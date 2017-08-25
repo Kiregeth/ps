@@ -18,7 +18,7 @@ class FormController extends Controller
 {
     public function add_to_db(Request $request)
     {
-        $fields=['pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
+        $fields=['pp_status','next_of_kin','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
         $app=app_form::find($request->ref_no);
         $pasa=new new_databank();
         $cols=\Schema::getColumnListing('app_forms');

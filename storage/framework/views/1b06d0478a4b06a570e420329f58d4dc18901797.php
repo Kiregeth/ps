@@ -70,7 +70,7 @@
         $discard=['photo','created_at','updated_at','date'];
         $date=['date_of_birth','date_of_issue','date_of_expiry'];
         $db_date_field=['offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date'];
-        $db_fields=['ref_no','pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date','remarks'];
+        $db_fields=['ref_no','pp_status','next_of_kin','local_agent','la_contact','trade','company','offer_letter_received_date','old_vp_date','pp_returned_date','pp_resubmitted_date','remarks'];
         $db_required=['pp_status'];
      ?>
     <div class="container">

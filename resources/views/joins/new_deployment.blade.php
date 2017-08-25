@@ -2,9 +2,6 @@
 
 @section('content')
 @php
-$fields=['ref_no','date','name','mobile_no','contact_address','email','date_of_birth', 'passport_no',
-'pp_status','local_agent','la_contact','trade','company','offer_letter_received_date','visa_process_date',
-'pp_returned_date','pp_resubmitted_date','vr_date','visa_issue_date','visa_expiry_date','flown_date'];
 $date=['date_of_birth','wp_expiry','offer_letter_received_date','pp_returned_date','pp_resubmitted_date','visa_process_date','visa_return_date','visa_issue_date','visa_expiry_date','flown_date'];
 $discard=['photo','db_status','created_at','updated_at','app_status','vp_status','id'];
 @endphp
