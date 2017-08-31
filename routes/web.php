@@ -122,6 +122,7 @@ Route::post('/export','FormController@export_to_excel');
  * Online Controller Routes
  */
 Route::get('/online_form', 'OnlineController@online_form');
+Route::get('/refresh', 'OnlineController@refresh');
 
 
 Route::group(['middleware' => ['auth']], function() {
