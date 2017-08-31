@@ -112,9 +112,16 @@ Route::post('/edit_preset','AjaxController@edit_preset');
 Route::post('/delete_preset','AjaxController@delete_preset');
 Route::post('/activate_preset','AjaxController@activate_preset');
 
-
+/*
+ * Export Routes
+ */
 
 Route::post('/export','FormController@export_to_excel');
+
+/*
+ * Online Controller Routes
+ */
+Route::get('/online_form', 'OnlineController@online_form');
 
 
 Route::group(['middleware' => ['auth']], function() {

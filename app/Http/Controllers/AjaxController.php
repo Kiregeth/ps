@@ -577,7 +577,7 @@ class AjaxController extends Controller
                 \DB::table('field_presets')->where(['view_id'=>$view_id,'preset_id'=>$preset->preset_id])->update(['state'=>null]);
             }
         }
-        session()->flash('message', 'Preset with name '.$request->preset_name.' was activated for '.preg_replace('/_+/', ' ', active_field::where('id',$view_id)->first(['view'])->view).'!');
+        session()->flash('message', 'Preset with name '.field_preset::where(['view_id'=>$view_id,'preset_id'=>$preset_id])->first(['preset_name'])->preset_name.' was activated for '.preg_replace('/_+/', ' ', active_field::where('id',$view_id)->first(['view'])->view).'!');
     }
 
 

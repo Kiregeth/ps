@@ -10,9 +10,12 @@
     </style>
     <?php if(in_array('transfer',session('permission'))): ?><strong></strong>
         <div class="container">
+            <?php if(session()->has('message')): ?>
+                <h3 align="center" class="alert alert-success"><?php echo e(session()->get('message')); ?></h3>
+            <?php endif; ?>
             <h1>New Preset Manager</h1>
             <div>
-                <h3>1. Databank Preset <a class="btn btn-primary" data-toggle="modal" data-target="#add_databank_preset">Add Preset</a></h3>
+                <h3>1. Databank Preset </h3>
                 <form action="post">
                 <?php echo e(csrf_field()); ?>
 
@@ -20,7 +23,7 @@
                 <table class="table-striped" width="80%">
                     <thead>
                         <tr>
-                            <th><strong>SN.</strong></th>
+                            <th><strong><a class="btn btn-xs btn-info" data-toggle="modal" data-target="#add_databank_preset">Add Preset</a></strong></th>
                             <th><strong>Preset Name</strong></th>
                             <th><strong>State</strong></th>
                             <th><strong>Action</strong></th>
@@ -53,13 +56,127 @@
                 </form>
             </div>
             <div>
-                <h3>2. Visa Process Preset <a class="btn btn-primary" data-toggle="modal" data-target="#add_vp_preset">Add Preset</a></h3>
+                <h3>2. Visa Process Preset </h3>
+                <form action="post">
+                    <?php echo e(csrf_field()); ?>
+
+
+                    <table class="table-striped" width="80%">
+                        <thead>
+                        <tr>
+                            <th><strong><a class="btn btn-xs btn-info" data-toggle="modal" data-target="#add_vp_preset">Add Preset</a></strong></th>
+                            <th><strong>Preset Name</strong></th>
+                            <th><strong>State</strong></th>
+                            <th><strong>Action</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php  $i=1;  ?>
+                        <?php $__currentLoopData = $vp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <td><?php echo e($i); ?></td>
+                                <td><?php echo e($preset->preset_name); ?></td>
+                                <td>
+                                    <?php if($preset->state==='active'): ?>
+                                        <h5 align="center" class="bg-success" style="width:120px;">Active Now</h5>
+                                    <?php else: ?>
+                                        <a class="btn btn-xs btn-primary activate" id="activate_<?php echo e($preset->view_id); ?>_<?php echo e($preset->preset_id); ?>">Activate</a>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a class="btn btn-xs btn-default" data-toggle="modal" data-target="#vp_preset_edit_<?php echo e($preset->preset_id); ?>">Edit</a>
+                                    <?php if($preset->state!=='active'): ?>
+                                        <a class="delete btn btn-xs btn-default" id="<?php echo e($preset->preset_id); ?>_vpdelete">Delete</a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php  $i++;  ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
+                </form>
             </div>
             <div>
-                <h3>3. Visa Receive Preset <a class="btn btn-primary" data-toggle="modal" data-target="#add_vr_preset">Add Preset</a></h3>
+                <h3>3. Visa Receive Preset </h3>
+                <form action="post">
+                    <?php echo e(csrf_field()); ?>
+
+
+                    <table class="table-striped" width="80%">
+                        <thead>
+                        <tr>
+                            <th><strong><a class="btn btn-xs btn-info" data-toggle="modal" data-target="#add_vr_preset">Add Preset</a></strong></th>
+                            <th><strong>Preset Name</strong></th>
+                            <th><strong>State</strong></th>
+                            <th><strong>Action</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php  $i=1;  ?>
+                        <?php $__currentLoopData = $vr_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <td><?php echo e($i); ?></td>
+                                <td><?php echo e($preset->preset_name); ?></td>
+                                <td>
+                                    <?php if($preset->state==='active'): ?>
+                                        <h5 align="center" class="bg-success" style="width:120px;">Active Now</h5>
+                                    <?php else: ?>
+                                        <a class="btn btn-xs btn-primary activate" id="activate_<?php echo e($preset->view_id); ?>_<?php echo e($preset->preset_id); ?>">Activate</a>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a class="btn btn-xs btn-default" data-toggle="modal" data-target="#vr_preset_edit_<?php echo e($preset->preset_id); ?>">Edit</a>
+                                    <?php if($preset->state!=='active'): ?>
+                                        <a class="delete btn btn-xs btn-default" id="<?php echo e($preset->preset_id); ?>_vrdelete">Delete</a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php  $i++;  ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
+                </form>
             </div>
             <div>
-                <h3>4. Deployment Preset <a class="btn btn-primary" data-toggle="modal" data-target="#add_deployment_preset">Add Preset</a></h3>
+                <h3>4. Deployment Preset </h3>
+                <form action="post">
+                    <?php echo e(csrf_field()); ?>
+
+
+                    <table class="table-striped" width="80%">
+                        <thead>
+                        <tr>
+                            <th><strong><a class="btn btn-xs btn-info" data-toggle="modal" data-target="#add_deployment_preset">Add Preset</a></strong></th>
+                            <th><strong>Preset Name</strong></th>
+                            <th><strong>State</strong></th>
+                            <th><strong>Action</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php  $i=1;  ?>
+                        <?php $__currentLoopData = $dp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <td><?php echo e($i); ?></td>
+                                <td><?php echo e($preset->preset_name); ?></td>
+                                <td>
+                                    <?php if($preset->state==='active'): ?>
+                                        <h5 align="center" class="bg-success" style="width:120px;">Active Now</h5>
+                                    <?php else: ?>
+                                        <a class="btn btn-xs btn-primary activate" id="activate_<?php echo e($preset->view_id); ?>_<?php echo e($preset->preset_id); ?>">Activate</a>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a class="btn btn-xs btn-default" data-toggle="modal" data-target="#dp_preset_edit_<?php echo e($preset->preset_id); ?>">Edit</a>
+                                    <?php if($preset->state!=='active'): ?>
+                                        <a class="delete btn btn-xs btn-default" id="<?php echo e($preset->preset_id); ?>_dpdelete">Delete</a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php  $i++;  ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
 
@@ -146,7 +263,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="modal fade" id="add_vr_preset" role="dialog">
             <div class="modal-dialog" >
@@ -284,6 +400,162 @@
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
+    <?php $__currentLoopData = $vp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="vp_preset_edit_<?php echo e($preset->preset_id); ?>" role="dialog">
+            <div class="modal-dialog" >
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Visa Process Field Preset [ <?php echo e($preset->preset_name); ?> ]</h4>
+                    </div>
+                    <form method="post">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body container">
+                            <div class="col-md-offset-1 col-md-10 row">
+                                <div class="col-md-2"><label class="control-label" for="vp_preset_name">Preset Name:</label></div>
+                                <div class="col-md-8"><input name="vp_preset_name_<?php echo e($preset->preset_id); ?>" value="<?php echo e($preset->preset_name); ?>" placeholder="<?php echo e($preset->preset_name); ?>" id="vp_preset_name_<?php echo e($preset->preset_id); ?>" class="form-control" required/></div>
+                            </div>
+                            <br />
+                            <br />
+                            <?php  $before_field=explode(',',$preset->preset_field)  ?>
+                            <div class="col-md-offset-1 col-md-10 row">
+                                <div class="col-md-5 field field-left" id="visaProcess-left-<?php echo e($preset->preset_id); ?>">
+                                    <ul>
+                                        <?php $__currentLoopData = $vp_cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if(!in_array($col,$before_field)): ?>
+                                                <li><?php echo e($col); ?><span class="pull-right"><i class="fa fa-exchange" aria-hidden="true"></i></span></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 field field-right" id="visaProcess-right-<?php echo e($preset->preset_id); ?>">
+                                    <ul>
+                                        <?php $__currentLoopData = $before_field; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($col!='ref_no' && $col!='date' && $col!='app_status'): ?>
+                                                <li><?php echo e($col); ?><span class="pull-right"><i class="fa fa-exchange" aria-hidden="true"></i></span></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-default" style="color:black !important;" id="vp_edit_btn_<?php echo e($preset->preset_id); ?>">Edit</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $vr_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="vr_preset_edit_<?php echo e($preset->preset_id); ?>" role="dialog">
+            <div class="modal-dialog" >
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Visa Receive Field Preset [ <?php echo e($preset->preset_name); ?> ]</h4>
+                    </div>
+                    <form method="post">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body container">
+                            <div class="col-md-offset-1 col-md-10 row">
+                                <div class="col-md-2"><label class="control-label" for="vr_preset_name">Preset Name:</label></div>
+                                <div class="col-md-8"><input name="vr_preset_name_<?php echo e($preset->preset_id); ?>" value="<?php echo e($preset->preset_name); ?>" placeholder="<?php echo e($preset->preset_name); ?>" id="vr_preset_name_<?php echo e($preset->preset_id); ?>" class="form-control" required/></div>
+                            </div>
+                            <br />
+                            <br />
+                            <?php  $before_field=explode(',',$preset->preset_field)  ?>
+                            <div class="col-md-offset-1 col-md-10 row">
+                                <div class="col-md-5 field field-left" id="visaReceive-left-<?php echo e($preset->preset_id); ?>">
+                                    <ul>
+                                        <?php $__currentLoopData = $vr_cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if(!in_array($col,$before_field)): ?>
+                                                <li><?php echo e($col); ?><span class="pull-right"><i class="fa fa-exchange" aria-hidden="true"></i></span></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 field field-right" id="visaReceive-right-<?php echo e($preset->preset_id); ?>">
+                                    <ul>
+                                        <?php $__currentLoopData = $before_field; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($col!='ref_no' && $col!='date' && $col!='app_status'): ?>
+                                                <li><?php echo e($col); ?><span class="pull-right"><i class="fa fa-exchange" aria-hidden="true"></i></span></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-default" style="color:black !important;" id="vr_edit_btn_<?php echo e($preset->preset_id); ?>">Edit</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $dp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="dp_preset_edit_<?php echo e($preset->preset_id); ?>" role="dialog">
+            <div class="modal-dialog" >
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Deployment Field Preset [ <?php echo e($preset->preset_name); ?> ]</h4>
+                    </div>
+                    <form method="post">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body container">
+                            <div class="col-md-offset-1 col-md-10 row">
+                                <div class="col-md-2"><label class="control-label" for="dp_preset_name">Preset Name:</label></div>
+                                <div class="col-md-8"><input name="dp_preset_name_<?php echo e($preset->preset_id); ?>" value="<?php echo e($preset->preset_name); ?>" placeholder="<?php echo e($preset->preset_name); ?>" id="dp_preset_name_<?php echo e($preset->preset_id); ?>" class="form-control" required/></div>
+                            </div>
+                            <br />
+                            <br />
+                            <?php  $before_field=explode(',',$preset->preset_field)  ?>
+                            <div class="col-md-offset-1 col-md-10 row">
+                                <div class="col-md-5 field field-left" id="deployment-left-<?php echo e($preset->preset_id); ?>">
+                                    <ul>
+                                        <?php $__currentLoopData = $dp_cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if(!in_array($col,$before_field)): ?>
+                                                <li><?php echo e($col); ?><span class="pull-right"><i class="fa fa-exchange" aria-hidden="true"></i></span></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 field field-right" id="deployment-right-<?php echo e($preset->preset_id); ?>">
+                                    <ul>
+                                        <?php $__currentLoopData = $before_field; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($col!='ref_no' && $col!='date' && $col!='app_status'): ?>
+                                                <li><?php echo e($col); ?><span class="pull-right"><i class="fa fa-exchange" aria-hidden="true"></i></span></li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-default" style="color:black !important;" id="dp_edit_btn_<?php echo e($preset->preset_id); ?>">Edit</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
         <script>
             var databankArray=[];
             var visaProcessArray=[];
@@ -293,11 +565,28 @@
             var tempStr="";
 
             var dbArray=[];
+            var vpArray=[];
+            var vrArray=[];
+            var dpArray=[];
 
             <?php $__currentLoopData = $db_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                dbArray[<?php echo e($preset->preset_id); ?>]=<?php echo json_encode(substr($preset->preset_field,12,strlen($preset->preset_field))); ?>;
+                dbArray[<?php echo e($preset->preset_id); ?>]=<?php echo json_encode(substr($preset->preset_field,23,strlen($preset->preset_field))); ?>;
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
+            <?php $__currentLoopData = $vp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                vpArray[<?php echo e($preset->preset_id); ?>]=<?php echo json_encode(substr($preset->preset_field,23,strlen($preset->preset_field))); ?>;
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            <?php $__currentLoopData = $vr_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                vrArray[<?php echo e($preset->preset_id); ?>]=<?php echo json_encode(substr($preset->preset_field,23,strlen($preset->preset_field))); ?>;
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            <?php $__currentLoopData = $vr_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                dpArray[<?php echo e($preset->preset_id); ?>]=<?php echo json_encode(substr($preset->preset_field,23,strlen($preset->preset_field))); ?>;
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
+            //append for add
             $(function () {
                 $("#databank-left").find('li').on('click',function () {
                     var check=0;
@@ -544,6 +833,7 @@
                 })
             });
 
+            //append for edit
             $(function(){
                 <?php $__currentLoopData = $db_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 $("#databank-left-<?php echo e($preset->preset_id); ?>").find('li').on('click',function () {
@@ -595,8 +885,6 @@
                             break;
                         }
                     }
-
-
                     if (check === 0) {
                         var temp1=[];
                         temp1=dbArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
@@ -617,8 +905,222 @@
                     });
                 });
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <?php $__currentLoopData = $vp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                $("#visaProcess-left-<?php echo e($preset->preset_id); ?>").find('li').on('click',function () {
+                    var check=0;
+                    var temp=vpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                    for(var i=0;i<temp.length;i++)
+                    {
+                        if(temp[i]===$(this).text())
+                        {
+                            temp.splice(i,1);
+                            check++;
+                            break;
+                        }
+                    }
+                    if(check===0)
+                    {
+                        var temp1=[];
+                        temp1=vpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                        temp1.push($(this).text());
+                        vpArray[<?php echo e($preset->preset_id); ?>]=temp1;
+                    }
+                    else{
+                        vpArray[<?php echo e($preset->preset_id); ?>]=temp;
+                    }
+
+                    $(this).appendTo('#visaProcess-right-<?php echo e($preset->preset_id); ?> ul').on('click',function (e) {
+                        var id=e.target.parentNode.parentNode.id;
+                        if(id==='visaProcess-right-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#visaProcess-left-<?php echo e($preset->preset_id); ?> ul');
+                        }
+
+                        else if(id==='visaProcess-left-<?php echo e($preset->preset_id); ?>') {
+
+                            $(this).appendTo('#visaProcess-right-<?php echo e($preset->preset_id); ?> ul');
+
+                        }
+                    });
+                });
+
+                $("#visaProcess-right-<?php echo e($preset->preset_id); ?>").find('li').on('click',function () {
+                    var check = 0;
+                    var temp=vpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                    for(var i=0;i<temp.length;i++)
+                    {
+                        if(temp[i]===$(this).text())
+                        {
+                            temp.splice(i,1);
+                            check++;
+                            break;
+                        }
+                    }
+                    if (check === 0) {
+                        var temp1=[];
+                        temp1=vpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                        temp1.push($(this).text());
+                        vpArray[<?php echo e($preset->preset_id); ?>]=temp1;
+                    }
+                    else{
+                        vpArray[<?php echo e($preset->preset_id); ?>]=temp;
+                    }
+                    $(this).appendTo('#visaProcess-left-<?php echo e($preset->preset_id); ?> ul').on('click', function (e) {
+                        var id = e.target.parentNode.parentNode.id;
+                        if (id === 'visaProcess-right-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#visaProcess-left-<?php echo e($preset->preset_id); ?> ul');
+                        }
+                        else if (id === 'visaProcess-left-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#visaProcess-right-<?php echo e($preset->preset_id); ?> ul');
+                        }
+                    });
+                });
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <?php $__currentLoopData = $vr_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                $("#visaReceive-left-<?php echo e($preset->preset_id); ?>").find('li').on('click',function () {
+                    var check=0;
+                    var temp=vrArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                    for(var i=0;i<temp.length;i++)
+                    {
+                        if(temp[i]===$(this).text())
+                        {
+                            temp.splice(i,1);
+                            check++;
+                            break;
+                        }
+                    }
+                    if(check===0)
+                    {
+                        var temp1=[];
+                        temp1=vrArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                        temp1.push($(this).text());
+                        vrArray[<?php echo e($preset->preset_id); ?>]=temp1;
+                    }
+                    else{
+                        vrArray[<?php echo e($preset->preset_id); ?>]=temp;
+                    }
+
+                    $(this).appendTo('#visaReceive-right-<?php echo e($preset->preset_id); ?> ul').on('click',function (e) {
+                        var id=e.target.parentNode.parentNode.id;
+                        if(id==='visaReceive-right-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#visaReceive-left-<?php echo e($preset->preset_id); ?> ul');
+                        }
+
+                        else if(id==='visaReceive-left-<?php echo e($preset->preset_id); ?>') {
+
+                            $(this).appendTo('#visaReceive-right-<?php echo e($preset->preset_id); ?> ul');
+
+                        }
+                    });
+                });
+
+                $("#visaReceive-right-<?php echo e($preset->preset_id); ?>").find('li').on('click',function () {
+                    var check = 0;
+                    var temp=vrArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                    for(var i=0;i<temp.length;i++)
+                    {
+                        if(temp[i]===$(this).text())
+                        {
+                            temp.splice(i,1);
+                            check++;
+                            break;
+                        }
+                    }
+                    if (check === 0) {
+                        var temp1=[];
+                        temp1=vrArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                        temp1.push($(this).text());
+                        vrArray[<?php echo e($preset->preset_id); ?>]=temp1;
+                    }
+                    else{
+                        vrArray[<?php echo e($preset->preset_id); ?>]=temp;
+                    }
+                    $(this).appendTo('#visaReceive-left-<?php echo e($preset->preset_id); ?> ul').on('click', function (e) {
+                        var id = e.target.parentNode.parentNode.id;
+                        if (id === 'visaReceive-right-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#visaReceive-left-<?php echo e($preset->preset_id); ?> ul');
+                        }
+                        else if (id === 'visaReceive-left-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#visaReceive-right-<?php echo e($preset->preset_id); ?> ul');
+                        }
+                    });
+                });
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <?php $__currentLoopData = $dp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                $("#deployment-left-<?php echo e($preset->preset_id); ?>").find('li').on('click',function () {
+                    var check=0;
+                    var temp=dpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                    for(var i=0;i<temp.length;i++)
+                    {
+                        if(temp[i]===$(this).text())
+                        {
+                            temp.splice(i,1);
+                            check++;
+                            break;
+                        }
+                    }
+                    if(check===0)
+                    {
+                        var temp1=[];
+                        temp1=dpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                        temp1.push($(this).text());
+                        dpArray[<?php echo e($preset->preset_id); ?>]=temp1;
+                    }
+                    else{
+                        dpArray[<?php echo e($preset->preset_id); ?>]=temp;
+                    }
+
+                    $(this).appendTo('#deployment-right-<?php echo e($preset->preset_id); ?> ul').on('click',function (e) {
+                        var id=e.target.parentNode.parentNode.id;
+                        if(id==='deployment-right-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#deployment-left-<?php echo e($preset->preset_id); ?> ul');
+                        }
+
+                        else if(id==='deployment-left-<?php echo e($preset->preset_id); ?>') {
+
+                            $(this).appendTo('#deployment-right-<?php echo e($preset->preset_id); ?> ul');
+
+                        }
+                    });
+                });
+
+                $("#deployment-right-<?php echo e($preset->preset_id); ?>").find('li').on('click',function () {
+                    var check = 0;
+                    var temp=dpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                    for(var i=0;i<temp.length;i++)
+                    {
+                        if(temp[i]===$(this).text())
+                        {
+                            temp.splice(i,1);
+                            check++;
+                            break;
+                        }
+                    }
+                    if (check === 0) {
+                        var temp1=[];
+                        temp1=dpArray[<?php echo e($preset->preset_id); ?>].toString().split(',');
+                        temp1.push($(this).text());
+                        dpArray[<?php echo e($preset->preset_id); ?>]=temp1;
+                    }
+                    else{
+                        dpArray[<?php echo e($preset->preset_id); ?>]=temp;
+                    }
+                    $(this).appendTo('#deployment-left-<?php echo e($preset->preset_id); ?> ul').on('click', function (e) {
+                        var id = e.target.parentNode.parentNode.id;
+                        if (id === 'deployment-right-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#deployment-left-<?php echo e($preset->preset_id); ?> ul');
+                        }
+                        else if (id === 'deployment-left-<?php echo e($preset->preset_id); ?>') {
+                            $(this).appendTo('#deployment-right-<?php echo e($preset->preset_id); ?> ul');
+                        }
+                    });
+                });
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             });
 
+            //edit preset button functionality
             $(function() {
                 <?php $__currentLoopData = $db_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 $("#db_edit_btn_<?php echo e($preset->preset_id); ?>").on('click',function (){
@@ -646,10 +1148,88 @@
                     }
                 });
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <?php $__currentLoopData = $vp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                $("#vp_edit_btn_<?php echo e($preset->preset_id); ?>").on('click',function (){
+                    var temp =vpArray[<?php echo e($preset->preset_id); ?>].toString();
+                    if(temp.substr(0,1)===',')
+                    {
+                        temp=temp.substr(1,temp.length-1);
+                    }
+                    if(temp.substr(temp.length-1,1)===',')
+                    {
+                        temp=temp.substr(0,temp.length-2);
+                    }
+                    vpArray[<?php echo e($preset->preset_id); ?>]=temp.split(',');
+                    $.post('/edit_preset', {'view_name':'new_visa_process','preset_id':<?php echo e($preset->preset_id); ?>,'preset_name': $('#vp_preset_name_<?php echo e($preset->preset_id); ?>').val(),'val': 'ref_no,date,app_status,'+vpArray[<?php echo e($preset->preset_id); ?>].toString(),'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                });
+
+                $("#<?php echo e($preset->preset_id); ?>_vpdelete").on('click',function(){
+                    var id=$(this).attr("id");
+                    var view_name='new_visa_process';
+                    var preset_id=parseInt(id.substr(0,id.lastIndexOf('_')));
+
+                    var result = confirm("Want to delete?");
+                    if (result) {
+                        $.post('/delete_preset', {'view_name':view_name,'preset_id':preset_id,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                    }
+                });
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <?php $__currentLoopData = $vr_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                $("#vr_edit_btn_<?php echo e($preset->preset_id); ?>").on('click',function (){
+                    var temp =vrArray[<?php echo e($preset->preset_id); ?>].toString();
+                    if(temp.substr(0,1)===',')
+                    {
+                        temp=temp.substr(1,temp.length-1);
+                    }
+                    if(temp.substr(temp.length-1,1)===',')
+                    {
+                        temp=temp.substr(0,temp.length-2);
+                    }
+                    vrArray[<?php echo e($preset->preset_id); ?>]=temp.split(',');
+                    $.post('/edit_preset', {'view_name':'new_visa_receive','preset_id':<?php echo e($preset->preset_id); ?>,'preset_name': $('#vr_preset_name_<?php echo e($preset->preset_id); ?>').val(),'val': 'ref_no,date,app_status,'+vrArray[<?php echo e($preset->preset_id); ?>].toString(),'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                });
+
+                $("#<?php echo e($preset->preset_id); ?>_vrdelete").on('click',function(){
+                    var id=$(this).attr("id");
+                    var view_name='new_visa_receive';
+                    var preset_id=parseInt(id.substr(0,id.lastIndexOf('_')));
+
+                    var result = confirm("Want to delete?");
+                    if (result) {
+                        $.post('/delete_preset', {'view_name':view_name,'preset_id':preset_id,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                    }
+                });
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <?php $__currentLoopData = $dp_presets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                $("#dp_edit_btn_<?php echo e($preset->preset_id); ?>").on('click',function (){
+                    var temp =dpArray[<?php echo e($preset->preset_id); ?>].toString();
+                    if(temp.substr(0,1)===',')
+                    {
+                        temp=temp.substr(1,temp.length-1);
+                    }
+                    if(temp.substr(temp.length-1,1)===',')
+                    {
+                        temp=temp.substr(0,temp.length-2);
+                    }
+                    dpArray[<?php echo e($preset->preset_id); ?>]=temp.split(',');
+                    $.post('/edit_preset', {'view_name':'new_deployment','preset_id':<?php echo e($preset->preset_id); ?>,'preset_name': $('#dp_preset_name_<?php echo e($preset->preset_id); ?>').val(),'val': 'ref_no,date,app_status,'+dpArray[<?php echo e($preset->preset_id); ?>].toString(),'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                });
+
+                $("#<?php echo e($preset->preset_id); ?>_dpdelete").on('click',function(){
+                    var id=$(this).attr("id");
+                    var view_name='new_deployment';
+                    var preset_id=parseInt(id.substr(0,id.lastIndexOf('_')));
+
+                    var result = confirm("Want to delete?");
+                    if (result) {
+                        $.post('/delete_preset', {'view_name':view_name,'preset_id':preset_id,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+                    }
+                });
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             });
-
-
-
 
             //activate function
             $(function (){
