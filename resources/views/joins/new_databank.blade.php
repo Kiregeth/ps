@@ -83,15 +83,8 @@
                                             @endif
                                             @if(in_array('transfer',session('permission')))
                                                 @if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf' && $data->app_status!='int')
-                                                    <a class="btn btn-link" href="/add_to_interview" onclick="event.preventDefault();
-                                                     document.getElementById('int-form').submit();"
-                                                       title="add to interview list"><i class="fa fa-question-circle"></i></a>
+                                                    <a class="int btn btn-link" id="{{$data->ref_no}}_int'" name="{{$data->ref_no}}_int'" title="add to interview list"><i class="fa fa-question-circle"></i></a>
 
-
-                                                        <form id="int-form" action="/add_to_interview" method="POST" style="display: none;">
-                                                            {{ csrf_field() }}
-                                                            <input type="hidden" name="ref_no" value="{{$data->ref_no}}">
-                                                        </form>
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_{{$data->ref_no}}"
                                                        title="add to visa processing"><i class="fa fa-forward"></i></a>
                                                     {{--<a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_{{$data->ref_no}}"--}}
@@ -533,6 +526,8 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+
         @if(in_array('delete',session('permission')))
         $(function (){
             $(".delete").click(function(){
@@ -621,6 +616,22 @@
             return false;
         }
     @endif
+
+    @if(in_array('transfer',session('permission')))
+    $(function (){
+        $(".int").click(function(){
+            var name=$(this).attr("name");
+            var val=parseInt(name.substr(0,name.lastIndexOf('_')));
+            var col='ref_no';
+            var result = confirm("Want to add to interview list?");
+            if (result) {
+                $.post('/add_to_interview', {'w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+            }
+
+
+        });
+    });
+        @endif
 
     $('.frm_remark').bind('keypress', function(e) {
         var keyCode = e.keyCode || e.which;

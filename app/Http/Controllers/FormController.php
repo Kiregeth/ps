@@ -62,12 +62,6 @@ class FormController extends Controller
         return back();
     }
 
-    public function add_to_interview(Request $request)
-    {
-        new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'int']);
-        return back();
-    }
-
     public function add_to_visa(Request $request)
     {
         $pasa=new new_visa_process();

@@ -378,6 +378,18 @@ class AjaxController extends Controller
         \DB::table('new_databanks')->where($col, $value)->update(['app_status' => 'vc']);
     }
 
+    public function add_to_interview(Request $request)
+    {
+        new_databank::where($request->w_col, $request->w_val)->update(['app_status' => 'int']);
+    }
+
+    public function reject(Request $request)
+    {
+        $col=$request->w_col;
+        $value=$request->w_val;
+        \DB::table('new_databanks')->where($col, $value)->update(['app_status' => 'db']);
+    }
+
     public function quick_edit_new(Request $request)
     {
         $w_col = $request->w_col;

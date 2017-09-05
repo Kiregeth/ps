@@ -62,7 +62,7 @@ Route::post('/deployment', 'OldDbController@deployment');
 
 Route::post('/add', 'FormController@add');
 Route::post('/add_to_db', 'FormController@add_to_db');
-Route::post('/add_to_interview', 'FormController@add_to_interview');
+
 Route::post('/add_to_visa', 'FormController@add_to_visa');
 Route::post('/add_to_visa_receive', 'FormController@add_to_visa_receive');
 Route::post('/add_to_deployment', 'FormController@add_to_deployment');
@@ -105,6 +105,7 @@ Route::post('/cv_save','AjaxController@cv_save');
 
 Route::post('/delete_new','AjaxController@delete_new');
 Route::post('/cancel_new','AjaxController@cancel_new');
+Route::post('/reject','AjaxController@reject');
 Route::post('/quick_edit_new','AjaxController@quick_edit_new');
 Route::post('/add_remark', 'AjaxController@add_remark');
 
@@ -114,6 +115,8 @@ Route::post('/add_preset','AjaxController@add_preset');
 Route::post('/edit_preset','AjaxController@edit_preset');
 Route::post('/delete_preset','AjaxController@delete_preset');
 Route::post('/activate_preset','AjaxController@activate_preset');
+
+Route::post('/add_to_interview', 'AjaxController@add_to_interview');
 
 /*
  * Export Routes

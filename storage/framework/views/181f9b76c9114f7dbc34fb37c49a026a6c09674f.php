@@ -1,4 +1,13 @@
 <?php $__env->startSection('content'); ?>
+    <style>
+        .btn-tbl{
+            font-size:10px;
+            font-weight:bold;
+            padding:2px 10px;
+            margin-top:5px;
+            margin-bottom:5px;
+        }
+    </style>
     <div class="container">
     <?php 
         $fields=['ref_no','name','passport_no','trade'];
@@ -51,6 +60,7 @@
                 <thead>
                 <tr>
                     <th>&nbsp;</th>
+                    <th>&nbsp;</th>
                     <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php if(!in_array($col,$discard)): ?>
                             <th><?php echo e(strtoupper(preg_replace('/_+/', ' ', $col))); ?></th>
@@ -71,23 +81,15 @@
                                        title="Remarks"><i class="fa fa-comment"></i></a>
                                 <?php endif; ?>
                                 <?php if(in_array('transfer',session('permission'))): ?>
-                                    <?php if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf' && $data->app_status!='int'): ?>
-                                        <a class="btn btn-link" href="/add_to_interview" onclick="event.preventDefault();
-                                                     document.getElementById('int-form').submit();"
-                                           title="add to interview list"><i class="fa fa-question-circle"></i></a>
 
-
-                                        <form id="int-form" action="/add_to_interview" method="POST" style="display: none;">
-                                            <?php echo e(csrf_field()); ?>
-
-                                            <input type="hidden" name="ref_no" value="<?php echo e($data->ref_no); ?>">
-                                        </form>
-                                        <a class="btn btn-link" data-toggle="modal" data-target="#visa_<?php echo e($data->ref_no); ?>"
-                                           title="add to visa processing"><i class="fa fa-forward"></i></a>
-                                        
-                                        
-                                    <?php endif; ?>
                                 <?php endif; ?>
+                            </div>
+                        </th>
+                        <th style="background-color: lightgrey">
+                            <div class="center-block" style="margin-top: auto;margin-bottom: auto; text-align: center;">
+                                <a class="btn btn-sm btn-success btn-tbl" data-toggle="modal" data-target="#visa_<?php echo e($data->ref_no); ?>"
+                                   title="add to visa processing">Accept</a>
+                                <a class="reject btn btn-sm btn-danger btn-tbl" name="<?php echo e($data->ref_no); ?>_reject">Reject</a>
                             </div>
                         </th>
                         <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -103,6 +105,7 @@
             </table>
         </form>
     </div>
+
 
     <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="modal fade" id="modal_<?php echo e($data->ref_no); ?>" role="dialog">
@@ -179,7 +182,108 @@
             </div>
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="visa_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add to Visa Processing</h4>
+                    </div>
+                    <form action="/add_to_visa" method="post" id="data-fom-<?php echo e($data->ref_no); ?>">
+                        <?php echo e(csrf_field()); ?>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'ref_no'); ?>"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="<?php echo e($data->ref_no); ?>"  readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'visa_process_date'); ?>">Visa Process Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'visa_process_date'); ?>"
+                                            name="visa_process_date"
+                                            placeholder="Enter Visa Process Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'trade'); ?>">Trade*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'trade'); ?>"
+                                            name="trade"
+                                            placeholder="Enter trade here! *"
+                                            value="<?php echo e($data->trade); ?>"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="<?php echo e($data->ref_no. '_' . 'company'); ?>">Companye*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="<?php echo e($data->ref_no. '_' . 'company'); ?>"
+                                            name="company"
+                                            placeholder="Enter company here!"
+                                            value="<?php echo e($data->company); ?>"
+                                            required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Add"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
     <script>
+
+    <?php if(in_array('transfer',session('permission'))): ?>
+    $(function (){
+        $(".reject").click(function(){
+            var name=$(this).attr("name");
+            var val=parseInt(name.substr(0,name.lastIndexOf('_')));
+            var col='ref_no';
+            var result = confirm("Want to reject?");
+            if (result) {
+                $.post('/reject', {'w_val': val,'w_col': col,'_token':$('input[name=_token]').val()}, function(response) {(response)?alert(response):location.reload(true);});
+            }
+
+
+        });
+    });
+
+
+    <?php endif; ?>
+
     $('.frm_remark').bind('keypress', function(e) {
     var keyCode = e.keyCode || e.which;
     if (keyCode === 13) {
