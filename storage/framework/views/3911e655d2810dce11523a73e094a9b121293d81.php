@@ -145,7 +145,7 @@
                                 <a class="li-head" href="#operation-nav" data-toggle="collapse">
                                     <span>Operation Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                                 </a>
-                                <div class="navigation-wrapper collapse <?php if($title=='visitor_log' || $title=='application_form' || $title=='app_forms'): ?>in <?php endif; ?>" id="operation-nav">
+                                <div class="navigation-wrapper collapse <?php if($title=='visitor_log' || $title=='application_form' || $title=='app_forms' || $title=='online_forms'): ?> in <?php endif; ?>" id="operation-nav">
                                     <ul class="navigation">
                                         <li class="<?php if($title === 'visitor_log'): ?> active <?php endif; ?>">
                                             <a href="/reception"><i class="fa fa-university"></i> Visitor Log </a>
@@ -156,6 +156,9 @@
                                         <li class="<?php if($title === 'app_forms'): ?> active <?php endif; ?>">
                                             <a href="/app_forms"><i class="fa fa-table"></i> Application Forms</a>
                                         </li>
+                                        <li class="<?php if($title === 'online_forms'): ?> active <?php endif; ?>">
+                                            <a href="/online_forms"><i class="fa fa-table"></i> Online Forms</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>
@@ -165,10 +168,13 @@
                                 <a class="li-head" href="#databank-nav" data-toggle="collapse">
                                     <span>Databank Management</span> <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
                                 </a>
-                                <div class="navigation-wrapper collapse <?php if($title=='new_databank' || $title=='new_visa' || $title=='new_deployment' || $title=='new_visa_receive' || $title=='new_preset'): ?>in <?php endif; ?>" id="databank-nav">
+                                <div class="navigation-wrapper collapse <?php if($title=='new_databank' || $title=='new_visa' || $title=='new_deployment' || $title=='new_visa_receive' || $title=='new_preset' || $title='interviewweb'): ?>in <?php endif; ?>" id="databank-nav">
                                     <ul class="navigation">
                                         <li class="<?php if($title === 'new_databank'): ?> active <?php endif; ?>">
                                             <a href="/new_databank"><i class="fa fa-database"></i>Databank </a>
+                                        </li>
+                                        <li class="<?php if($title === 'interview'): ?> active <?php endif; ?>">
+                                            <a href="/interview"><i class="fa fa-question-circle"></i>Interview </a>
                                         </li>
                                         <li class="<?php if($title === 'new_visa'): ?> active <?php endif; ?>">
                                             <a href="/new_visa"><i class="fa fa-cc-visa"></i>Visa Process </a>

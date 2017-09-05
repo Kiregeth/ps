@@ -55,6 +55,19 @@ return [
             'visibility' => 'public',
         ],
 
+        'ftp' => [
+            'driver'   => 'ftp',
+            'host'     => 'ftp://pasainternational.com.np',
+            'username' => 'pasainternationa',
+            'password' => 'z8Q;gS62VcfM',
+            // Optional FTP Settings...
+             'port'     => 21,
+             'root'     => 'publci_html',
+             'passive'  => true,
+             'ssl'      => true,
+             'timeout'  => 30,
+            ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),

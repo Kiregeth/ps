@@ -4,12 +4,50 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\online_form;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Ftp as Adapter;
 
 class OnlineController extends Controller
 {
     public function online_form()
     {
-        return view('joins/online_forms');
+        $datas= json_decode(file_get_contents(public_path('results.json')), true);
+        $cols=[];
+        foreach($datas[0] as $key=>$value)
+        {
+            $cols[]=$key;
+        }
+        $this->update_folders($datas);
+        $full_path_source = \Storage::disk('ftp')->getDriver()->getAdapter()->applyPathPrefix('ftp://pasainternational.com.np/public_html/image/online_files');
+//        echo $full_path_source;
+//        exit;
+        $full_path_dest=public_path("images/app_forms/online");
+        if(\File::copyDirectory($full_path_source, $full_path_dest))
+        {
+            echo "asd";
+        }
+        else
+        {
+            echo "dsa";
+        }
+
+        return view('joins/online_forms',compact('cols','datas'));
+
+    }
+
+    public function update_folders($datas){
+
+
+//        foreach($datas as $data)
+//        {
+//            if (!\File::exists(public_path('\\images\\app_forms\\online\\O').$data['id']))
+//            {
+//                \File::makeDirectory(public_path("\\images\\app_forms\\online\\O").$data['id']);
+//
+//                $url= 'ftp://pasainternational.com.np/public_html/image/online_files/cv_doc_'.$data->id.'.*';
+//
+//            }
+//        }
 
     }
 

@@ -16,7 +16,7 @@
             <h1>New Preset Manager</h1>
             <div>
                 <h3>1. Databank Preset </h3>
-                <form action="post">
+                <form method="post">
                 <?php echo e(csrf_field()); ?>
 
 

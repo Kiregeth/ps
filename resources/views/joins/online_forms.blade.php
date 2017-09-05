@@ -1,4 +1,4 @@
-@extends('layouts.dash_app',['title'=>'new_deployment'])
+@extends('layouts.dash_app',['title'=>'online_forms'])
 
 @section('content')
     <div class="container">

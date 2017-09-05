@@ -22,7 +22,7 @@ class FormController extends Controller
         $app=app_form::find($request->ref_no);
         $pasa=new new_databank();
         $cols=\Schema::getColumnListing('app_forms');
-        $discard=['created_at','updated_at'];
+        $discard=['created_at','updated_at','ref_no'];
 
         foreach($cols as $col)
         {
@@ -39,22 +39,35 @@ class FormController extends Controller
 
         $pasa->save();
 
+        $ins_id=new_databank::orderBy('ref_no','desc')->first()->ref_no;
+
         app_form::where('ref_no', $app->ref_no)->delete();
-        new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'db']);
+        new_databank::where('ref_no', $ins_id)->update(['app_status' => 'db']);
+        new_databank::where('ref_no', $ins_id)->update(['photo' => 'app_forms/DB'.$ins_id.'/photo_'.$app->ref_no.'.jpg']);
 
         if($request->remarks!==null && $request->remarks!=="")
         {
             $pasa1=new db_remark();
-            $pasa1->ref_no=$request->ref_no;
+            $pasa1->ref_no=$ins_id;
             $pasa1->remark_id=1;
             $pasa1->remark=$request->remarks;
             $pasa1->user=\Auth::user()->uname;
             $pasa1->save();
         }
 
+
+        $success = \File::copyDirectory(public_path("images/app_forms/")."L".$app->ref_no, public_path("images/app_forms/")."DB".$ins_id);
+        \File::deleteDirectory(public_path("images/app_forms/")."L".$app->ref_no);
         session()->flash('message', 'Candidate with refer no. '.$request->ref_no.' was entered into databank!');
         return back();
     }
+
+    public function add_to_interview(Request $request)
+    {
+        new_databank::where('ref_no', $request->ref_no)->update(['app_status' => 'int']);
+        return back();
+    }
+
     public function add_to_visa(Request $request)
     {
         $pasa=new new_visa_process();

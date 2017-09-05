@@ -46,13 +46,52 @@ class NewDbController extends Controller
             $fields=explode(',',active_field::where('view','new_databank')->first()->field);
             $db_table = 'new_databanks';
             $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
-
-            return view("joins.new_databank", compact('db_table','fields', 'sel', 'search','limit', 'datas','remarks'));
+            $cols = \Schema::getColumnListing('new_databanks');
+            return view("joins.new_databank", compact('db_table','cols','fields', 'sel', 'search','limit', 'datas','remarks'));
         }
         else
         {
             return redirect('/');
         }
+    }
+
+    function interview(Request $request)
+    {
+        if (\Auth::user()) {
+            $sel = "";
+            $search = "";
+            if ($request->page_size != null && $request->page_size != "") {
+                $limit = intval($request->page_size);
+            } else {
+                $limit = 20;
+            }
+//        $app_cols=\Schema::getColumnListing('app_forms');
+//        $db_cols=\Schema::getColumnListing('new_databanks');
+
+            if (!empty($request->all()) && $request->sel != "" && $request->search != "") {
+
+                $sel = $request->sel;
+                if ($sel === 'ref_no') {
+                    $sel = 'new_databanks.' . $sel;
+                }
+                $search = $request->search;
+                $datas = new_databank::where($sel, 'LIKE', '%' . $search . '%')
+                    ->orderBy('new_databanks.ref_no', 'desc')
+                    ->paginate($limit);
+
+            } else {
+                $datas = new_databank::where('app_status', 'int')->orderBy('new_databanks.ref_no', 'desc')
+                    ->paginate($limit);
+            }
+            $cols = \Schema::getColumnListing('new_databanks');
+            $remarks = db_remark::orderBy('time', 'desc')->get(['ref_no','remark_id','remark','user','time']);
+            return view('joins.interview',compact('cols','sel', 'search','limit', 'datas','remarks'));
+        }
+        else
+        {
+            return redirect('/');
+        }
+
     }
 
     function new_visa(Request $request)

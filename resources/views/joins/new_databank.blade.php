@@ -60,10 +60,13 @@
                             <tbody>
                             @php $i=0; $datas_array=array(); @endphp
                             @foreach ($datas as $data)
-                                <tr @if($data->app_status=='vp')
+                                <tr
+                                    @if($data->app_status== 'int')
                                     style='background-color: lightgreen;'
+                                    @elseif($data->app_status=='vp')
+                                    style='background-color: green;'
                                     @elseif($data->app_status=='vr')
-                                    style='background-color: yellow;'
+                                    style='background-color: darkgreen;'
                                     @elseif($data->app_status== 'vc')
                                     style='background-color: lightcoral;'
                                     @elseif($data->app_status== 'vf')
@@ -79,11 +82,20 @@
                                                title="Remarks"><i class="fa fa-comment"></i></a>
                                             @endif
                                             @if(in_array('transfer',session('permission')))
-                                                @if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf')
+                                                @if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf' && $data->app_status!='int')
+                                                    <a class="btn btn-link" href="/add_to_interview" onclick="event.preventDefault();
+                                                     document.getElementById('int-form').submit();"
+                                                       title="add to interview list"><i class="fa fa-question-circle"></i></a>
+
+
+                                                        <form id="int-form" action="/add_to_interview" method="POST" style="display: none;">
+                                                            {{ csrf_field() }}
+                                                            <input type="hidden" name="ref_no" value="{{$data->ref_no}}">
+                                                        </form>
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_{{$data->ref_no}}"
-                                                       title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
-                                                    <a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_{{$data->ref_no}}"
-                                                       title="add to visa receive"><i class="fa fa-life-ring"></i></a>
+                                                       title="add to visa processing"><i class="fa fa-forward"></i></a>
+                                                    {{--<a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_{{$data->ref_no}}"--}}
+                                                       {{--title="add to visa receive"><i class="fa fa-life-ring"></i></a>--}}
                                                 @endif
                                             @endif
                                         </div>
@@ -147,16 +159,16 @@
                     </div>
                     <div class="modal-body">
                         @php $j=0;@endphp
-                        @foreach($data as $col=>$value)
-                            @if(!in_array($col,$discard))
+                        @foreach($cols as $col)
+                            @if($col!='created_at' && $col!='updated_at' && $col!='app_status')
                                 <div class="row">
                                     <div class="col-xs-4 col-md-4"><label class="control-label pull-right"
-                                                                          for="{{$data->ref_no. '_' . $j}}">{{ucwords($col)}}:</label>
+                                                                          for="{{$data->ref_no. '_' . $j}}">{{$col}}:</label>
                                     </div>
                                     <div class="col-xs-8 col-md-8"><input
                                                 class="form-control"
                                                 id="{{$data->ref_no. '_' . $j}}"
-                                                value="{{$value}}" readonly/>
+                                                value="{{$data->$col}}" readonly/>
                                     </div>
                                 </div>
                                 @php $j++; @endphp

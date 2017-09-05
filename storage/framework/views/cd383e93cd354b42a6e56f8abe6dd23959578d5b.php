@@ -60,10 +60,13 @@
                             <tbody>
                             <?php  $i=0; $datas_array=array();  ?>
                             <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr <?php if($data->app_status=='vp'): ?>
+                                <tr
+                                    <?php if($data->app_status== 'int'): ?>
                                     style='background-color: lightgreen;'
+                                    <?php elseif($data->app_status=='vp'): ?>
+                                    style='background-color: green;'
                                     <?php elseif($data->app_status=='vr'): ?>
-                                    style='background-color: yellow;'
+                                    style='background-color: darkgreen;'
                                     <?php elseif($data->app_status== 'vc'): ?>
                                     style='background-color: lightcoral;'
                                     <?php elseif($data->app_status== 'vf'): ?>
@@ -79,11 +82,21 @@
                                                title="Remarks"><i class="fa fa-comment"></i></a>
                                             <?php endif; ?>
                                             <?php if(in_array('transfer',session('permission'))): ?>
-                                                <?php if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf'): ?>
+                                                <?php if($data->app_status!='vp' && $data->app_status!='vr' && $data->app_status!='vf' && $data->app_status!='int'): ?>
+                                                    <a class="btn btn-link" href="/add_to_interview" onclick="event.preventDefault();
+                                                     document.getElementById('int-form').submit();"
+                                                       title="add to interview list"><i class="fa fa-question-circle"></i></a>
+
+
+                                                        <form id="int-form" action="/add_to_interview" method="POST" style="display: none;">
+                                                            <?php echo e(csrf_field()); ?>
+
+                                                            <input type="hidden" name="ref_no" value="<?php echo e($data->ref_no); ?>">
+                                                        </form>
                                                     <a class="btn btn-link" data-toggle="modal" data-target="#visa_<?php echo e($data->ref_no); ?>"
-                                                       title="add to visa processing"><i class="fa fa-cc-visa"></i></a>
-                                                    <a class="btn btn-link" data-toggle="modal" data-target="#visa_receive_<?php echo e($data->ref_no); ?>"
-                                                       title="add to visa receive"><i class="fa fa-life-ring"></i></a>
+                                                       title="add to visa processing"><i class="fa fa-forward"></i></a>
+                                                    
+                                                       
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                         </div>
@@ -148,16 +161,16 @@
                     </div>
                     <div class="modal-body">
                         <?php  $j=0; ?>
-                        <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php if(!in_array($col,$discard)): ?>
+                        <?php $__currentLoopData = $cols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($col!='created_at' && $col!='updated_at' && $col!='app_status'): ?>
                                 <div class="row">
                                     <div class="col-xs-4 col-md-4"><label class="control-label pull-right"
-                                                                          for="<?php echo e($data->ref_no. '_' . $j); ?>"><?php echo e(ucwords($col)); ?>:</label>
+                                                                          for="<?php echo e($data->ref_no. '_' . $j); ?>"><?php echo e($col); ?>:</label>
                                     </div>
                                     <div class="col-xs-8 col-md-8"><input
                                                 class="form-control"
                                                 id="<?php echo e($data->ref_no. '_' . $j); ?>"
-                                                value="<?php echo e($value); ?>" readonly/>
+                                                value="<?php echo e($data->$col); ?>" readonly/>
                                     </div>
                                 </div>
                                 <?php  $j++;  ?>
