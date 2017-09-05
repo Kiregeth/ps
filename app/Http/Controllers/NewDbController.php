@@ -75,7 +75,7 @@ class NewDbController extends Controller
                     $sel = 'new_databanks.' . $sel;
                 }
                 $search = $request->search;
-                $datas = new_databank::where($sel, 'LIKE', '%' . $search . '%')
+                $datas = new_databank::where('app_status', 'int')->where($sel, 'LIKE', '%' . $search . '%')
                     ->orderBy('new_databanks.ref_no', 'desc')
                     ->paginate($limit);
 
