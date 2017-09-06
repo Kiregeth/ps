@@ -96,12 +96,15 @@
                                     <th style="background-color: lightgrey">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; text-align: center;">
                                             @if(in_array('edit',session('permission')))
+                                                <a class="btn btn-link" data-toggle="modal" href="/{{$data->ref_no}}/app_form_regenerate"
+                                                   title="Regenerate Application Form"><i class="fa fa-address-card-o"></i></a>
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#change_photo_{{$data->ref_no}}"
                                                    title="Change Photo"><i class="fa fa-camera"></i></a>
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#upload_doc_{{$data->ref_no}}"
                                                    title="Upload Document"><i class="fa fa-upload"></i></a>
-                                                <a class="btn btn-link" data-toggle="modal" href="/{{$data->ref_no}}/app_form_regenerate"
-                                                   title="Regenerate Application Form"><i class="fa fa-address-card-o"></i></a>
+                                            @if(!file_exists(public_path().'/images/app_forms/DB'.$data->ref_no.'.jpg'))
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#ansar_{{$data->ref_no}}"
+                                                   title="Generate Ansar Group Application Form"><i class="fa fa-square-o"></i></a>@endif
                                             @endif
                                         </div>
                                     </th>
@@ -503,6 +506,40 @@
                     </form>
 
                 </div>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach($datas as $data)
+        <div class="modal fade" id="ansar_{{$data->ref_no}}" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Ansar Form Generator [Ref. Id. {{$data->ref_no}}]</h4>
+                    </div>
+                    <form>
+                        <div class="modal-body container">
+                            <div class="row">
+                                <div class="col-md-1"><label class="control-label" for="as_ref_no_{{$data->ref_no}}">Ref. No.:</label></div>
+                                <div class="col-md-1"><input class="form-control" id="as_ref_no_{{$data->ref_no}}" name="ref_no" value="{{$data->ref_no}}" readonly /></div>
+                                <div class="col-md-2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="control-label" for="as_agency_{{$data->ref_no}}">Agency Applied:</label></div>
+                                <div class="col-md-3"><input class="form-control" id="as_agency_{{$data->ref_no}}" name="agency" value="Pasa International Pvt Ltd" readonly /></div>
+                                <div class="col-md-1">&nbsp;&nbsp;&nbsp;<label class="control-label" for="as_date_{{$data->ref_no}}">Date:</label></div>
+                                <div class="col-md-2"><input class="form-control" id="as_date_{{$data->ref_no}}" name="date" value="{{date('Y-m-d')}}" readonly /></div>
+                            </div>
+                            <div class="row">
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+
             </div>
         </div>
     @endforeach

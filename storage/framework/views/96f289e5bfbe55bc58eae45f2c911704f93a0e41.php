@@ -53,6 +53,7 @@
                         <thead>
                         <tr>
                             <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                             <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php if(!in_array($col,$discard)): ?>
                                     <th><?php echo e(strtoupper(preg_replace('/_+/', ' ', $col))); ?></th>
@@ -94,6 +95,7 @@
                                         <?php endif; ?>
                                     </div>
                                 </th>
+
                                 <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php if(!in_array($col,$discard)): ?>
                                         <?php  $datas_array[$i][$col]=$data->$col;  ?>
@@ -372,6 +374,30 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </form>
+                </div>
+
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="ansar_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Ansar Form Generator</h4>
+                    </div>
+                    <form>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    </form>
+
                 </div>
 
             </div>

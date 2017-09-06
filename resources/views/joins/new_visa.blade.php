@@ -53,6 +53,7 @@
                         <thead>
                         <tr>
                             <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                             @foreach($fields as $col)
                                 @if(!in_array($col,$discard))
                                     <th>{{strtoupper(preg_replace('/_+/', ' ', $col))}}</th>
@@ -94,6 +95,7 @@
                                         @endif
                                     </div>
                                 </th>
+
                                 @foreach ($fields as $col)
                                     @if(!in_array($col,$discard))
                                         @php $datas_array[$i][$col]=$data->$col; @endphp

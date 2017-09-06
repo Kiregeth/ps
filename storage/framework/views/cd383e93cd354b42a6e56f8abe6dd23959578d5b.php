@@ -96,12 +96,15 @@
                                     <th style="background-color: lightgrey">
                                         <div class="center-block" style="margin-top: auto;margin-bottom: auto; text-align: center;">
                                             <?php if(in_array('edit',session('permission'))): ?>
+                                                <a class="btn btn-link" data-toggle="modal" href="/<?php echo e($data->ref_no); ?>/app_form_regenerate"
+                                                   title="Regenerate Application Form"><i class="fa fa-address-card-o"></i></a>
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#change_photo_<?php echo e($data->ref_no); ?>"
                                                    title="Change Photo"><i class="fa fa-camera"></i></a>
                                                 <a class="btn btn-link" data-toggle="modal" data-target="#upload_doc_<?php echo e($data->ref_no); ?>"
                                                    title="Upload Document"><i class="fa fa-upload"></i></a>
-                                                <a class="btn btn-link" data-toggle="modal" href="/<?php echo e($data->ref_no); ?>/app_form_regenerate"
-                                                   title="Regenerate Application Form"><i class="fa fa-address-card-o"></i></a>
+                                            <?php if(!file_exists(public_path().'/images/app_forms/DB'.$data->ref_no.'.jpg')): ?>
+                                                <a class="btn btn-link" data-toggle="modal" data-target="#ansar_<?php echo e($data->ref_no); ?>"
+                                                   title="Generate Ansar Group Application Form"><i class="fa fa-square-o"></i></a><?php endif; ?>
                                             <?php endif; ?>
                                         </div>
                                     </th>
@@ -509,6 +512,42 @@
                     </form>
 
                 </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="modal fade" id="ansar_<?php echo e($data->ref_no); ?>" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Ansar Form Generator [Ref. Id. <?php echo e($data->ref_no); ?>]</h4>
+                    </div>
+                    <form>
+                        <div class="modal-body container">
+                            <div class="row">
+                                    <div class="col-md-1"><label class="control-label" for="as_ref_no_<?php echo e($data->ref_no); ?>">Ref. No.:</label></div>
+                                    <div class="col-md-1"><input class="form-control" id="as_ref_no_<?php echo e($data->ref_no); ?>" name="ref_no" value="<?php echo e($data->ref_no); ?>" readonly /></div>
+
+
+                                    <div class="col-md-2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="control-label" for="as_agency_<?php echo e($data->ref_no); ?>">Agency Applied:</label></div>
+                                    <div class="col-md-3"><input class="form-control" id="as_agency_<?php echo e($data->ref_no); ?>" name="agency" value="Pasa International Pvt Ltd" readonly /></div>
+
+
+                                    <div class="col-md-1">&nbsp;&nbsp;&nbsp;<label class="control-label" for="as_date_<?php echo e($data->ref_no); ?>">Date:</label></div>
+                                    <div class="col-md-2"><input class="form-control" id="as_date_<?php echo e($data->ref_no); ?>" name="date" value="<?php echo e(date('Y-m-d')); ?>" readonly /></div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+                </div>
+
             </div>
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -183,7 +183,87 @@
     @endforeach
 
     @foreach($datas as $data)
-        <div class="modal fade" id="visa_{{$data->ref_no}}" role="dialog">
+        <div class="modal fade" id="ansar_{{$data->ref_no}}" role="dialog">
+            <div class="modal-dialog" >
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add to Visa Processing</h4>
+                    </div>
+                    <form action="/add_to_visa" method="post" id="data-fom-{{$data->ref_no}}">
+                        {{csrf_field()}}
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'ref_no'}}">Ref No:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="text"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'ref_no'}}"
+                                            name="ref_no"
+                                            placeholder="Enter Ref No here!"
+                                            value="{{$data->ref_no}}"  readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'visa_process_date'}}">Visa Process Date*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            type="date"
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'visa_process_date'}}"
+                                            name="visa_process_date"
+                                            placeholder="Enter Visa Process Date here!"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'trade'}}">Trade*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'trade'}}"
+                                            name="trade"
+                                            placeholder="Enter trade here! *"
+                                            value="{{$data->trade}}"
+                                            required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3">
+                                    <label class="control-label pull-right"
+                                           for="{{$data->ref_no. '_' . 'company'}}">Companye*:</label>
+                                </div>
+                                <div class="col-xs-7 col-md-7"><input
+                                            class="form-control"
+                                            id="{{$data->ref_no. '_' . 'company'}}"
+                                            name="company"
+                                            placeholder="Enter company here!"
+                                            value="{{$data->company}}"
+                                            required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-default" value="Add"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    @endforeach
+
+    @foreach($datas as $data)
+        <div class="modal fade" id="remarks_{{$data->ref_no}}" role="dialog">
             <div class="modal-dialog" >
                 <!-- Modal content-->
                 <div class="modal-content">
